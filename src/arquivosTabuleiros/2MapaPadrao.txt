@@ -1,0 +1,10 @@
+Mapa padrao 2
+padrao
+Floresta Floresta Floresta Pasto Floresta Floresta Floresta Floresta
+Floresta Floresta Pasto Pasto Pasto Floresta Floresta Floresta
+Elevacao Elevacao Pasto Pasto Pasto Pasto Pasto Floresta
+Pasto Pasto Pasto Pasto Floresta Pasto Pasto Pasto
+Pasto Pasto Pasto Floresta Pasto Pasto Pasto Floresta
+Floresta Pasto Pasto Pasto Pasto Pasto Elevacao Elevacao
+Floresta Floresta Floresta Pasto Pasto Pasto Floresta Floresta
+Floresta Floresta Floresta Floresta Pasto Floresta Floresta Floresta
