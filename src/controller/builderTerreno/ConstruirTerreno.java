@@ -1,8 +1,10 @@
 package controller.builderTerreno;
 
+//MODEL
 import model.Terreno;
 
 public abstract class ConstruirTerreno {
+
     protected Terreno terreno;
 
     public void construirTipo() {}

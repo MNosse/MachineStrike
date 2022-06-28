@@ -1,17 +1,26 @@
 package view.Tela;
 
-import global.EnumTipoTerreno;
+//CONTROLLER
 import controller.observer.ObserverTelaTabuleiros;
-import view.abstractFactoryTela.AbstractFactoryTela;
 import controller.controlador.ControladorTelaTabuleiros;
-import view.abstractFactoryTela.ConcretFactoryTelaInicial;
 
+//GLOBAL
+import global.EnumTipoTerreno;
+
+//JAVA
 import java.awt.*;
-import javax.swing.*;
 import java.awt.event.*;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.HashMap;
+
+//JAVAX
+import javax.swing.*;
+
+//VIEW
+import view.abstractFactoryTela.AbstractFactoryTela;
+import view.abstractFactoryTela.ConcretFactoryTelaInicial;
+
 
 public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
     private JLabel lblFundo;
@@ -37,7 +46,7 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
     private HashMap<EnumTipoTerreno, ImageIcon> imagensTerrenos;
     private HashMap<String, EnumTipoTerreno> terrenosQuadradosTabuleiros;
 
-    public TelaTabuleiros(){
+    public TelaTabuleiros() {
         edicaoAtiva = false;
         controlador = new ControladorTelaTabuleiros();
         controlador.attach(this);
@@ -48,7 +57,7 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         controlador.desenharTabuleiro(cmbListaTabuleiros.getSelectedItem().toString());
     }
 
-    private void initialize(){
+    private void initialize() {
         iniciarListaQuadradosTabuleiros();
         iniciarImagensTerrenos();
         //btnCriarTabuleiro
@@ -62,7 +71,7 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         mudarEstadoEditarDeletar(false);
         //btnVoltar
         btnVoltar = criarBotao("Voltar", ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
-        //lblLeftPallet
+        //lblPainelEsquerdo
         lblPainelEsquerdo = new JLabel(criarImagem("src/images/Filtro.png", ((int)(getAltura()*0.9)), ((int)(getLargura()*0.225))));
         lblPainelEsquerdo.setLayout(layout);
         constraints.gridx = 0;
@@ -105,9 +114,9 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         lblPainelCentral = new JLabel(criarImagem("src/images/Filtro.png", ((int)(getAltura()*0.9)), ((int)(getAltura()*0.9))));
         lblPainelCentral.setLayout(layout);
         constraints.insets = new Insets(0, 0, 0, 0);
-        for (int linha = 0; linha < 8; linha++){
+        for (int linha = 0; linha < 8; linha++) {
             constraints.gridy = linha;
-            for (int coluna = 0; coluna < 8; coluna++){
+            for (int coluna = 0; coluna < 8; coluna++) {
                 constraints.gridx = coluna;
                 lblPainelCentral.add(listaQuadradosTabuleiros.get(linha+""+coluna), constraints);
             }
@@ -133,9 +142,9 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         getFrmTela().setVisible(true);
     }
 
-    private void iniciarAcoes(){
+    private void iniciarAcoes() {
         //btnCriarTabuleiro
-        btnCriarTabuleiro.addActionListener(new ActionListener(){
+        btnCriarTabuleiro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mudarEstadoPainelDireito(true);
@@ -148,7 +157,7 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
             public void itemStateChanged(ItemEvent e) {
                 String selecionado = cmbListaTabuleiros.getSelectedItem().toString();
                 controlador.mudarEstadoEditarDeletar(selecionado);
-                if (edicaoAtiva){
+                if (edicaoAtiva) {
                     mudarEstadoPainelDireito(false);
                 }
                 controlador.desenharTabuleiro(selecionado);
@@ -210,15 +219,15 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
 
     private void iniciarListaQuadradosTabuleiros() {
         listaQuadradosTabuleiros = new HashMap<>();
-        for (int linha = 0; linha < 8; linha++){
-            for (int coluna = 0; coluna < 8; coluna++){
+        for (int linha = 0; linha < 8; linha++) {
+            for (int coluna = 0; coluna < 8; coluna++) {
                 JLabel quadrado = new JLabel();
                 int finalLinha = linha;
                 int finalColuna = coluna;
                 quadrado.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if(edicaoAtiva){
+                        if(edicaoAtiva) {
                             quadrado.setIcon(imagensTerrenos.get(cmbTiposTerreno.getSelectedItem()));
                             terrenosQuadradosTabuleiros.put((finalLinha +""+finalColuna), EnumTipoTerreno.valueOf(cmbTiposTerreno.getSelectedItem().toString()));
                         }
@@ -243,7 +252,7 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         imagensTerrenos.put(EnumTipoTerreno.MONTANHA, criarImagem("src/images/"+EnumTipoTerreno.MONTANHA.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
     }
 
-    public void mudarEstadoPainelDireito(boolean estado){
+    public void mudarEstadoPainelDireito(boolean estado) {
         edicaoAtiva = estado;
         txtNome.setText("");
         txtNome.setEnabled(estado);
@@ -254,14 +263,14 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         btnSalvar.setEnabled(estado);
     }
 
-    public void mudarEstadoEditarDeletar(boolean estado){
+    public void mudarEstadoEditarDeletar(boolean estado) {
         btnEditarTabuleiro.setEnabled(estado);
         btnDeletarTabuleiro.setEnabled(estado);
     }
 
-    public void desenharTabuleiro(HashMap<String, EnumTipoTerreno> terrenos){
-        for (int linha = 0; linha < 8; linha++){
-            for (int coluna = 0; coluna < 8; coluna++){
+    public void desenharTabuleiro(HashMap<String, EnumTipoTerreno> terrenos) {
+        for (int linha = 0; linha < 8; linha++) {
+            for (int coluna = 0; coluna < 8; coluna++) {
                 listaQuadradosTabuleiros.get(linha+""+coluna).setIcon(imagensTerrenos.get(terrenos.get(linha+""+coluna)));
             }
         }

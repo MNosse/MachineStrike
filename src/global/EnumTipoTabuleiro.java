@@ -6,11 +6,11 @@ public enum EnumTipoTabuleiro {
 
     private String tipo;
 
-    EnumTipoTabuleiro(String tipo){
+    EnumTipoTabuleiro(String tipo) {
         this.tipo = tipo;
     }
 
-    public String getTipo(){
+    public String getTipo() {
         return tipo;
     }
 }

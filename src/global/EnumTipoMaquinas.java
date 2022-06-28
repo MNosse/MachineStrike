@@ -10,11 +10,11 @@ public enum EnumTipoMaquinas {
 
     private String tipo;
 
-    EnumTipoMaquinas(String tipo){
+    EnumTipoMaquinas(String tipo) {
         this.tipo = tipo;
     }
 
-    public String getTipo(){
+    public String getTipo() {
         return tipo;
     }
 }

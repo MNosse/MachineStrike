@@ -1,19 +1,20 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+//JAVA
+import java.util.Map;
+import java.util.HashMap;
 
 public class Jogador {
-    private int pontosVitoria;
     private String nome;
+    private int pontosVitoria;
     private boolean estaJogando;
-    private List<Maquina> maquinas;
+    private Map<String, Maquina> maquinas;
 
     public Jogador(String nome) {
         pontosVitoria = 0;
         this.nome = nome;
         estaJogando = false;
-        maquinas = new ArrayList<>();
+        maquinas = new HashMap();
     }
 
     public String getNome() {
@@ -36,11 +37,15 @@ public class Jogador {
         this.estaJogando = estaJogando;
     }
 
-    public List<Maquina> getMaquinas() {
+    public Map<String, Maquina> getMaquinas() {
         return maquinas;
     }
 
-    public void setMaquinas(List<Maquina> maquinas) {
-        this.maquinas = maquinas;
+    public void addMaquinas(String posicao, Maquina maquina) {
+        maquinas.put(posicao, maquina);
+    }
+
+    public void removeMaquinas(String posicao) {
+        maquinas.remove(posicao);
     }
 }

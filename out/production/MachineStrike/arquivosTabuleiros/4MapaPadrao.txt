@@ -1,0 +1,10 @@
+Mapa padrao 4
+padrao
+Pasto Pasto Pasto Floresta Pasto Floresta Pasto Pasto
+Floresta Floresta Montanha Pasto Floresta Pasto Floresta Pasto
+Pasto Pasto Montanha Floresta Floresta Pasto Elevacao Floresta
+Pasto Elevacao Floresta Pasto Elevacao Pasto Montanha Pasto
+Pasto Montanha Pasto Elevacao Pasto Floresta Elevacao Pasto
+Floresta Elevacao Pasto Floresta Floresta Montanha Pasto Pasto
+Pasto Floresta Pasto Floresta Pasto Montanha Floresta Floresta
+Pasto Pasto Floresta Pasto Floresta Pasto Pasto Pasto

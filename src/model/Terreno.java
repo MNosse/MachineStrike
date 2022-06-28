@@ -1,11 +1,12 @@
 package model;
 
+//GLOBAL
 import global.EnumTipoTerreno;
 
 public class Terreno {
 
-    private EnumTipoTerreno tipo;
     private int pontosDeCombate;
+    private EnumTipoTerreno tipo;
     private String caminhoDaImagem;
 
     public EnumTipoTerreno getTipo() {

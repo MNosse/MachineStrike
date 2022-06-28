@@ -14,11 +14,11 @@ public enum EnumMaquinas {
 
     private String nome;
 
-    EnumMaquinas(String nome){
+    EnumMaquinas(String nome) {
         this.nome = nome;
     }
 
-    public String getNome(){
+    public String getNome() {
         return nome;
     }
 }

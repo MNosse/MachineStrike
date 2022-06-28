@@ -6,11 +6,11 @@ public enum EnumAdicionarRemover {
 
     private String nome;
 
-    EnumAdicionarRemover(String nome){
+    EnumAdicionarRemover(String nome) {
         this.nome = nome;
     }
 
-    public String getNome(){
+    public String getNome() {
         return nome;
     }
 }

@@ -1,11 +1,13 @@
 package model;
 
-import global.EnumDirecao;
+//CONTROLLER
+import controller.stateDirecao.StateDirecao;
+
+//GLOBAL
 import global.EnumResistencia;
 import global.EnumTipoMaquinas;
 
 public class Maquina {
-    private Jogador jogador;
     private int vida;
     private int linha;
     private int coluna;
@@ -13,13 +15,14 @@ public class Maquina {
     private int alcance;
     private String nome;
     private int movimento;
+    private Jogador jogador;
     private int pontosVitoria;
-    private EnumTipoMaquinas tipo;
     private EnumResistencia tras;
+    private EnumTipoMaquinas tipo;
     private EnumResistencia frente;
     private EnumResistencia direita;
     private EnumResistencia esquerda;
-    private EnumDirecao direcaoAtual;
+    private StateDirecao direcaoAtual;
 
     public Jogador getJogador() {
         return jogador;
@@ -133,11 +136,12 @@ public class Maquina {
         this.esquerda = esquerda;
     }
 
-    public EnumDirecao getDirecaoAtual() {
+    public StateDirecao getDirecaoAtual() {
         return direcaoAtual;
     }
 
-    public void setDirecaoAtual(EnumDirecao direcaoAtual) {
+    public void setDirecaoAtual(StateDirecao direcaoAtual) {
         this.direcaoAtual = direcaoAtual;
     }
+
 }

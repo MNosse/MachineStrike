@@ -1,8 +1,10 @@
 package controller.builderTerreno;
 
+//GLOBAL
 import global.EnumTipoTerreno;
 
 public class ConstruirFloresta extends ConstruirTerreno {
+
     @Override
     public void construirTipo() {
         terreno.setTipo(EnumTipoTerreno.FLORESTA);

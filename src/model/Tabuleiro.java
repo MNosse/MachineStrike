@@ -1,7 +1,9 @@
 package model;
 
+//GLOBAL
 import global.EnumTipoTabuleiro;
 
+//JAVA
 import java.util.HashMap;
 
 public class Tabuleiro {
@@ -10,19 +12,19 @@ public class Tabuleiro {
     private HashMap<String, Terreno> terrenos;
     private HashMap<String, Maquina> maquinas;
 
-    public Terreno getTerrenoPorIndice (String linhaColuna){
+    public Terreno getTerrenoPorIndice (String linhaColuna) {
         return terrenos.get(linhaColuna);
     }
 
-    public Maquina getMaquinaPorIndice (String linhaColuna){
+    public Maquina getMaquinaPorIndice (String linhaColuna) {
         return maquinas.get(linhaColuna);
     }
 
-    public void atualizaTerrenoPorIndice (String linhaColuna, Terreno novoTerreno){
+    public void atualizaTerrenoPorIndice (String linhaColuna, Terreno novoTerreno) {
         terrenos.replace(linhaColuna, novoTerreno);
     }
 
-    public void atualizaTerrenoPorIndice (String linhaColuna, Maquina novaMaquina){
+    public void atualizaTerrenoPorIndice (String linhaColuna, Maquina novaMaquina) {
         maquinas.replace(linhaColuna, novaMaquina);
     }
 

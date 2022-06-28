@@ -1,9 +1,11 @@
 package controller.observer;
 
+//GLOBAL
 import global.EnumTipoTerreno;
 
-import java.util.HashMap;
+//JAVA
 import java.util.Vector;
+import java.util.HashMap;
 
 public interface ObserverTelaTabuleiros {
     void mostrarTela();

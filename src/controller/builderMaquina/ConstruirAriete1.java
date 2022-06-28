@@ -1,9 +1,11 @@
 package controller.builderMaquina;
 
+//GLOBAL
 import global.EnumResistencia;
 import global.EnumTipoMaquinas;
 
 public class ConstruirAriete1 extends ConstruirMaquina {
+
     public void construirVida() {
         maquina.setVida(5);
     }
@@ -47,4 +49,5 @@ public class ConstruirAriete1 extends ConstruirMaquina {
     public void construirEsquerda() {
         maquina.setEsquerda(EnumResistencia.NEUTRO);
     }
+
 }

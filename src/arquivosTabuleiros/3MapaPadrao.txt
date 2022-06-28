@@ -1,0 +1,10 @@
+Mapa padrao 3
+padrao
+Floresta Floresta Floresta Floresta Elevacao Montanha Montanha Montanha
+Floresta Floresta Pasto Floresta Elevacao Elevacao Montanha Montanha
+Pantano Pasto Pasto Pasto Floresta Elevacao Elevacao Pantano
+Pantano Abismo Pasto Pasto Floresta Pantano Pantano Pantano
+Pantano Pantano Pantano Floresta Pasto Pasto Abismo Pantano
+Pantano Elevacao Elevacao Floresta Pasto Pasto Pasto Pantano
+Montanha Montanha Elevacao Elevacao Floresta Pasto Floresta Floresta
+Montanha Montanha Montanha Elevacao Floresta Floresta Floresta Floresta

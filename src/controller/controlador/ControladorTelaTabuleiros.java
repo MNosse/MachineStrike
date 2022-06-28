@@ -1,23 +1,30 @@
 package controller.controlador;
 
+//CONTROLLER
+import controller.builderTerreno.DirectorTerreno;
+import controller.observer.ObserverTelaTabuleiros;
+import controller.builderTerreno.ConstruirTerreno;
+import controller.builderTabuleiro.DirectorTabuleiro;
+import controller.builderTabuleiro.ConstruirTabuleiroSemMaquinas;
+
+//GLOBAL
+import global.EnumTipoTerreno;
+import global.EnumTipoTabuleiro;
+
+//JAVA
 import java.io.*;
 import java.util.*;
 
-import controller.builderTabuleiro.ConstruirTabuleiroSemMaquinas;
-import controller.builderTabuleiro.DirectorTabuleiro;
-import controller.builderTerreno.ConstruirTerreno;
-import controller.builderTerreno.DirectorTerreno;
-import controller.observer.ObserverTelaTabuleiros;
-import global.EnumTipoTabuleiro;
-import global.EnumTipoTerreno;
+//MODEL
 import model.Tabuleiro;
 import model.Terreno;
 
 public class ControladorTelaTabuleiros {
-    private LinkedHashMap<String, Tabuleiro> tabuleiros;
-    private List<ObserverTelaTabuleiros> observers;
+
     private DirectorTerreno directorTerreno;
     private DirectorTabuleiro directorTabuleiro;
+    private List<ObserverTelaTabuleiros> observers;
+    private LinkedHashMap<String, Tabuleiro> tabuleiros;
     private ConstruirTabuleiroSemMaquinas construirTabuleiro;
 
     public ControladorTelaTabuleiros() {
@@ -32,23 +39,23 @@ public class ControladorTelaTabuleiros {
         BufferedReader bufferedReader;
         File todosArquivos = new File("src/arquivosTabuleiros");
         File[] arquivos = todosArquivos.listFiles();
-        for (File arquivo:arquivos){
+        for (File arquivo:arquivos) {
             try {
                 bufferedReader = new BufferedReader(new FileReader(arquivo));
                 List<String> linhas = new ArrayList<>(bufferedReader.lines().toList());
                 bufferedReader.close();
                 String nome = linhas.get(0);
                 EnumTipoTabuleiro tipoTabuleiro = EnumTipoTabuleiro.PADRAO;
-                if (!linhas.get(1).equals("padrao")){
+                if (!linhas.get(1).equals("padrao")) {
                     tipoTabuleiro = EnumTipoTabuleiro.CRIADO;
                 }
                 ArrayList<ArrayList<String>> tiposTerrenos = new ArrayList<>();
-                for (int linha = 2; linha < linhas.size(); linha++){
+                for (int linha = 2; linha < linhas.size(); linha++) {
                     tiposTerrenos.add(new ArrayList<>(Arrays.asList(linhas.get(linha).split(" "))));
                 }
                 HashMap<String, Terreno> terrenos = new HashMap<>();
-                for (int linha = 0; linha < 8; linha++){
-                    for (int coluna = 0; coluna < 8; coluna++){
+                for (int linha = 0; linha < 8; linha++) {
+                    for (int coluna = 0; coluna < 8; coluna++) {
                         ConstruirTerreno builder = (ConstruirTerreno) Class.forName("controller.builderTerreno.Construir"+tiposTerrenos.get(linha).get(coluna)).getDeclaredConstructor().newInstance();
                         directorTerreno = new DirectorTerreno(builder);
                         directorTerreno.construir();
@@ -67,7 +74,7 @@ public class ControladorTelaTabuleiros {
         return tabuleiros.get(nomeTabuleiro).getTipoTabuleiro();
     }
 
-    public void criarArquivoDeTabuleiro(String nome, HashMap<String, EnumTipoTerreno> terrenos){
+    public void criarArquivoDeTabuleiro(String nome, HashMap<String, EnumTipoTerreno> terrenos) {
         String nomeDoArquivo = nome.replace(" ", "_");
         String caminho = "src/arquivosTabuleiros/Mapa"+nomeDoArquivo+".txt";
         File arquivoDeTabuleiro = new File(caminho);
@@ -76,10 +83,10 @@ public class ControladorTelaTabuleiros {
             FileWriter fileWriter = new FileWriter(caminho);
             fileWriter.write(nome+"\n");
             fileWriter.write("criado\n");
-            for (int linha = 0; linha < 8; linha++){
-                for (int coluna = 0; coluna < 8; coluna++){
+            for (int linha = 0; linha < 8; linha++) {
+                for (int coluna = 0; coluna < 8; coluna++) {
                     fileWriter.write(terrenos.get(linha+""+coluna).getTipo());
-                    if (coluna < 7){
+                    if (coluna < 7) {
                         fileWriter.write(" ");
                     }
                 }
@@ -87,7 +94,7 @@ public class ControladorTelaTabuleiros {
             }
             fileWriter.close();
             construirTabuleiros();
-            for (ObserverTelaTabuleiros observer:observers){
+            for (ObserverTelaTabuleiros observer:observers) {
                 observer.atualizarListaDeTabuleiros(new Vector<String>(tabuleiros.keySet()));
             }
         } catch (IOException e) {
@@ -95,7 +102,7 @@ public class ControladorTelaTabuleiros {
         }
     }
 
-    public void atualizarArquivoDeTabuleiro(String nome, HashMap<String, EnumTipoTerreno> terrenos){
+    public void atualizarArquivoDeTabuleiro(String nome, HashMap<String, EnumTipoTerreno> terrenos) {
         String caminho = "src/arquivosTabuleiros/Mapa"+nome+".txt";
         File arquivoDeTabuleiro = new File(caminho);
         try {
@@ -103,10 +110,10 @@ public class ControladorTelaTabuleiros {
             FileWriter fileWriter = new FileWriter(caminho);
             fileWriter.write(nome+"\n");
             fileWriter.write(getTipoTabuleiro(nome).getTipo()+"\n");
-            for (int linha = 0; linha < 8; linha++){
+            for (int linha = 0; linha < 8; linha++) {
                 for (int coluna = 0; coluna < 8; coluna++){
                     fileWriter.write(terrenos.get(linha+""+coluna).getTipo());
-                    if (coluna < 7){
+                    if (coluna < 7) {
                         fileWriter.write(" ");
                     }
                 }
@@ -114,7 +121,7 @@ public class ControladorTelaTabuleiros {
             }
             fileWriter.close();
             construirTabuleiros();
-            for (ObserverTelaTabuleiros observer:observers){
+            for (ObserverTelaTabuleiros observer:observers) {
                 observer.atualizarListaDeTabuleiros(new Vector<String>(tabuleiros.keySet()));
             }
         } catch (IOException e) {
@@ -122,18 +129,18 @@ public class ControladorTelaTabuleiros {
         }
     }
 
-    public void deletarArquivoDeTabuleiro(String nome){
+    public void deletarArquivoDeTabuleiro(String nome) {
         String nomeDoArquivo = nome.replace(" ", "_");
         String caminho = "src/arquivosTabuleiros/Mapa"+nomeDoArquivo+".txt";
         File arquivoDeTabuleiro = new File(caminho);
         arquivoDeTabuleiro.delete();
         construirTabuleiros();
-        for (ObserverTelaTabuleiros observer:observers){
+        for (ObserverTelaTabuleiros observer:observers) {
             observer.atualizarListaDeTabuleiros(new Vector<String>(tabuleiros.keySet()));
         }
     }
 
-    public void attach(ObserverTelaTabuleiros observer){
+    public void attach(ObserverTelaTabuleiros observer) {
         observers.add(observer);
     }
 
@@ -149,11 +156,11 @@ public class ControladorTelaTabuleiros {
         }
     }
 
-    public void desenharTabuleiro(String chaveTabuleiro){
+    public void desenharTabuleiro(String chaveTabuleiro) {
         Tabuleiro tabuleiro = tabuleiros.get(chaveTabuleiro);
         HashMap<String, EnumTipoTerreno> terrenos = new HashMap<>();
-        for (int linha = 0; linha < 8; linha++){
-            for (int coluna = 0; coluna < 8; coluna++){
+        for (int linha = 0; linha < 8; linha++) {
+            for (int coluna = 0; coluna < 8; coluna++) {
                 terrenos.put((linha+""+coluna), tabuleiro.getTerrenos().get(linha+""+coluna).getTipo());
             }
         }
@@ -162,11 +169,11 @@ public class ControladorTelaTabuleiros {
         }
     }
 
-    public void iniciarListaTerrenosCriacao(String chaveTabuleiro){
+    public void iniciarListaTerrenosCriacao(String chaveTabuleiro) {
         Tabuleiro tabuleiro = tabuleiros.get(chaveTabuleiro);
         HashMap<String, EnumTipoTerreno> terrenos = new HashMap<>();
-        for (int linha = 0; linha < 8; linha++){
-            for (int coluna = 0; coluna < 8; coluna++){
+        for (int linha = 0; linha < 8; linha++) {
+            for (int coluna = 0; coluna < 8; coluna++) {
                 terrenos.put((linha+""+coluna), tabuleiro.getTerrenos().get(linha+""+coluna).getTipo());
             }
         }
@@ -175,9 +182,9 @@ public class ControladorTelaTabuleiros {
         }
     }
 
-    public void mudarEstadoEditarDeletar(String chaveTabuleiro){
+    public void mudarEstadoEditarDeletar(String chaveTabuleiro) {
         boolean retorno = false;
-        if (tabuleiros.get(chaveTabuleiro).getTipoTabuleiro() == EnumTipoTabuleiro.CRIADO){
+        if (tabuleiros.get(chaveTabuleiro).getTipoTabuleiro() == EnumTipoTabuleiro.CRIADO) {
             retorno = true;
         }
         for (ObserverTelaTabuleiros observer:observers) {

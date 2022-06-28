@@ -1,10 +1,15 @@
 package controller.builderMaquina;
 
+//GLOBAL
+import controller.stateDirecao.StateDirecao;
 import global.EnumDirecao;
+
+//MODEL
 import model.Jogador;
 import model.Maquina;
 
 public abstract class ConstruirMaquina {
+
     protected Maquina maquina;
 
     public void construirJogador(Jogador jogador) {
@@ -41,7 +46,7 @@ public abstract class ConstruirMaquina {
 
     public void construirEsquerda() {}
 
-    public void construirDirecaoAtual(EnumDirecao direcaoAtual) {
+    public void construirDirecaoAtual(StateDirecao direcaoAtual) {
         maquina.setDirecaoAtual(direcaoAtual);
     }
 

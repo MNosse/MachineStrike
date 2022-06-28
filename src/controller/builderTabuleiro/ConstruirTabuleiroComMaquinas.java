@@ -1,12 +1,15 @@
 package controller.builderTabuleiro;
 
-import model.Maquina;
-
+//JAVA
 import java.util.HashMap;
 
-public class ConstruirTabuleiroComMaquinas extends ConstruirTabuleiroSemMaquinas{
+//MODEL
+import model.Maquina;
+
+public class ConstruirTabuleiroComMaquinas extends ConstruirTabuleiroSemMaquinas {
+
     @Override
-    public void construirMaquinas(HashMap<String, Maquina> maquinas){
+    public void construirMaquinas(HashMap<String, Maquina> maquinas) {
         tabuleiro.setMaquinas(maquinas);
     }
 }

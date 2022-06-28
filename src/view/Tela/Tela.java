@@ -1,9 +1,12 @@
 package view.Tela;
 
-import javax.swing.*;
+//JAVA
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Vector;
+import java.awt.image.BufferedImage;
+
+//JAVAX
+import javax.swing.*;
 
 public abstract class Tela {
     private JFrame frmTela = new JFrame();
@@ -18,7 +21,7 @@ public abstract class Tela {
         return new ImageIcon(new BufferedImage(largura, altura, BufferedImage.TYPE_INT_ARGB).getScaledInstance(largura, altura, Image.SCALE_SMOOTH));
     }
 
-    protected JButton criarBotao(String texto, int largura, int altura){
+    protected JButton criarBotao(String texto, int largura, int altura) {
         JButton botao = new JButton(texto);
         botao.setBackground(new Color(217, 217, 217));
         botao.setMinimumSize(new Dimension(largura, altura));
@@ -26,7 +29,7 @@ public abstract class Tela {
         return botao;
     }
 
-    protected JComboBox criarComboBox(Vector vector, int largura, int altura){
+    protected JComboBox criarComboBox(Vector vector, int largura, int altura) {
         JComboBox jComboBox = new JComboBox(vector);
         jComboBox.setBackground(new Color(217, 217, 217));
         jComboBox.setMinimumSize(new Dimension(largura, altura));
@@ -42,7 +45,7 @@ public abstract class Tela {
         frmTela.setVisible(false);
     }
 
-    public void navegarParaOutraTela(Tela outraTela){
+    public void navegarParaOutraTela(Tela outraTela) {
         outraTela.mostrarTela();
         frmTela.dispose();
     }
