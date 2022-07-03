@@ -1,5 +1,5 @@
-import view.Tela.Tela;
-import view.Tela.TelaInicial;
+import view.Tela;
+import view.TelaInicial;
 
 public class MachineStrike {
     public static void main(String[] args) {

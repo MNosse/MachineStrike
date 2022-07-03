@@ -5,6 +5,8 @@ import controller.builderTerreno.DirectorTerreno;
 import controller.observer.ObserverTelaTabuleiros;
 import controller.builderTerreno.ConstruirTerreno;
 import controller.builderTabuleiro.DirectorTabuleiro;
+import controller.abstractFactoryTela.AbstractFactoryTela;
+import controller.abstractFactoryTela.ConcretFactoryTelaInicial;
 import controller.builderTabuleiro.ConstruirTabuleiroSemMaquinas;
 
 //GLOBAL
@@ -144,18 +146,6 @@ public class ControladorTelaTabuleiros {
         observers.add(observer);
     }
 
-    public void mostrar(){
-        for (ObserverTelaTabuleiros observer:observers) {
-            observer.mostrarTela();
-        }
-    }
-
-    public void ocultar(){
-        for (ObserverTelaTabuleiros observer:observers) {
-            observer.ocultarTela();
-        }
-    }
-
     public void desenharTabuleiro(String chaveTabuleiro) {
         Tabuleiro tabuleiro = tabuleiros.get(chaveTabuleiro);
         HashMap<String, EnumTipoTerreno> terrenos = new HashMap<>();
@@ -189,6 +179,13 @@ public class ControladorTelaTabuleiros {
         }
         for (ObserverTelaTabuleiros observer:observers) {
             observer.mudarEstadoEditarDeletar(retorno);
+        }
+    }
+
+    public void navegarParaTelaInicial() {
+        AbstractFactoryTela factoryTela = new ConcretFactoryTelaInicial();
+        for (ObserverTelaTabuleiros observer:observers) {
+            observer.navegarParaOutraTela(factoryTela.construirTela());
         }
     }
 

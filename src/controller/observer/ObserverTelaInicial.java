@@ -1,6 +1,7 @@
 package controller.observer;
 
+import view.Tela;
+
 public interface ObserverTelaInicial {
-    void mostrarTela();
-    void ocultarTela();
+    void navegarParaOutraTela(Tela outraTela);
 }
