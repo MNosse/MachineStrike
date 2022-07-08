@@ -11,11 +11,15 @@ import global.EnumTipoTerreno;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.Vector;
 import java.util.HashMap;
 
 //JAVAX
 import javax.swing.*;
+
+//VIEW
+import view.utils.SingletonImagens;
 
 public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
     private JLabel lblFundo;
@@ -37,8 +41,8 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
     private GridBagConstraints constraints;
     private ControladorTelaTabuleiros controlador;
     private HashMap<String, JLabel> listaQuadradosTabuleiros;
-    private HashMap<EnumTipoTerreno, ImageIcon> imagensTerrenos;
     private HashMap<String, EnumTipoTerreno> terrenosQuadradosTabuleiros;
+    private HashMap<String, ImageIcon> imagens = SingletonImagens.getInstancia().getImagens();
 
     public TelaTabuleiros() {
         edicaoAtiva = false;
@@ -53,7 +57,6 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
 
     private void initialize() {
         iniciarListaQuadradosTabuleiros();
-        iniciarImagensTerrenos();
         //btnCriarTabuleiro
         btnCriarTabuleiro = criarBotao("Criar tabuleiro", ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
         //cmbListaTabuleiros
@@ -85,7 +88,9 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         //cmbTiposTerreno
         cmbTiposTerreno = criarComboBox(new Vector<>(Arrays.asList(EnumTipoTerreno.values())), ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
         //lblTerrenoSelecionado
-        lblTerrenoSelecionado = new JLabel(imagensTerrenos.get(cmbTiposTerreno.getSelectedItem()));
+        System.out.println(cmbTiposTerreno.getSelectedItem());
+        System.out.println(cmbTiposTerreno.getSelectedItem().toString());
+        lblTerrenoSelecionado = new JLabel(imagens.get(EnumTipoTerreno.valueOf(cmbTiposTerreno.getSelectedItem().toString()).getTipo()));
         //btnCancelar
         btnCancelar = criarBotao("Cancelar", ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
         //btnSalvar
@@ -108,15 +113,14 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         lblPainelCentral = new JLabel(criarImagem("src/images/Filtro.png", ((int)(getAltura()*0.9)), ((int)(getAltura()*0.9))));
         lblPainelCentral.setLayout(layout);
         constraints.insets = new Insets(0, 0, 0, 0);
-        for (int linha = 0; linha < 8; linha++) {
-            constraints.gridy = linha;
-            for (int coluna = 0; coluna < 8; coluna++) {
-                constraints.gridx = coluna;
-                lblPainelCentral.add(listaQuadradosTabuleiros.get(linha+""+coluna), constraints);
-            }
+        Set<String> quadrados = listaQuadradosTabuleiros.keySet();
+        for (String posicao : quadrados) {
+            constraints.gridy = Integer.parseInt(String.valueOf(posicao.charAt(0)));
+            constraints.gridx = Integer.parseInt(String.valueOf(posicao.charAt(1)));
+            lblPainelCentral.add(listaQuadradosTabuleiros.get(posicao), constraints);
         }
         //lblFundo
-        lblFundo = new JLabel(criarImagem("src/images/Background.png", getAltura(), getLargura()));
+        lblFundo = new JLabel(imagens.get("Background"));
         lblFundo.setLayout(layout);
         constraints.insets = new Insets(0, 0, 0, 0);
         constraints.gridx = GridBagConstraints.RELATIVE;
@@ -176,14 +180,14 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         btnVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaTelaInicial();
+                controlador.navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaInicial");
             }
         });
         //cmbTiposTerreno
         cmbTiposTerreno.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                lblTerrenoSelecionado.setIcon(imagensTerrenos.get(cmbTiposTerreno.getSelectedItem()));
+                lblTerrenoSelecionado.setIcon(imagens.get(EnumTipoTerreno.valueOf(cmbTiposTerreno.getSelectedItem().toString()).getTipo()));
             }
         });
 //      btnCancelar
@@ -221,7 +225,7 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if(edicaoAtiva) {
-                            quadrado.setIcon(imagensTerrenos.get(cmbTiposTerreno.getSelectedItem()));
+                            quadrado.setIcon(imagens.get(EnumTipoTerreno.valueOf(cmbTiposTerreno.getSelectedItem().toString()).getTipo()));
                             terrenosQuadradosTabuleiros.put((finalLinha +""+finalColuna), EnumTipoTerreno.valueOf(cmbTiposTerreno.getSelectedItem().toString()));
                         }
                     }
@@ -233,16 +237,6 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
 
     public void iniciarListaTerrenosCriacao(HashMap<String, EnumTipoTerreno> terrenos) {
         terrenosQuadradosTabuleiros = terrenos;
-    }
-
-    private void iniciarImagensTerrenos() {
-        imagensTerrenos = new HashMap<>();
-        imagensTerrenos.put(EnumTipoTerreno.ABISMO, criarImagem("src/images/"+EnumTipoTerreno.ABISMO.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.PANTANO, criarImagem("src/images/"+EnumTipoTerreno.PANTANO.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.PASTO, criarImagem("src/images/"+EnumTipoTerreno.PASTO.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.FLORESTA, criarImagem("src/images/"+EnumTipoTerreno.FLORESTA.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.ELEVACAO, criarImagem("src/images/"+EnumTipoTerreno.ELEVACAO.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.MONTANHA, criarImagem("src/images/"+EnumTipoTerreno.MONTANHA.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
     }
 
     public void mudarEstadoPainelDireito(boolean estado) {
@@ -262,10 +256,9 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
     }
 
     public void desenharTabuleiro(HashMap<String, EnumTipoTerreno> terrenos) {
-        for (int linha = 0; linha < 8; linha++) {
-            for (int coluna = 0; coluna < 8; coluna++) {
-                listaQuadradosTabuleiros.get(linha+""+coluna).setIcon(imagensTerrenos.get(terrenos.get(linha+""+coluna)));
-            }
+        Set<String> posicoes = terrenos.keySet();
+        for (String posicao : posicoes) {
+            listaQuadradosTabuleiros.get(posicao).setIcon(imagens.get(terrenos.get(posicao).getTipo()));
         }
     }
 

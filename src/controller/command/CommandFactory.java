@@ -4,6 +4,7 @@ package controller.command;
 import controller.observer.ObserverCommand;
 
 //JAVA
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -13,10 +14,10 @@ public class CommandFactory {
 
     private Map<String, Class<? extends Command>> comandos = new HashMap<>();
 
-    private List<ObserverCommand> observers;
+    private List<ObserverCommand> observers = new ArrayList<>();
 
     private CommandFactory() {
-//        comandos.put("new", NewCommand.class);
+        comandos.put("mover", MoverCommand.class);
     }
 
     private static CommandFactory instancia;
@@ -32,23 +33,28 @@ public class CommandFactory {
         observers.add(observer);
     }
 
-    public Command getComando(String nomeComando, Object... args) throws Exception {
-        Class<? extends Command> commandClass = comandos.get(nomeComando);
-        Class<?>[] parametros;
-        if (args != null) {
-            parametros = new Class<?>[] {ObserverCommand.class, Object[].class};
-        } else {
-            parametros = new Class<?>[] {ObserverCommand.class};
-        }
-        Constructor<? extends Command> constructor = commandClass.getConstructor(parametros);
+    public Command getComando(String nomeComando, Object[] args) {
+        try {
+            Class<? extends Command> commandClass = comandos.get(nomeComando);
+            Class<?>[] parametros;
+            if (args != null) {
+                parametros = new Class<?>[]{List.class, Object[].class};
+            } else {
+                parametros = new Class<?>[]{List.class};
+            }
+            Constructor<? extends Command> constructor = commandClass.getConstructor(parametros);
 
-        Command command;
-        if (args != null) {
-            command = constructor.newInstance(observers, args);
-        } else {
-            command = constructor.newInstance(observers);
-        }
+            Command command;
+            if (args != null) {
+                command = constructor.newInstance(observers, args);
+            } else {
+                command = constructor.newInstance(observers);
+            }
 
-        return command;
+            return command;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

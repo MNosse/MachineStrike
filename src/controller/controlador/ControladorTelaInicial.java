@@ -1,10 +1,8 @@
 package controller.controlador;
 
 //CONTROLLER
-import controller.abstractFactoryTela.ConcretFactoryTelaTabuleiros;
 import controller.observer.ObserverTelaInicial;
 import controller.abstractFactoryTela.AbstractFactoryTela;
-import controller.abstractFactoryTela.ConcretFactoryTelaConfigurarJogo;
 
 //JAVA
 import java.util.List;
@@ -22,17 +20,14 @@ public class ControladorTelaInicial {
         observers.add(observer);
     }
 
-    public void navegarParaTelaConfigurarJogo() {
-        AbstractFactoryTela factoryTela = new ConcretFactoryTelaConfigurarJogo();
-        for (ObserverTelaInicial observer:observers) {
-            observer.navegarParaOutraTela(factoryTela.construirTela());
-        }
-    }
-
-    public void navegarParaTelaTabuleiros() {
-        AbstractFactoryTela factoryTela = new ConcretFactoryTelaTabuleiros();
-        for (ObserverTelaInicial observer:observers) {
-            observer.navegarParaOutraTela(factoryTela.construirTela());
+    public void navegarParaOutraTela(String caminho) {
+        try {
+            AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
+            for (ObserverTelaInicial observer : observers) {
+                observer.navegarParaOutraTela(factoryTela.construirTela());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

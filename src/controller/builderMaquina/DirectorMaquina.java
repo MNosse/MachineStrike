@@ -1,11 +1,8 @@
 package controller.builderMaquina;
 
-//GLOBAL
-import controller.stateDirecao.StateDirecao;
-import global.EnumDirecao;
-
 //MODEL
 import model.Jogador;
+import model.state.stateDirecao.StateDirecao;
 
 public class DirectorMaquina {
     private ConstruirMaquina construirMaquina;
@@ -14,7 +11,7 @@ public class DirectorMaquina {
         this.construirMaquina = construirMaquina;
     }
 
-    public void construir(Jogador jogador, int linha, int coluna) {
+    public void construir(Jogador jogador, int linha, int coluna, StateDirecao direcao) {
         construirMaquina.reset();
         construirMaquina.construirJogador(jogador);
         construirMaquina.construirVida();
@@ -30,5 +27,7 @@ public class DirectorMaquina {
         construirMaquina.construirFrente();
         construirMaquina.construirDireita();
         construirMaquina.construirEsquerda();
+        construirMaquina.construirDirecaoAtual(direcao);
+        construirMaquina.construirMoverAtual();
     }
 }

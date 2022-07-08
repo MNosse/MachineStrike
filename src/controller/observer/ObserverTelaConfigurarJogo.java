@@ -2,10 +2,12 @@ package controller.observer;
 
 //GLOBAL
 import global.EnumTipoTerreno;
-import view.Tela;
 
 //JAVA
 import java.util.HashMap;
+
+//VIEW
+import view.Tela;
 
 public interface ObserverTelaConfigurarJogo {
     void desenharTabuleiro(HashMap<String, EnumTipoTerreno> terrenos);

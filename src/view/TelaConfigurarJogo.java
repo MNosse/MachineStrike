@@ -6,6 +6,7 @@ import controller.observer.ObserverTelaConfigurarJogo;
 import controller.controlador.ControladorTelaConfigurarJogo;
 
 //GLOBAL
+import global.EnumJogador;
 import global.EnumMaquinas;
 import global.EnumTipoTerreno;
 import global.EnumAdicionarRemover;
@@ -20,9 +21,10 @@ import javax.swing.*;
 
 //VIEW
 import view.components.CardMaquina;
+import view.utils.SingletonImagens;
 
 
-public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJogo, ObserverCommand {
+public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJogo {
     private JLabel lblFundo;
     private JButton btnJogar;
     private JButton btnVoltar;
@@ -39,9 +41,7 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
     private ControladorTelaConfigurarJogo controlador;
     private Map<String, JLabel> listaQuadradosTabuleiros;
     private Map<String, JLabel> listaMaquinasNoTabuleiro;
-    private HashMap<EnumMaquinas, ImageIcon> imagensMaquinas;
-    private HashMap<EnumTipoTerreno, ImageIcon> imagensTerrenos;
-    private HashMap<String, ImageIcon> imagensOutrosTiposQuadrados;
+    private HashMap<String, ImageIcon> imagens = SingletonImagens.getInstancia().getImagens();
 
     public TelaConfigurarJogo() {
         controlador = new ControladorTelaConfigurarJogo();
@@ -54,9 +54,6 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
     }
 
     private void initialize() {
-        iniciarImagensTerrenos();
-        iniciarImagensMaquinas();
-        iniciarImagensOutrosTiposQuadrados();
         iniciarListaQuadradosTabuleiros();
         iniciarListaMaquinasNoTabuleiro();
         //btnJogar
@@ -92,28 +89,26 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         lblPainelDireito.add(cmbJogador, constraints);
         lblPainelDireito.add(cmbAdicionarRemover, constraints);
         lblPainelDireito.add(cmbMaquinas, constraints);
-        constraints.insets = new Insets(0, 0, 60, 0);
+        constraints.insets = new Insets(0, 0, 168, 0);
         lblPainelDireito.add(cardMaquina, constraints);
         //lblPainelCentral
         lblPainelCentral = new JLabel(criarImagem("src/images/Filtro.png", ((int)(getAltura()*0.9)), ((int)(getAltura()*0.9))));
         lblPainelCentral.setLayout(layout);
         constraints.insets = new Insets(0, 0, 0, 0);
-        for (int linha = 0; linha < 8; linha++) {
-            constraints.gridy = linha;
-            for (int coluna = 0; coluna < 8; coluna++) {
-                constraints.gridx = coluna;
-                JLabel maquinaLabel = listaMaquinasNoTabuleiro.get(linha+""+coluna);
-                JLabel terrenoLabel = listaQuadradosTabuleiros.get(linha+""+coluna);
-                if (linha > 1 && linha < 6) {
-                    maquinaLabel.setIcon(imagensOutrosTiposQuadrados.get("Bloqueado"));
-                }
-                lblPainelCentral.add(maquinaLabel, constraints);
-                lblPainelCentral.add(terrenoLabel, constraints);
+        Set<String> posicoes = listaQuadradosTabuleiros.keySet();
+        for (String posicao : posicoes) {
+            constraints.gridy = Integer.parseInt(String.valueOf(posicao.charAt(0)));
+            constraints.gridx = Integer.parseInt(String.valueOf(posicao.charAt(1)));
+            JLabel maquinaLabel = listaMaquinasNoTabuleiro.get(posicao);
+            if (constraints.gridy > 1 && constraints.gridy < 6) {
+                maquinaLabel.setIcon(imagens.get("BloqueadoPequeno"));
             }
+            lblPainelCentral.add(maquinaLabel, constraints);
+            lblPainelCentral.add(listaQuadradosTabuleiros.get(posicao), constraints);
         }
-        controlador.alterouComboboxJogadores(cmbJogador.getSelectedItem().toString());
+        controlador.alterouComboboxJogadores((EnumJogador) cmbJogador.getSelectedItem());
         //lblFundo
-        lblFundo = new JLabel(criarImagem("src/images/Background.png", getAltura(), getLargura()));
+        lblFundo = new JLabel(imagens.get("Background"));
         lblFundo.setLayout(layout);
         constraints.insets = new Insets(0, 0, 0, 0);
         constraints.gridx = GridBagConstraints.RELATIVE;
@@ -126,7 +121,7 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         //frmTela
         getFrmTela().setSize(getLargura(), getAltura());
         getFrmTela().setResizable(false);
-        getFrmTela().setTitle("Machine Strike - Tabuleiros");
+        getFrmTela().setTitle("Machine Strike - Configurar Jogo");
         getFrmTela().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getFrmTela().setLocationRelativeTo(null);
         getFrmTela().setContentPane(lblFundo);
@@ -138,7 +133,7 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         btnJogar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //fazer algo
+                controlador.navegarParaTelaJogo(cmbListaTabuleiros.getSelectedItem().toString());
             }
         });
         //cmbListaTabuleiros
@@ -147,7 +142,7 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
             public void itemStateChanged(ItemEvent e) {
                 controlador.desenharTabuleiro(cmbListaTabuleiros.getSelectedItem().toString());
                 mudarEstadoPainelDireito();
-                controlador.alterouComboboxJogadores(cmbJogador.getSelectedItem().toString());
+                controlador.alterouComboboxJogadores((EnumJogador) cmbJogador.getSelectedItem());
                 controlador.removerMaquinasDosJogadores();
             }
         });
@@ -155,14 +150,14 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         btnVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaTelaInicial();
+                controlador.navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaInicial");
             }
         });
         //cmbJogador
         cmbJogador.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                controlador.alterouComboboxJogadores(cmbJogador.getSelectedItem().toString());
+                controlador.alterouComboboxJogadores((EnumJogador) cmbJogador.getSelectedItem());
             }
         });
         //cmbMaquinas
@@ -170,7 +165,6 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
             @Override
             public void itemStateChanged(ItemEvent e) {
                 cardMaquina.atualizarConteudo(controlador.getInformacoesMaquina((EnumMaquinas)cmbMaquinas.getSelectedItem()));
-
             }
         });
     }
@@ -180,16 +174,16 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         for (int linha = 0; linha < 8; linha++) {
             for (int coluna = 0; coluna < 8; coluna++) {
                 JLabel quadrado = new JLabel();
-                quadrado.setIcon(imagensOutrosTiposQuadrados.get("Vazio"));
+                quadrado.setIcon(imagens.get("Vazio"));
                 int finalLinha = linha;
                 int finalColuna = coluna;
                 quadrado.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         if (cmbAdicionarRemover.getSelectedItem().equals(EnumAdicionarRemover.ADICIONAR)) {
-                            controlador.adicionarMaquinaAoJogador(cmbJogador.getSelectedItem().toString(), finalLinha+""+finalColuna, EnumMaquinas.valueOf(cmbMaquinas.getSelectedItem().toString()), cmbListaTabuleiros.getSelectedItem().toString());
+                            controlador.adicionarMaquinaAoJogador((EnumJogador) cmbJogador.getSelectedItem(), finalLinha+""+finalColuna, EnumMaquinas.valueOf(cmbMaquinas.getSelectedItem().toString()), cmbListaTabuleiros.getSelectedItem().toString());
                         } else {
-                            controlador.removerMaquinaDoJogador(cmbJogador.getSelectedItem().toString(), finalLinha+""+finalColuna);
+                            controlador.removerMaquinaDoJogador((EnumJogador) cmbJogador.getSelectedItem(), finalLinha+""+finalColuna);
                         }
                     }
                 });
@@ -208,36 +202,6 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         }
     }
 
-    private void iniciarImagensTerrenos() {
-        imagensTerrenos = new HashMap<>();
-        imagensTerrenos.put(EnumTipoTerreno.ABISMO, criarImagem("src/images/"+EnumTipoTerreno.ABISMO.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.PANTANO, criarImagem("src/images/"+EnumTipoTerreno.PANTANO.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.PASTO, criarImagem("src/images/"+EnumTipoTerreno.PASTO.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.FLORESTA, criarImagem("src/images/"+EnumTipoTerreno.FLORESTA.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.ELEVACAO, criarImagem("src/images/"+EnumTipoTerreno.ELEVACAO.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensTerrenos.put(EnumTipoTerreno.MONTANHA, criarImagem("src/images/"+EnumTipoTerreno.MONTANHA.getTipo()+".png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-    }
-
-    private void iniciarImagensMaquinas() {
-        imagensMaquinas = new HashMap<>();
-        imagensMaquinas.put(EnumMaquinas.ARIETE1, criarImagem("src/images/Ariete1-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensMaquinas.put(EnumMaquinas.ARIETE2, criarImagem("src/images/Ariete2-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensMaquinas.put(EnumMaquinas.ARRANCADA, criarImagem("src/images/Arrancada-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensMaquinas.put(EnumMaquinas.ATIRADOR1, criarImagem("src/images/Atirador1-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensMaquinas.put(EnumMaquinas.ATIRADOR2, criarImagem("src/images/Atirador2-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensMaquinas.put(EnumMaquinas.CORPO_A_CORPO1, criarImagem("src/images/CorpoACorpo1-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensMaquinas.put(EnumMaquinas.CORPO_A_CORPO2, criarImagem("src/images/CorpoACorpo2-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensMaquinas.put(EnumMaquinas.MERGULHO1, criarImagem("src/images/Mergulho1-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensMaquinas.put(EnumMaquinas.MERGULHO2, criarImagem("src/images/Mergulho2-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensMaquinas.put(EnumMaquinas.PUXAO, criarImagem("src/images/Puxao-Norte.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-    }
-
-    private void iniciarImagensOutrosTiposQuadrados() {
-        imagensOutrosTiposQuadrados = new HashMap<>();
-        imagensOutrosTiposQuadrados.put("Vazio", criarImagem("src/images/Vazio.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-        imagensOutrosTiposQuadrados.put("Bloqueado", criarImagem("src/images/Bloqueado.png", ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
-    }
-
     public void mudarEstadoPainelDireito() {
         cmbJogador.setSelectedIndex(0);
         cmbAdicionarRemover.setSelectedIndex(0);
@@ -247,7 +211,7 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
     public void desenharTabuleiro(HashMap<String, EnumTipoTerreno> terrenos) {
         for (int linha = 0; linha < 8; linha++) {
             for (int coluna = 0; coluna < 8; coluna++) {
-                listaQuadradosTabuleiros.get(linha+""+coluna).setIcon(imagensTerrenos.get(terrenos.get(linha+""+coluna)));
+                listaQuadradosTabuleiros.get(linha+""+coluna).setIcon(imagens.get(EnumTipoTerreno.valueOf(terrenos.get(linha+""+coluna).toString()).getTipo()));
             }
         }
     }
@@ -257,6 +221,6 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
     }
 
     public void desenharBloquadoOuVazio(String nomeImagem, String posicao) {
-        listaMaquinasNoTabuleiro.get(posicao).setIcon(imagensOutrosTiposQuadrados.get(nomeImagem));
+        listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get(nomeImagem));
     }
 }

@@ -37,6 +37,15 @@ public abstract class Tela {
         return jComboBox;
     }
 
+    protected JLabel criarTexto(String texto) {
+        JLabel lbl = new JLabel();
+        lbl.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+        lbl.setBackground(new Color(217, 217, 217));
+        lbl.setForeground(Color.BLACK);
+        lbl.setText(texto);
+        return lbl;
+    }
+
 
     public void navegarParaOutraTela(Tela outraTela) {
         frmTela.dispose();

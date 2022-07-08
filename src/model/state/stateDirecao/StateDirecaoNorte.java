@@ -1,27 +1,30 @@
-package controller.stateDirecao;
+package model.state.stateDirecao;
 
+//GLOBAL
 import global.EnumDirecao;
+
+//MODEL
 import model.Maquina;
 
-public class StateDirecaoSul extends StateDirecao {
+public class StateDirecaoNorte extends StateDirecao {
 
-    public StateDirecaoSul(Maquina maquina) {
+    public StateDirecaoNorte(Maquina maquina) {
         super(maquina);
     }
 
     @Override
     public void girar() {
-        maquina.setDirecaoAtual(new StateDirecaoOeste(maquina));
+        maquina.setDirecaoAtual(new StateDirecaoLeste(maquina));
     }
 
     @Override
     public EnumDirecao getDirecaoAtual() {
-        return EnumDirecao.SUL;
+        return EnumDirecao.NORTE;
     }
 
     @Override
     public String getCaminhoImagem() {
         String auxiliar = maquina.getNome().replace(" ", "");
-        return "src/images/"+auxiliar+"-Sul.png";
+        return "src/images/"+auxiliar+"-Norte.png";
     }
 }

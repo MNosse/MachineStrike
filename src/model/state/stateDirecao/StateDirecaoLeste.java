@@ -1,6 +1,9 @@
-package controller.stateDirecao;
+package model.state.stateDirecao;
 
+//GLOBAL
 import global.EnumDirecao;
+
+//MODEL
 import model.Maquina;
 
 public class StateDirecaoLeste extends StateDirecao {

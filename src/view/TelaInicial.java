@@ -1,12 +1,20 @@
 package view;
 
+//CONTROLLER
 import controller.observer.ObserverTelaInicial;
 import controller.controlador.ControladorTelaInicial;
 
-import javax.swing.*;
+//JAVA
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+
+//JAVAX
+import javax.swing.*;
+
+//VIEW
+import view.utils.SingletonImagens;
 
 public class TelaInicial extends Tela implements ObserverTelaInicial {
     private JLabel lblLogo;
@@ -18,6 +26,7 @@ public class TelaInicial extends Tela implements ObserverTelaInicial {
     private GridBagLayout layout;
     private GridBagConstraints constraints;
     private ControladorTelaInicial controlador;
+    private HashMap<String, ImageIcon> imagens = SingletonImagens.getInstancia().getImagens();
 
     public TelaInicial(){
         layout = new GridBagLayout();
@@ -30,7 +39,7 @@ public class TelaInicial extends Tela implements ObserverTelaInicial {
 
     private void initialize(){
         //lblLogo
-        lblLogo = new JLabel(criarImagem("src/images/Logo.png", ((int)(getAltura()*0.375)), ((int)(getLargura()*0.36402))));
+        lblLogo = new JLabel(imagens.get("Logo"));
         //btnJogar
         btnJogar = criarBotao("Jogar", 100, 30);
         //btnTabuleiros
@@ -46,7 +55,7 @@ public class TelaInicial extends Tela implements ObserverTelaInicial {
         lblBotoes.add(btnTabuleiros, constraints);
         lblBotoes.add(btnRegras, constraints);
         //lblFundo
-        lblFundo = new JLabel(criarImagem("src/images/Background.png", getAltura(), getLargura()));
+        lblFundo = new JLabel(imagens.get("Background"));
         lblFundo.setLayout(layout);
         constraints.insets = new Insets(0, 0, 0, 0);
         constraints.gridx = 0;
@@ -69,14 +78,14 @@ public class TelaInicial extends Tela implements ObserverTelaInicial {
         btnJogar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaTelaConfigurarJogo();
+                controlador.navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaConfigurarJogo");
             }
         });
         //btnTabuleiros
         btnTabuleiros.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaTelaTabuleiros();
+                controlador.navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaTabuleiros");
             }
         });
     }

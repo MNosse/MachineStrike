@@ -1,11 +1,13 @@
 package model;
 
 //CONTROLLER
-import controller.stateDirecao.StateDirecao;
+import global.EnumDirecao;
+import model.state.stateDirecao.StateDirecao;
 
 //GLOBAL
 import global.EnumResistencia;
 import global.EnumTipoMaquinas;
+import model.state.stateMover.StateMover;
 
 public class Maquina {
     private int vida;
@@ -23,6 +25,23 @@ public class Maquina {
     private EnumResistencia direita;
     private EnumResistencia esquerda;
     private StateDirecao direcaoAtual;
+    private StateMover moverAtual;
+
+    public void girar() {
+        direcaoAtual.girar();
+    }
+
+    public void mover(int novaLinha, int novaColuna) {
+        moverAtual.mover(novaLinha, novaColuna);
+    }
+
+    public EnumDirecao direcaoAtualDaMaquina() {
+        return direcaoAtual.getDirecaoAtual();
+    }
+
+    public String caminhoImagemDirecaoAtual() {
+        return direcaoAtual.getCaminhoImagem();
+    }
 
     public Jogador getJogador() {
         return jogador;
@@ -144,4 +163,11 @@ public class Maquina {
         this.direcaoAtual = direcaoAtual;
     }
 
+    public StateMover getMoverAtual() {
+        return moverAtual;
+    }
+
+    public void setMoverAtual(StateMover moverAtual) {
+        this.moverAtual = moverAtual;
+    }
 }

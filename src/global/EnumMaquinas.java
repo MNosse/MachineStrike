@@ -13,18 +13,18 @@ public enum EnumMaquinas {
     PUXAO("Puxao", "controller.builderMaquina.ConstruirPuxao");
 
     private String nome;
-    private String caminhoBuilder;
+    private String nomeBuilder;
 
-    EnumMaquinas(String nome, String caminhoBuilder) {
+    EnumMaquinas(String nome, String nomeBuilder) {
         this.nome = nome;
-        this.caminhoBuilder = caminhoBuilder;
+        this.nomeBuilder = nomeBuilder;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public String getCaminhoBuilder() {
-        return caminhoBuilder;
+    public String getNomeBuilder() {
+        return nomeBuilder;
     }
 }

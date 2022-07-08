@@ -9,7 +9,7 @@ import javax.swing.*;
 
 public class CardMaquina extends JLabel {
 
-    private int altura = (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.5209);
+    private int altura = (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.40);
     private int largura = (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.19125);
 
     private JLabel lblTextoCabecalho;
@@ -22,8 +22,12 @@ public class CardMaquina extends JLabel {
     private JLabel lblTextoMovimento;
 
     public CardMaquina(HashMap<String, String> informacoesMaquina) {
-        super(new ImageIcon(new ImageIcon("src/images/Carta.png").getImage().getScaledInstance((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.19125), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.5209), Image.SCALE_SMOOTH)));
-        initialize(informacoesMaquina.get("CaminhoImagem"), informacoesMaquina.get("Nome"), informacoesMaquina.get("PV"), informacoesMaquina.get("Vida"), informacoesMaquina.get("Ataque"), informacoesMaquina.get("Alcance"), informacoesMaquina.get("Movimento"));
+        super(new ImageIcon(new ImageIcon("src/images/Carta.png").getImage().getScaledInstance((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.19125), (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.38), Image.SCALE_SMOOTH)));
+        if (informacoesMaquina != null) {
+            initialize(informacoesMaquina.get("CaminhoImagem"), informacoesMaquina.get("Nome"), informacoesMaquina.get("PV"), informacoesMaquina.get("Vida"), informacoesMaquina.get("Ataque"), informacoesMaquina.get("Alcance"), informacoesMaquina.get("Movimento"));
+        } else {
+            initialize("src/images/Bloqueado.png", "", "", "", "", "", "");
+        }
     }
 
     private void initialize(String caminhoImagem, String nome, String pv, String vida, String ataque, String alcance, String movimento) {
@@ -51,8 +55,8 @@ public class CardMaquina extends JLabel {
         panInformacoes = new JPanel();
         panInformacoes.setLayout(new GridBagLayout());
         panInformacoes.setBackground(new Color(217, 217, 217));
-        panInformacoes.setMinimumSize(new Dimension((int)(largura*0.93), (int)(altura*0.22)));
-        panInformacoes.setPreferredSize(new Dimension((int)(largura*0.93), (int)(altura*0.22)));
+        panInformacoes.setMinimumSize(new Dimension((int)(largura*0.93), (int)(altura*0.25)));
+        panInformacoes.setPreferredSize(new Dimension((int)(largura*0.93), (int)(altura*0.25)));
         constraints.gridx = 0;
         constraints.gridy = GridBagConstraints.RELATIVE;
         constraints.anchor = GridBagConstraints.LINE_START;
@@ -69,7 +73,7 @@ public class CardMaquina extends JLabel {
         constraints.insets = new Insets(0, 0, (int)(altura*0.05), 0);
         this.add(panCabecalho, constraints);
         this.add(lblImagemMaquina, constraints);
-        constraints.insets = new Insets(0, 0, (int)(altura*0.20), 0);
+        constraints.insets = new Insets(0, 0, (int)(altura*0.010), 0);
         this.add(panInformacoes, constraints);
     }
 

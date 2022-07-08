@@ -1,12 +1,12 @@
 package controller.builderMaquina;
 
-//GLOBAL
-import controller.stateDirecao.StateDirecao;
-import global.EnumDirecao;
+//CONTROLLER
+import model.state.stateDirecao.StateDirecao;
 
 //MODEL
 import model.Jogador;
 import model.Maquina;
+import model.state.stateMover.StateMoverAtivo;
 
 public abstract class ConstruirMaquina {
 
@@ -48,6 +48,10 @@ public abstract class ConstruirMaquina {
 
     public void construirDirecaoAtual(StateDirecao direcaoAtual) {
         maquina.setDirecaoAtual(direcaoAtual);
+    }
+
+    public void construirMoverAtual() {
+        maquina.setMoverAtual(new StateMoverAtivo(maquina));
     }
 
     public Maquina getMaquina() {

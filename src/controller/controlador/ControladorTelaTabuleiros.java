@@ -6,7 +6,6 @@ import controller.observer.ObserverTelaTabuleiros;
 import controller.builderTerreno.ConstruirTerreno;
 import controller.builderTabuleiro.DirectorTabuleiro;
 import controller.abstractFactoryTela.AbstractFactoryTela;
-import controller.abstractFactoryTela.ConcretFactoryTelaInicial;
 import controller.builderTabuleiro.ConstruirTabuleiroSemMaquinas;
 
 //GLOBAL
@@ -147,28 +146,26 @@ public class ControladorTelaTabuleiros {
     }
 
     public void desenharTabuleiro(String chaveTabuleiro) {
-        Tabuleiro tabuleiro = tabuleiros.get(chaveTabuleiro);
-        HashMap<String, EnumTipoTerreno> terrenos = new HashMap<>();
-        for (int linha = 0; linha < 8; linha++) {
-            for (int coluna = 0; coluna < 8; coluna++) {
-                terrenos.put((linha+""+coluna), tabuleiro.getTerrenos().get(linha+""+coluna).getTipo());
-            }
+        HashMap<String, Terreno> terrenos = tabuleiros.get(chaveTabuleiro).getTerrenos();
+        Set<String> posicoes = terrenos.keySet();
+        HashMap<String, EnumTipoTerreno> tiposTerreno = new HashMap<>();
+        for(String posicao : posicoes) {
+            tiposTerreno.put(posicao, terrenos.get(posicao).getTipo());
         }
         for (ObserverTelaTabuleiros observer:observers) {
-            observer.desenharTabuleiro(terrenos);
+            observer.desenharTabuleiro(tiposTerreno);
         }
     }
 
     public void iniciarListaTerrenosCriacao(String chaveTabuleiro) {
-        Tabuleiro tabuleiro = tabuleiros.get(chaveTabuleiro);
-        HashMap<String, EnumTipoTerreno> terrenos = new HashMap<>();
-        for (int linha = 0; linha < 8; linha++) {
-            for (int coluna = 0; coluna < 8; coluna++) {
-                terrenos.put((linha+""+coluna), tabuleiro.getTerrenos().get(linha+""+coluna).getTipo());
-            }
+        HashMap<String, Terreno> terrenos = tabuleiros.get(chaveTabuleiro).getTerrenos();
+        Set<String> posicoes = terrenos.keySet();
+        HashMap<String, EnumTipoTerreno> tiposTerrenos = new HashMap<>();
+        for (String posicao : posicoes) {
+            tiposTerrenos.put(posicao, terrenos.get(posicao).getTipo());
         }
         for (ObserverTelaTabuleiros observer:observers) {
-            observer.iniciarListaTerrenosCriacao(terrenos);
+            observer.iniciarListaTerrenosCriacao(tiposTerrenos);
         }
     }
 
@@ -182,10 +179,14 @@ public class ControladorTelaTabuleiros {
         }
     }
 
-    public void navegarParaTelaInicial() {
-        AbstractFactoryTela factoryTela = new ConcretFactoryTelaInicial();
-        for (ObserverTelaTabuleiros observer:observers) {
-            observer.navegarParaOutraTela(factoryTela.construirTela());
+    public void navegarParaOutraTela(String caminho) {
+        try {
+            AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
+            for (ObserverTelaTabuleiros observer : observers) {
+                observer.navegarParaOutraTela(factoryTela.construirTela());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

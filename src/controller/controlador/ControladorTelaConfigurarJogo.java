@@ -1,17 +1,18 @@
 package controller.controlador;
 
 //CONTROLLER
-import controller.stateDirecao.StateDirecao;
-import controller.stateDirecao.StateDirecaoSul;
-import controller.stateDirecao.StateDirecaoNorte;
+import model.state.stateDirecao.StateDirecao;
+import model.state.stateDirecao.StateDirecaoSul;
+import model.state.stateDirecao.StateDirecaoNorte;
 import controller.builderMaquina.DirectorMaquina;
 import controller.builderTerreno.DirectorTerreno;
 import controller.builderMaquina.ConstruirMaquina;
 import controller.builderTerreno.ConstruirTerreno;
 import controller.builderTabuleiro.DirectorTabuleiro;
+import controller.singleton.SingletonConfiguracaoJogo;
 import controller.observer.ObserverTelaConfigurarJogo;
 import controller.abstractFactoryTela.AbstractFactoryTela;
-import controller.abstractFactoryTela.ConcretFactoryTelaInicial;
+import controller.builderTabuleiro.ConstruirTabuleiroComMaquinas;
 import controller.builderTabuleiro.ConstruirTabuleiroSemMaquinas;
 
 //GLOBAL
@@ -35,7 +36,7 @@ public class ControladorTelaConfigurarJogo {
     private final File[] arquivosTabuleiros;
     private ConstruirMaquina construirMaquina;
     private DirectorTabuleiro directorTabuleiro;
-    private LinkedHashMap<String, Jogador> jogadores;
+    private LinkedHashMap<EnumJogador, Jogador> jogadores;
     private List<ObserverTelaConfigurarJogo> observers;
     private LinkedHashMap<String, Tabuleiro> tabuleiros;
     private ConstruirTabuleiroSemMaquinas construirTabuleiro;
@@ -85,22 +86,21 @@ public class ControladorTelaConfigurarJogo {
 
     private void iniciarJogadores() {
         jogadores = new LinkedHashMap<>();
-        Jogador jogador1 = new Jogador("Jogador 1");
-        Jogador jogador2 = new Jogador("Jogador 2");
-        jogadores.put(jogador1.getNome(), jogador1);
-        jogadores.put(jogador2.getNome(), jogador2);
+        Jogador jogador1 = new Jogador(EnumJogador.JOGADOR1);
+        Jogador jogador2 = new Jogador(EnumJogador.JOGADOR2);
+        jogadores.put(EnumJogador.JOGADOR1, jogador1);
+        jogadores.put(EnumJogador.JOGADOR2, jogador2);
     }
 
     public void desenharTabuleiro(String chaveTabuleiro) {
-        Tabuleiro tabuleiro = tabuleiros.get(chaveTabuleiro);
-        HashMap<String, EnumTipoTerreno> terrenos = new HashMap<>();
-        for (int linha = 0; linha < 8; linha++) {
-            for (int coluna = 0; coluna < 8; coluna++) {
-                terrenos.put((linha+""+coluna), tabuleiro.getTerrenos().get(linha+""+coluna).getTipo());
-            }
+        HashMap<String, Terreno> terrenos = tabuleiros.get(chaveTabuleiro).getTerrenos();
+        Set<String> posicoes = terrenos.keySet();
+        HashMap<String, EnumTipoTerreno> tiposTerreno = new HashMap<>();
+        for(String posicao : posicoes) {
+            tiposTerreno.put(posicao, terrenos.get(posicao).getTipo());
         }
         for (ObserverTelaConfigurarJogo observer:observers) {
-            observer.desenharTabuleiro(terrenos);
+            observer.desenharTabuleiro(tiposTerreno);
         }
     }
 
@@ -112,19 +112,19 @@ public class ControladorTelaConfigurarJogo {
         return tabuleiros;
     }
 
-    public LinkedHashMap<String, Jogador> getJogadores() {
+    public LinkedHashMap<EnumJogador, Jogador> getJogadores() {
         return jogadores;
     }
 
     public HashMap<String, String> getInformacoesMaquina(EnumMaquinas nomeMaquina) {
         HashMap<String, String> resposta = new HashMap<>();
         try {
-            construirMaquina = (ConstruirMaquina) Class.forName(nomeMaquina.getCaminhoBuilder()).getDeclaredConstructor().newInstance();
+            construirMaquina = (ConstruirMaquina) Class.forName(nomeMaquina.getNomeBuilder()).getDeclaredConstructor().newInstance();
             DirectorMaquina directorMaquina = new DirectorMaquina(construirMaquina);
-            directorMaquina.construir(null, 0, 0);
+            directorMaquina.construir(null, 0, 0, new StateDirecaoNorte(construirMaquina.getMaquina()));
             Maquina maquina = construirMaquina.getMaquina();
-            maquina.setDirecaoAtual(new StateDirecaoNorte(maquina));
-            resposta.put("CaminhoImagem", maquina.getDirecaoAtual().getCaminhoImagem());
+//            maquina.setDirecaoAtual(new StateDirecaoNorte(maquina));
+            resposta.put("CaminhoImagem", maquina.caminhoImagemDirecaoAtual());
             resposta.put("Nome", maquina.getNome());
             resposta.put("PV", String.valueOf(maquina.getPontosVitoria()));
             resposta.put("Vida", String.valueOf(maquina.getVida()));
@@ -137,32 +137,38 @@ public class ControladorTelaConfigurarJogo {
         return resposta;
     }
 
-    public void adicionarMaquinaAoJogador(String nomeJogador, String posicao, EnumMaquinas nomeMaquina, String nomeTabuleiro) {
+    public void adicionarMaquinaAoJogador(EnumJogador nomeJogador, String posicao, EnumMaquinas nomeMaquina, String nomeTabuleiro) {
         try {
             boolean continua = false;
-            if ((nomeJogador.equals("Jogador 1") && Integer.parseInt(posicao.substring(0, 1)) > 5)
-                || (nomeJogador.equals("Jogador 2") && Integer.parseInt(posicao.substring(0, 1)) < 2)) {
+            int linha = Integer.parseInt(String.valueOf(posicao.charAt(0)));
+            int coluna = Integer.parseInt(String.valueOf(posicao.charAt(1)));
+            if ((nomeJogador.equals(EnumJogador.JOGADOR1) && linha > 5)
+                    || (nomeJogador.equals(EnumJogador.JOGADOR2) && linha < 2)) {
                 continua = true;
             }
             if (continua) {
-                construirMaquina = (ConstruirMaquina) Class.forName(nomeMaquina.getCaminhoBuilder()).getDeclaredConstructor().newInstance();
-                DirectorMaquina directorMaquina = new DirectorMaquina(construirMaquina);
                 Jogador jogador = jogadores.get(nomeJogador);
-                int linha = Integer.parseInt(String.valueOf(posicao.charAt(0)));
-                int coluna = Integer.parseInt(String.valueOf(posicao.charAt(1)));
-                directorMaquina.construir(jogador, linha, coluna);
+                construirMaquina = (ConstruirMaquina) Class.forName(nomeMaquina.getNomeBuilder()).getDeclaredConstructor().newInstance();
+                DirectorMaquina directorMaquina = new DirectorMaquina(construirMaquina);
+                StateDirecao direcao = new StateDirecaoSul(construirMaquina.getMaquina());
+                if (nomeJogador.equals(EnumJogador.JOGADOR1)) {
+                    direcao = new StateDirecaoNorte(construirMaquina.getMaquina());
+                }
+                directorMaquina.construir(jogador, linha, coluna, direcao);
                 Maquina maquina = construirMaquina.getMaquina();
-                if ((tabuleiros.get(nomeTabuleiro).getTerrenoPorIndice(posicao).getTipo().equals(EnumTipoTerreno.ABISMO)
-                        && maquina.getTipo().equals(EnumTipoMaquinas.MERGULHO))
-                        || (!tabuleiros.get(nomeTabuleiro).getTerrenoPorIndice(posicao).getTipo().equals(EnumTipoTerreno.ABISMO))) {
-                    StateDirecao direcao = new StateDirecaoSul(maquina);
-                    if (nomeJogador.equals("Jogador 1")) {
-                        direcao = new StateDirecaoNorte(maquina);
+                if (jogador.getMaquinas().containsKey(posicao)) {
+                    if (jogador.podeSubstituirMaquinas(jogador.getMaquinas().get(posicao), maquina)) {
+                        removerMaquinaDoJogador(nomeJogador, posicao);
                     }
-                    maquina.setDirecaoAtual(direcao);
-                    jogador.addMaquinas(posicao, maquina);
-                    for (ObserverTelaConfigurarJogo observer : observers) {
-                        observer.desenharMaquina(maquina.getDirecaoAtual().getCaminhoImagem(), posicao);
+                }
+                if (jogador.podeAdicionarMaquinas(maquina)) {
+                    if ((tabuleiros.get(nomeTabuleiro).getTerrenoPorIndice(posicao).getTipo().equals(EnumTipoTerreno.ABISMO)
+                            && maquina.getTipo().equals(EnumTipoMaquinas.MERGULHO))
+                            || (!tabuleiros.get(nomeTabuleiro).getTerrenoPorIndice(posicao).getTipo().equals(EnumTipoTerreno.ABISMO))) {
+                        jogador.addMaquinas(posicao, maquina);
+                        for (ObserverTelaConfigurarJogo observer : observers) {
+                            observer.desenharMaquina(maquina.caminhoImagemDirecaoAtual(), posicao);
+                        }
                     }
                 }
             }
@@ -171,10 +177,10 @@ public class ControladorTelaConfigurarJogo {
         }
     }
 
-    public void removerMaquinaDoJogador(String nomeJogador, String posicao) {
+    public void removerMaquinaDoJogador(EnumJogador nomeJogador, String posicao) {
         boolean continua = false;
-        if ((nomeJogador.equals("Jogador 1") && Integer.parseInt(posicao.substring(0, 1)) > 5)
-                || (nomeJogador.equals("Jogador 2") && Integer.parseInt(posicao.substring(0, 1)) < 2)) {
+        if ((nomeJogador.equals(EnumJogador.JOGADOR1) && Integer.parseInt(posicao.substring(0, 1)) > 5)
+                || (nomeJogador.equals(EnumJogador.JOGADOR2) && Integer.parseInt(posicao.substring(0, 1)) < 2)) {
             continua = true;
         }
         if (continua) {
@@ -187,13 +193,13 @@ public class ControladorTelaConfigurarJogo {
     }
 
     public void removerMaquinasDosJogadores() {
-        jogadores.get("Jogador 1").getMaquinas().clear();
-        jogadores.get("Jogador 2").getMaquinas().clear();
+        jogadores.get(EnumJogador.JOGADOR1).getMaquinas().clear();
+        jogadores.get(EnumJogador.JOGADOR2).getMaquinas().clear();
     }
 
-    public void alterouComboboxJogadores(String nomeNovoJogador) {
-        Set<String> chavesMaquinasSuperiores = jogadores.get("Jogador 2").getMaquinas().keySet();
-        Set<String> chavesMaquinasInferiores = jogadores.get("Jogador 1").getMaquinas().keySet();
+    public void alterouComboboxJogadores(EnumJogador nomeNovoJogador) {
+        Set<String> chavesMaquinasSuperiores = jogadores.get(EnumJogador.JOGADOR2).getMaquinas().keySet();
+        Set<String> chavesMaquinasInferiores = jogadores.get(EnumJogador.JOGADOR1).getMaquinas().keySet();
         Set<String> chavesLinhasSuperiores = new HashSet<>();
         Set<String> chavesLinhasInferiores = new HashSet<>();
         for (int linha = 0; linha < 2; linha++) {
@@ -210,11 +216,11 @@ public class ControladorTelaConfigurarJogo {
         }
         String caminho = "";
         boolean isJogador1 = false;
-        if (nomeNovoJogador.equals("Jogador 1")){
+        if (nomeNovoJogador.equals(EnumJogador.JOGADOR1)){
             isJogador1 = true;
         }
         if (isJogador1) {
-            caminho = "Bloqueado";
+            caminho = "BloqueadoPequeno";
         } else {
             caminho = "Vazio";
         }
@@ -227,7 +233,7 @@ public class ControladorTelaConfigurarJogo {
         if (isJogador1) {
             caminho = "Vazio";
         } else {
-            caminho = "Bloqueado";
+            caminho = "BloqueadoPequeno";
         }
         for (String chave : chavesLinhasInferiores) {
             for (ObserverTelaConfigurarJogo observer:observers) {
@@ -236,10 +242,35 @@ public class ControladorTelaConfigurarJogo {
         }
     }
 
-    public void navegarParaTelaInicial() {
-        AbstractFactoryTela factoryTela = new ConcretFactoryTelaInicial();
-        for (ObserverTelaConfigurarJogo observer:observers) {
-            observer.navegarParaOutraTela(factoryTela.construirTela());
+    public void navegarParaTelaJogo(String nomeTabuleiro) {
+        if (jogadores.get(EnumJogador.JOGADOR1).contagemPVMaquinas() > 0
+                && jogadores.get(EnumJogador.JOGADOR2).contagemPVMaquinas() > 0) {
+            construirTabuleiro = new ConstruirTabuleiroComMaquinas();
+            directorTabuleiro = new DirectorTabuleiro(construirTabuleiro);
+            HashMap<String, Maquina> maquinas = new HashMap<>();
+            Map<String, Maquina> maquinasJogador1 = jogadores.get(EnumJogador.JOGADOR1).getMaquinas();
+            Map<String, Maquina> maquinasJogador2 = jogadores.get(EnumJogador.JOGADOR2).getMaquinas();
+            for (String chave : maquinasJogador1.keySet()) {
+                maquinas.put(chave, maquinasJogador1.get(chave));
+            }
+            for (String chave : maquinasJogador2.keySet()) {
+                maquinas.put(chave, maquinasJogador2.get(chave));
+            }
+            directorTabuleiro.construir(tabuleiros.get(nomeTabuleiro).getTipoTabuleiro(), tabuleiros.get(nomeTabuleiro).getTerrenos(), maquinas);
+            SingletonConfiguracaoJogo.getInstancia().setTabuleiro(construirTabuleiro.getTabuleiro());
+            SingletonConfiguracaoJogo.getInstancia().setJogadores(jogadores);
+            navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaJogo");
+        }
+    }
+
+    public void navegarParaOutraTela(String caminho) {
+        try {
+            AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
+            for (ObserverTelaConfigurarJogo observer : observers) {
+                observer.navegarParaOutraTela(factoryTela.construirTela());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
