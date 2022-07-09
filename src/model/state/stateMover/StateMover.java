@@ -11,4 +11,6 @@ public abstract class StateMover {
     }
 
     public abstract void mover(int novaLinha, int novaColuna);
+
+    public abstract boolean isAtivo();
 }

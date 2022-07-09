@@ -50,7 +50,7 @@ public class CardMaquina extends JLabel {
         //lblTextoAlcance
         lblTextoAlcance = criarTexto("Alcance: "+alcance);
         //lblTextoMovimento
-        lblTextoMovimento = criarTexto("Movimento: "+alcance);
+        lblTextoMovimento = criarTexto("Movimento: "+movimento);
         //panInformacoes
         panInformacoes = new JPanel();
         panInformacoes.setLayout(new GridBagLayout());

@@ -1,9 +1,8 @@
 package view;
 
 //CONTROLLER
-import controller.observer.ObserverCommand;
 import controller.observer.ObserverTelaConfigurarJogo;
-import controller.controlador.ControladorTelaConfigurarJogo;
+import controller.ControladorTelaConfigurarJogo;
 
 //GLOBAL
 import global.EnumJogador;
@@ -150,7 +149,7 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         btnVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaInicial");
+                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
             }
         });
         //cmbJogador
@@ -180,10 +179,13 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
                 quadrado.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if (cmbAdicionarRemover.getSelectedItem().equals(EnumAdicionarRemover.ADICIONAR)) {
-                            controlador.adicionarMaquinaAoJogador((EnumJogador) cmbJogador.getSelectedItem(), finalLinha+""+finalColuna, EnumMaquinas.valueOf(cmbMaquinas.getSelectedItem().toString()), cmbListaTabuleiros.getSelectedItem().toString());
-                        } else {
-                            controlador.removerMaquinaDoJogador((EnumJogador) cmbJogador.getSelectedItem(), finalLinha+""+finalColuna);
+                        if ((cmbJogador.getSelectedItem().equals(EnumJogador.JOGADOR1) && finalLinha > 5)
+                                || cmbJogador.getSelectedItem().equals(EnumJogador.JOGADOR2) && finalLinha < 2) {
+                            if (cmbAdicionarRemover.getSelectedItem().equals(EnumAdicionarRemover.ADICIONAR)) {
+                                controlador.adicionarMaquinaAoJogador((EnumJogador) cmbJogador.getSelectedItem(), finalLinha, finalColuna, EnumMaquinas.valueOf(cmbMaquinas.getSelectedItem().toString()), cmbListaTabuleiros.getSelectedItem().toString());
+                            } else {
+                                controlador.removerMaquinaDoJogador((EnumJogador) cmbJogador.getSelectedItem(), finalLinha, finalColuna);
+                            }
                         }
                     }
                 });
@@ -220,7 +222,10 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         listaMaquinasNoTabuleiro.get(posicao).setIcon(criarImagem(caminhoImagem, ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
     }
 
-    public void desenharBloquadoOuVazio(String nomeImagem, String posicao) {
-        listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get(nomeImagem));
+    public void desenharBloqueadosOuVazios(HashMap<String, String> valores) {
+        Set<String> posicoes = valores.keySet();
+        for (String posicao : posicoes) {
+            listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get(valores.get(posicao)));
+        }
     }
 }

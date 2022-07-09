@@ -12,4 +12,9 @@ public class StateMoverInativo extends StateMover{
     public void mover(int novaLinha, int novaColuna) {
         System.out.println("nao pode mover");
     }
+
+    @Override
+    public boolean isAtivo() {
+        return false;
+    }
 }

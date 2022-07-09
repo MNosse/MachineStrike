@@ -18,6 +18,8 @@ public class CommandFactory {
 
     private CommandFactory() {
         comandos.put("mover", MoverCommand.class);
+        comandos.put("girar", GirarCommand.class);
+        comandos.put("correr", CorrerCommand.class);
     }
 
     private static CommandFactory instancia;

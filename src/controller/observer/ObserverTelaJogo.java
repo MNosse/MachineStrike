@@ -16,7 +16,17 @@ public interface ObserverTelaJogo {
     void desenharQuadrado(String posicao, String caminhoImagem);
     void desenharQuadrados(HashMap<String, String> maquinas);
     void desenharQuadrados(Set<String> posicoes);
-    void desenharQuadradosSelecionados(Set<String> antigos, Set<String> novos);
+
+    void apagarCampoDeMovimento(Set<String> posicoes);
+    void desenharCampoDeMovimento(Set<String> posicoes);
+
+    void mudarEstadoBtnAtacar(boolean estado);
+    void mudarEstadoBtnSobrecarregar(boolean estado);
+    void mudarEstadoBtnMover(boolean estado);
+    void mudarEstadoBtnCorrer(boolean estado);
+    void mudarEstadoBtnGirar(boolean estado);
+    void desativarBotoes();
+
     void atualizarCardMaquinaAtacante(HashMap<String, String> informacoes);
     void navegarParaOutraTela(Tela outraTela);
 }

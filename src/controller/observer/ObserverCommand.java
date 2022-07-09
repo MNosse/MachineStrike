@@ -1,5 +1,6 @@
 package controller.observer;
 
 public interface ObserverCommand {
-    void atualizarListasDeMaquinas(String posicao);
+//    void atualizarListasDeMaquinas(String posicao);
+    void redesenharMaquinas();
 }

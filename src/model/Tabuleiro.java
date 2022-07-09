@@ -5,27 +5,25 @@ import global.EnumTipoTabuleiro;
 
 //JAVA
 import java.util.HashMap;
+import java.util.List;
 
 public class Tabuleiro {
     //Chaves sao as posicoes linha+coluna
     private EnumTipoTabuleiro tipoTabuleiro;
     private HashMap<String, Terreno> terrenos;
-    private HashMap<String, Maquina> maquinas;
+    private List<Maquina> maquinas;
 
-    public Terreno getTerrenoPorIndice (String linhaColuna) {
+    public Terreno getTerrenoPorPosicao(String linhaColuna) {
         return terrenos.get(linhaColuna);
     }
 
-    public Maquina getMaquinaPorIndice (String linhaColuna) {
-        return maquinas.get(linhaColuna);
-    }
-
-    public void atualizaTerrenoPorIndice (String linhaColuna, Terreno novoTerreno) {
-        terrenos.replace(linhaColuna, novoTerreno);
-    }
-
-    public void atualizaTerrenoPorIndice (String linhaColuna, Maquina novaMaquina) {
-        maquinas.replace(linhaColuna, novaMaquina);
+    public Maquina getMaquinaPorPosicao (int linha, int coluna) {
+        for (Maquina maquina : maquinas) {
+            if (maquina.getLinha() == linha && maquina.getColuna() == coluna) {
+                return maquina;
+            }
+        }
+        return null;
     }
 
     public HashMap<String, Terreno> getTerrenos() {
@@ -36,11 +34,11 @@ public class Tabuleiro {
         this.terrenos = terrenos;
     }
 
-    public HashMap<String, Maquina> getMaquinas() {
+    public List<Maquina> getMaquinas() {
         return maquinas;
     }
 
-    public void setMaquinas(HashMap<String, Maquina> maquinas) {
+    public void setMaquinas(List<Maquina> maquinas) {
         this.maquinas = maquinas;
     }
 

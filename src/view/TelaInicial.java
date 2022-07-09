@@ -2,7 +2,7 @@ package view;
 
 //CONTROLLER
 import controller.observer.ObserverTelaInicial;
-import controller.controlador.ControladorTelaInicial;
+import controller.ControladorTelaInicial;
 
 //JAVA
 import java.awt.*;
@@ -78,14 +78,14 @@ public class TelaInicial extends Tela implements ObserverTelaInicial {
         btnJogar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaConfigurarJogo");
+                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaConfigurarJogo");
             }
         });
         //btnTabuleiros
         btnTabuleiros.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaTabuleiros");
+                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaTabuleiros");
             }
         });
     }

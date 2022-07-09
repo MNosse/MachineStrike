@@ -1,9 +1,13 @@
 package controller.command;
 
+//CONTROLLER
 import controller.observer.ObserverCommand;
-import model.Maquina;
 
+//JAVA
 import java.util.List;
+
+//MODEL
+import model.Maquina;
 
 public class MoverCommand extends Command{
     private Maquina maquina;
@@ -20,10 +24,9 @@ public class MoverCommand extends Command{
     @Override
     public void execute() {
         String posicao = maquina.getLinha()+""+ maquina.getColuna();
-        maquina.setLinha(novaLinha);
-        maquina.setColuna(novaColuna);
+        maquina.mover(novaLinha, novaColuna);
         for (ObserverCommand observer : observers) {
-            observer.atualizarListasDeMaquinas(posicao);
+            observer.redesenharMaquinas();
         }
     }
 

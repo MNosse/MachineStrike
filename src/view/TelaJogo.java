@@ -2,7 +2,7 @@ package view;
 
 //CONTROLLER
 import controller.observer.ObserverTelaJogo;
-import controller.controlador.ControladorTelaJogo;
+import controller.ControladorTelaJogo;
 
 //GLOBAL
 import global.EnumTipoTerreno;
@@ -28,6 +28,8 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
     private JButton btnMover;
     private JButton btnSobrecarregar;
     private JButton btnGirar;
+    private JButton btnCorrer;
+    private JButton btnEncerrarTurno;
     private JPanel panJogadorAtivo;
     private JLabel lblJogadorAtivo;
     private GridBagLayout layout;
@@ -66,13 +68,17 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         //cardMaquinaAtacante
         cardMaquinaAtacante = new CardMaquina(null);
         //btnAtacar
-        btnAtacar = criarBotao("Atacar", ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
-        //btnMover
-        btnMover = criarBotao("Mover", ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
+        btnAtacar = criarBotao("Atacar", ((int)(getLargura()*0.10)), ((int)(getAltura()*0.056)));
         //btnSobrecarregar
-        btnSobrecarregar = criarBotao("Sobrecarregar", ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
+        btnSobrecarregar = criarBotao("Sobrecarregar", ((int)(getLargura()*0.10)), ((int)(getAltura()*0.056)));
+        //btnMover
+        btnMover = criarBotao("Mover", ((int)(getLargura()*0.10)), ((int)(getAltura()*0.056)));
+        //btnCorrer
+        btnCorrer = criarBotao("Correr", ((int)(getLargura()*0.10)), ((int)(getAltura()*0.056)));
         //btnGirar
-        btnGirar = criarBotao("Sobrecarregar", ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
+        btnGirar = criarBotao("Girar", ((int)(getLargura()*0.10)), ((int)(getAltura()*0.056)));
+        //btnEncerrarTurno
+        btnEncerrarTurno = criarBotao("Encerrar", ((int)(getLargura()*0.10)), ((int)(getAltura()*0.056)));
         //btnSair
         btnSair = criarBotao("Sair", ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
         //lblLeftPallet
@@ -83,10 +89,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         constraints.insets = new Insets(0, 0, 10, 0);
         lblPainelEsquerdo.add(panJogadorAtivo, constraints);
         lblPainelEsquerdo.add(cardMaquinaAtacante, constraints);
-        lblPainelEsquerdo.add(btnAtacar, constraints);
-        lblPainelEsquerdo.add(btnMover, constraints);
-        lblPainelEsquerdo.add(btnSobrecarregar, constraints);
-        lblPainelEsquerdo.add(btnGirar, constraints);
+        JLabel linha1 = criarLinha(btnAtacar, btnSobrecarregar, ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
+        JLabel linha2 = criarLinha(btnMover, btnCorrer, ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
+        JLabel linha3 = criarLinha(btnGirar, btnEncerrarTurno, ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
+        lblPainelEsquerdo.add(linha1, constraints);
+        lblPainelEsquerdo.add(linha2, constraints);
+        lblPainelEsquerdo.add(linha3, constraints);
         constraints.insets = new Insets(30, 0, 0, 0);
         lblPainelEsquerdo.add(btnSair, constraints);
         //lblPainelDireito
@@ -103,7 +111,7 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
             lblPainelCentral.add(listaMaquinasNoTabuleiro.get(posicao), constraints);
             lblPainelCentral.add(listaQuadradosTabuleiros.get(posicao), constraints);
         }
-        controlador.desenharJogo();
+        controlador.desenharJogoInicial();
         //lblFundo
         lblFundo = new JLabel(imagens.get("Background"));
         lblFundo.setLayout(layout);
@@ -123,6 +131,7 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         getFrmTela().setLocationRelativeTo(null);
         getFrmTela().setContentPane(lblFundo);
         getFrmTela().setVisible(true);
+        desativarBotoes();
     }
 
     private void iniciarAcoes() {
@@ -130,7 +139,23 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         btnMover.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.trocarEstadoMover();
+                controlador.clicarBotaoMover();
+            }
+        });
+
+        //btnCorrer
+        btnCorrer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controlador.clicarBotaoCorrer();
+            }
+        });
+
+        //btnGirar
+        btnGirar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controlador.clicarBotaoGirar();
             }
         });
 
@@ -138,7 +163,7 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         btnSair.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaInicial");
+                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
             }
         });
 
@@ -173,6 +198,54 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         }
     }
 
+    protected JLabel criarLinha(JButton button1, JButton button2, int largura, int altura) {
+        JLabel linha = new JLabel();
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        linha.setLayout(layout);
+        gridBagConstraints.gridx = GridBagConstraints.RELATIVE;
+        gridBagConstraints.gridy = 0;
+        linha.setMinimumSize(new Dimension(largura, altura));
+        linha.setPreferredSize(new Dimension(largura, altura));
+        linha.add(button1, gridBagConstraints);
+        gridBagConstraints.insets = new Insets(0, 10, 0, 0);
+        linha.add(button2, gridBagConstraints);
+        return linha;
+    }
+
+    @Override
+    public void mudarEstadoBtnAtacar(boolean estado) {
+        btnAtacar.setEnabled(estado);
+    }
+
+    @Override
+    public void mudarEstadoBtnSobrecarregar(boolean estado) {
+        btnSobrecarregar.setEnabled(estado);
+    }
+
+    @Override
+    public void mudarEstadoBtnMover(boolean estado) {
+        btnMover.setEnabled(estado);
+    }
+
+    @Override
+    public void mudarEstadoBtnCorrer(boolean estado) {
+        btnCorrer.setEnabled(estado);
+    }
+
+    @Override
+    public void mudarEstadoBtnGirar(boolean estado) {
+        btnGirar.setEnabled(estado);
+    }
+
+    @Override
+    public void desativarBotoes() {
+        btnAtacar.setEnabled(false);
+        btnSobrecarregar.setEnabled(false);
+        btnMover.setEnabled(false);
+        btnCorrer.setEnabled(false);
+        btnGirar.setEnabled(false);
+    }
+
     @Override
     public void desenharTabuleiro(HashMap<String, EnumTipoTerreno> terrenos) {
         Set<String> posicoes = terrenos.keySet();
@@ -182,13 +255,27 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
     }
 
     @Override
-    public void desenharQuadrado(String posicao, String caminhoImagem) {
-        listaMaquinasNoTabuleiro.get(posicao).setIcon(criarImagem(caminhoImagem, ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
+    public void apagarCampoDeMovimento(Set<String> posicoes) {
+        for (String posicao : posicoes) {
+            listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get("Vazio"));
+        }
+    }
+
+    @Override
+    public void desenharCampoDeMovimento(Set<String> posicoes) {
+        for (String posicao : posicoes) {
+            listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get("Selecionado"));
+        }
     }
 
     @Override
     public void desenharQuadrado(String posicao) {
         listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get("Vazio"));
+    }
+
+    @Override
+    public void desenharQuadrado(String posicao, String caminhoImagem) {
+        listaMaquinasNoTabuleiro.get(posicao).setIcon(criarImagem(caminhoImagem, ((int)(getAltura()*0.11)), ((int)(getAltura()*0.11))));
     }
 
     @Override
@@ -203,19 +290,6 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
     public void desenharQuadrados(Set<String> posicoes) {
         for (String posicao : posicoes) {
             desenharQuadrado(posicao);
-        }
-    }
-
-    public void desenharQuadradosSelecionados(Set<String> antigos, Set<String> novos) {
-        if (antigos != null) {
-            for (String posicao : antigos) {
-                listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get("Vazio"));
-            }
-        }
-        if (novos != null) {
-            for (String posicao : novos) {
-                listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get("Selecionado"));
-            }
         }
     }
 

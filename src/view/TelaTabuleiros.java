@@ -2,7 +2,7 @@ package view;
 
 //CONTROLLER
 import controller.observer.ObserverTelaTabuleiros;
-import controller.controlador.ControladorTelaTabuleiros;
+import controller.ControladorTelaTabuleiros;
 
 //GLOBAL
 import global.EnumTipoTerreno;
@@ -180,7 +180,7 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         btnVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("controller.abstractFactoryTela.ConcretFactoryTelaInicial");
+                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
             }
         });
         //cmbTiposTerreno

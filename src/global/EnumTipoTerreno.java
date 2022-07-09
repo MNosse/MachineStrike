@@ -1,12 +1,12 @@
 package global;
 
 public enum EnumTipoTerreno {
-    ABISMO("Abismo", "controller.builderTerreno.ConstruirAbismo"),
-    PANTANO("Pantano", "controller.builderTerreno.ConstruirPantano"),
-    PASTO("Pasto", "controller.builderTerreno.ConstruirPasto"),
-    FLORESTA("Floresta", "controller.builderTerreno.ConstruirFloresta"),
-    ELEVACAO("Elevacao", "controller.builderTerreno.ConstruirElevacao"),
-    MONTANHA("Montanha", "controller.builderTerreno.ConstruirMontanha");
+    ABISMO("Abismo", "model.builderTerreno.ConstruirAbismo"),
+    PANTANO("Pantano", "model.builderTerreno.ConstruirPantano"),
+    PASTO("Pasto", "model.builderTerreno.ConstruirPasto"),
+    FLORESTA("Floresta", "model.builderTerreno.ConstruirFloresta"),
+    ELEVACAO("Elevacao", "model.builderTerreno.ConstruirElevacao"),
+    MONTANHA("Montanha", "model.builderTerreno.ConstruirMontanha");
 
     private String tipo;
     private String nomeBuilder;

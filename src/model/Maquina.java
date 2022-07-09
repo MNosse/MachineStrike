@@ -2,6 +2,7 @@ package model;
 
 //CONTROLLER
 import global.EnumDirecao;
+import model.state.stateCorrer.StateCorrer;
 import model.state.stateDirecao.StateDirecao;
 
 //GLOBAL
@@ -26,6 +27,7 @@ public class Maquina {
     private EnumResistencia esquerda;
     private StateDirecao direcaoAtual;
     private StateMover moverAtual;
+    private StateCorrer correrAtual;
 
     public void girar() {
         direcaoAtual.girar();
@@ -33,6 +35,36 @@ public class Maquina {
 
     public void mover(int novaLinha, int novaColuna) {
         moverAtual.mover(novaLinha, novaColuna);
+    }
+
+    public void correr(int novaLinha, int novaColuna) {
+        correrAtual.correr(novaLinha, novaColuna);
+    }
+
+    public boolean podeMover(int novaLinha, int novaColuna) {
+        int diferencaLinha = Math.abs(linha - novaLinha);
+        int diferencaColuna = Math.abs(coluna - novaColuna);
+        if ((diferencaLinha+diferencaColuna) != 0 && (diferencaLinha+diferencaColuna) <= movimento) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean podeCorrer(int novaLinha, int novaColuna) {
+        int diferencaLinha = Math.abs(linha - novaLinha);
+        int diferencaColuna = Math.abs(coluna - novaColuna);
+        if ((diferencaLinha+diferencaColuna) != 0 && (diferencaLinha+diferencaColuna) <= movimento+1) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isMoverAtivo() {
+        return moverAtual.isAtivo();
+    }
+
+    public boolean isCorrerAtivo() {
+        return correrAtual.isAtivo();
     }
 
     public EnumDirecao direcaoAtualDaMaquina() {
@@ -169,5 +201,13 @@ public class Maquina {
 
     public void setMoverAtual(StateMover moverAtual) {
         this.moverAtual = moverAtual;
+    }
+
+    public StateCorrer getCorrerAtual() {
+        return correrAtual;
+    }
+
+    public void setCorrerAtual(StateCorrer correrAtual) {
+        this.correrAtual = correrAtual;
     }
 }

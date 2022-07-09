@@ -19,6 +19,10 @@ public class Jogo {
         return jogadorAtivo.getJogadorAtivo();
     }
 
+    public Jogador jogadorAtivo() {
+        return jogadores.get(jogadorAtivo.getJogadorAtivo());
+    }
+
     public Jogo(Tabuleiro tabuleiro, LinkedHashMap<EnumJogador, Jogador> jogadores) {
         this.tabuleiro = tabuleiro;
         this.jogadores = jogadores;
