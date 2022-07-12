@@ -1,10 +1,10 @@
 package controller.singleton;
 
-//JAVA
-import java.util.LinkedHashMap;
-
 //GLOBAL
 import global.EnumJogador;
+
+//JAVA
+import java.util.LinkedHashMap;
 
 //MODEL
 import model.Jogador;

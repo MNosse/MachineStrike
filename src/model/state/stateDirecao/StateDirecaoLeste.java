@@ -23,6 +23,26 @@ public class StateDirecaoLeste extends StateDirecao {
     }
 
     @Override
+    public int getResistenciaBaixo() {
+        return maquina.getResistenciaDireita();
+    }
+
+    @Override
+    public int getResistenciaDireita() {
+        return maquina.getResistenciaFrente();
+    }
+
+    @Override
+    public int getResistenciaEsquerda() {
+        return maquina.getResistenciaTras();
+    }
+
+    @Override
+    public int getResistenciaCima() {
+        return maquina.getResistenciaEsquerda();
+    }
+
+    @Override
     public String getCaminhoImagem() {
         String auxiliar = maquina.getNome().replace(" ", "");
         return "src/images/"+auxiliar+"-Leste.png";

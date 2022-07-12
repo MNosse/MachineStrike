@@ -4,8 +4,8 @@ package model.builderTabuleiro;
 import global.EnumTipoTabuleiro;
 
 //JAVA
-import java.util.HashMap;
 import java.util.List;
+import java.util.HashMap;
 
 //MODEL
 import model.Maquina;

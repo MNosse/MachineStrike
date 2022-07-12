@@ -13,8 +13,4 @@ public class ConstruirPasto extends ConstruirTerreno {
     public void construirPontosDeCombate() {
         terreno.setPontosDeCombate(0);
     }
-
-    public void construirCaminhoDaImage() {
-        terreno.setCaminhoDaImagem("src/images/Pasto.png");
-    }
 }

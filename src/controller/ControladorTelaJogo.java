@@ -7,16 +7,20 @@ import controller.command.CommandInvoker;
 import controller.observer.ObserverCommand;
 import controller.observer.ObserverTelaJogo;
 import controller.singleton.SingletonConfiguracaoJogo;
-import view.abstractFactoryTela.AbstractFactoryTela;
+import controller.state.stateAcaoAtiva.StateAcaoAtiva;
+import controller.state.stateAcaoAtiva.StateAcaoAtivaNeutro;
 
 //GLOBAL
 import global.EnumTipoTerreno;
 
+//JAVA
+import java.util.*;
+
 //MODEL
 import model.*;
 
-//JAVA
-import java.util.*;
+//VIEW ABSTRACT FACTORY
+import view.abstractFactoryTela.AbstractFactoryTela;
 
 public class ControladorTelaJogo implements ObserverCommand {
 
@@ -25,19 +29,14 @@ public class ControladorTelaJogo implements ObserverCommand {
     private Set<String> campoDeMovimento;
     private Set<String> campoDeCorrida;
     private Maquina maquinaSelecionada;
-    private Boolean isMoverAtivo;
-    private Boolean isCorrerAtivo;
-    CommandFactory cf = CommandFactory.getInstancia();
-    CommandInvoker ci = CommandInvoker.getInstancia();
+    private StateAcaoAtiva stateAcaoAtiva;
 
     public ControladorTelaJogo() {
         observers = new ArrayList<>();
         campoDeMovimento = new HashSet<>();
         campoDeCorrida = new HashSet<>();
+        stateAcaoAtiva = new StateAcaoAtivaNeutro(this);
         maquinaSelecionada = null;
-        isMoverAtivo = false;
-        isCorrerAtivo = false;
-        cf.attach(this);
         jogo = new Jogo(SingletonConfiguracaoJogo.getInstancia().getTabuleiro(), SingletonConfiguracaoJogo.getInstancia().getJogadores());
     }
 
@@ -82,7 +81,6 @@ public class ControladorTelaJogo implements ObserverCommand {
 
     private void desenharCampoDeMovimento(Maquina maquina) {
         apagarCampoDeCorrida();
-        isCorrerAtivo = false;
         gerarSetCampoDeMovimento(maquina);
         for (ObserverTelaJogo observer:observers) {
             observer.desenharCampoDeMovimento(campoDeMovimento);
@@ -90,7 +88,6 @@ public class ControladorTelaJogo implements ObserverCommand {
     }
 
     private void apagarCampoDeMovimento() {
-
         for (ObserverTelaJogo observer:observers) {
             observer.apagarCampoDeMovimento(campoDeMovimento);
         }
@@ -99,7 +96,6 @@ public class ControladorTelaJogo implements ObserverCommand {
 
     private void desenharCampoDeCorrida(Maquina maquina) {
         apagarCampoDeMovimento();
-        isMoverAtivo = false;
         gerarSetCampoDeCorrida(maquina);
         for (ObserverTelaJogo observer:observers) {
             observer.desenharCampoDeMovimento(campoDeCorrida);
@@ -114,70 +110,85 @@ public class ControladorTelaJogo implements ObserverCommand {
     }
 
     public void clicarBotaoMover() {
-        isMoverAtivo = !isMoverAtivo;
-        if (isMoverAtivo) {
-            apagarCampoDeMovimento();
+        if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
+            stateAcaoAtiva.ativarMover();
+            apagarCampos();
             desenharCampoDeMovimento(maquinaSelecionada);
-        } else {
-            apagarCampoDeMovimento();
         }
     }
 
     public void clicarBotaoCorrer() {
-        isCorrerAtivo = !isCorrerAtivo;
-        if (isCorrerAtivo) {
-            apagarCampoDeCorrida();
+        if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
+            stateAcaoAtiva.ativarCorrer();
+            apagarCampos();
             desenharCampoDeCorrida(maquinaSelecionada);
-        } else {
-            apagarCampoDeCorrida();
+        }
+    }
+
+    public void clicarBotaoAtacar() {
+        if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
+            stateAcaoAtiva.ativarAtacar();
+            apagarCampos();
+        }
+    }
+
+    public void clicarBotaoSobrecarregar() {
+        if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
+            stateAcaoAtiva.ativarSobrecarregar();
+            stateAcaoAtiva.fazerAcao(null);
+            apagarCampos();
+        }
+    }
+
+    public void clicarBotaoEncerrar() {
+        jogo.passarTurno();
+        maquinaSelecionada = null;
+        desativarPainel();
+        apagarCampos();
+        redesenharMaquinas();
+        for (ObserverTelaJogo observer:observers) {
+            observer.atualizarLblJogadorAtivo(jogo.jogadorAtivo().getNome().getNome());
         }
     }
 
     public void clicarBotaoGirar() {
-        Command comm = cf.getComando("girar", new Object[]{maquinaSelecionada});
-        ci.execute(comm);
+        if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
+            apagarCampos();
+            CommandFactory cf = CommandFactory.getInstancia();
+            CommandInvoker ci = CommandInvoker.getInstancia();
+            cf.setObserver(this);
+            Command comm = cf.getComando("girar", new Object[]{maquinaSelecionada});
+            ci.execute(comm);
+        }
     }
 
-    public void selecionarQuadrado(String posicao) {
-        int linha = Integer.parseInt(String.valueOf(posicao.charAt(0)));
-        int coluna = Integer.parseInt(String.valueOf(posicao.charAt(1)));
-        if (jogo.getJogador(jogo.nomeJogadorAtivo()).getMaquinaPorPosicao(linha, coluna) != null) {
-            maquinaSelecionada = jogo.getTabuleiro().getMaquinaPorPosicao(linha, coluna);
-            for (ObserverTelaJogo observer:observers) {
+    public void ativarPainel() {
+        if (maquinaSelecionada != null) {
+            for (ObserverTelaJogo observer : observers) {
                 observer.mudarEstadoBtnMover(maquinaSelecionada.isMoverAtivo());
                 observer.mudarEstadoBtnCorrer(maquinaSelecionada.isCorrerAtivo());
+                observer.mudarEstadoBtnAtacar(maquinaSelecionada.isAtacarAtivo());
+                observer.mudarEstadoBtnSobrecarregar(maquinaSelecionada.isSobrecarregarAtivo());
                 observer.mudarEstadoBtnGirar(true);
                 observer.atualizarCardMaquinaAtacante(getInformacoesMaquina(maquinaSelecionada));
             }
-        } else if (isMoverAtivo && campoDeMovimento.contains(posicao)) {
-            isMoverAtivo = false;
-            apagarCampoDeMovimento();
-            Command comm = cf.getComando("mover", new Object[]{maquinaSelecionada, linha, coluna});
-            ci.execute(comm);
-            maquinaSelecionada = null;
-            for (ObserverTelaJogo observer:observers) {
-                observer.desativarBotoes();
-                observer.atualizarCardMaquinaAtacante(getInformacoesMaquina());
-            }
-        } else if (isCorrerAtivo && campoDeCorrida.contains(posicao)) {
-            isCorrerAtivo = false;
-            apagarCampoDeCorrida();
-            Command comm = cf.getComando("correr", new Object[]{maquinaSelecionada, linha, coluna});
-            ci.execute(comm);
-            maquinaSelecionada = null;
-            for (ObserverTelaJogo observer:observers) {
-                observer.desativarBotoes();
-                observer.atualizarCardMaquinaAtacante(getInformacoesMaquina());
-            }
-        } else {
-            maquinaSelecionada = null;
-            isMoverAtivo = false;
-            apagarCampoDeMovimento();
-            for (ObserverTelaJogo observer:observers) {
-                observer.mudarEstadoBtnMover(false);
-                observer.atualizarCardMaquinaAtacante(getInformacoesMaquina());
-            }
         }
+    }
+
+    public void desativarPainel() {
+        for (ObserverTelaJogo observer : observers) {
+            observer.desativarBotoes();
+            observer.atualizarCardMaquinaAtacante(getInformacoesMaquina());
+        }
+    }
+
+    public void apagarCampos() {
+        apagarCampoDeMovimento();
+        apagarCampoDeCorrida();
+    }
+
+    public void selecionarQuadrado(String posicao) {
+        stateAcaoAtiva.fazerAcao(posicao);
     }
 
     private void gerarSetCampoDeMovimento(Maquina maquina) {
@@ -247,6 +258,30 @@ public class ControladorTelaJogo implements ObserverCommand {
 
     public String getNomeJogadorAtual() {
         return jogo.nomeJogadorAtivo().getNome();
+    }
+
+    public StateAcaoAtiva getStateAcaoAtiva() {
+        return stateAcaoAtiva;
+    }
+
+    public void setStateAcaoAtiva(StateAcaoAtiva stateAcaoAtiva) {
+        this.stateAcaoAtiva = stateAcaoAtiva;
+    }
+
+    public Jogo getJogo() {
+        return jogo;
+    }
+
+    public void setJogo(Jogo jogo) {
+        this.jogo = jogo;
+    }
+
+    public Maquina getMaquinaSelecionada() {
+        return maquinaSelecionada;
+    }
+
+    public void setMaquinaSelecionada(Maquina maquinaSelecionada) {
+        this.maquinaSelecionada = maquinaSelecionada;
     }
 
     public void navegarParaOutraTela(String caminho) {

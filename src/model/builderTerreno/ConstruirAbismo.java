@@ -13,8 +13,4 @@ public class ConstruirAbismo extends ConstruirTerreno {
     public void construirPontosDeCombate() {
         terreno.setPontosDeCombate(-2);
     }
-
-    public void construirCaminhoDaImage() {
-        terreno.setCaminhoDaImagem("src/images/Abismo.png");
-    }
 }

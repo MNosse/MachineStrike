@@ -7,7 +7,6 @@ public class Terreno {
 
     private int pontosDeCombate;
     private EnumTipoTerreno tipo;
-    private String caminhoDaImagem;
 
     public EnumTipoTerreno getTipo() {
         return tipo;
@@ -23,13 +22,5 @@ public class Terreno {
 
     public void setPontosDeCombate(int pontosDeCombate) {
         this.pontosDeCombate = pontosDeCombate;
-    }
-
-    public String getCaminhoDaImagem() {
-        return caminhoDaImagem;
-    }
-
-    public void setCaminhoDaImagem(String caminhoDaImagem) {
-        this.caminhoDaImagem = caminhoDaImagem;
     }
 }

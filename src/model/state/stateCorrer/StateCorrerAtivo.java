@@ -1,7 +1,10 @@
 package model.state.stateCorrer;
 
+//MODEL
 import model.Maquina;
 import model.state.stateMover.StateMoverInativo;
+import model.state.stateAtacar.StateAtacarInativo;
+import model.state.StateSobrecarregar.StateSobrecarregarAtivo;
 
 public class StateCorrerAtivo extends StateCorrer{
 
@@ -16,7 +19,10 @@ public class StateCorrerAtivo extends StateCorrer{
             maquina.setColuna(novaColuna);
             maquina.setMoverAtual(new StateMoverInativo(maquina));
             maquina.setCorrerAtual(new StateCorrerInativo(maquina));
-            System.out.println("Adicionar os proximos states aqui");
+            maquina.setAtacarAtual(new StateAtacarInativo(maquina));
+            if (!maquina.getJaSobrecarregou()) {
+                maquina.setSobrecarregarAtual(new StateSobrecarregarAtivo(maquina));
+            }
         }
     }
 

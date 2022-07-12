@@ -4,9 +4,7 @@ package controller.command;
 import controller.observer.ObserverCommand;
 
 //JAVA
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.List;
 import java.util.HashMap;
 import java.lang.reflect.Constructor;
 
@@ -14,12 +12,14 @@ public class CommandFactory {
 
     private Map<String, Class<? extends Command>> comandos = new HashMap<>();
 
-    private List<ObserverCommand> observers = new ArrayList<>();
+    private ObserverCommand observer;
 
     private CommandFactory() {
         comandos.put("mover", MoverCommand.class);
         comandos.put("girar", GirarCommand.class);
         comandos.put("correr", CorrerCommand.class);
+        comandos.put("atacar", AtacarCommand.class);
+        comandos.put("sobrecarregar", SobrecarregarCommand.class);
     }
 
     private static CommandFactory instancia;
@@ -31,8 +31,8 @@ public class CommandFactory {
         return instancia;
     }
 
-    public void attach(ObserverCommand observer) {
-        observers.add(observer);
+    public void setObserver(ObserverCommand observer) {
+        this.observer = observer;
     }
 
     public Command getComando(String nomeComando, Object[] args) {
@@ -40,17 +40,17 @@ public class CommandFactory {
             Class<? extends Command> commandClass = comandos.get(nomeComando);
             Class<?>[] parametros;
             if (args != null) {
-                parametros = new Class<?>[]{List.class, Object[].class};
+                parametros = new Class<?>[]{ObserverCommand.class, Object[].class};
             } else {
-                parametros = new Class<?>[]{List.class};
+                parametros = new Class<?>[]{ObserverCommand.class};
             }
             Constructor<? extends Command> constructor = commandClass.getConstructor(parametros);
 
             Command command;
             if (args != null) {
-                command = constructor.newInstance(observers, args);
+                command = constructor.newInstance(observer, args);
             } else {
-                command = constructor.newInstance(observers);
+                command = constructor.newInstance(observer);
             }
 
             return command;

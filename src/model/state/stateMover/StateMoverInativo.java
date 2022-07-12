@@ -1,5 +1,6 @@
 package model.state.stateMover;
 
+//MODEL
 import model.Maquina;
 
 public class StateMoverInativo extends StateMover{

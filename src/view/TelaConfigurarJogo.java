@@ -1,8 +1,8 @@
 package view;
 
 //CONTROLLER
-import controller.observer.ObserverTelaConfigurarJogo;
 import controller.ControladorTelaConfigurarJogo;
+import controller.observer.ObserverTelaConfigurarJogo;
 
 //GLOBAL
 import global.EnumJogador;

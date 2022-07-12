@@ -11,8 +11,6 @@ public abstract class ConstruirTerreno {
 
     public void construirPontosDeCombate() {}
 
-    public void construirCaminhoDaImage() {}
-
     public Terreno getTerreno() {
         return terreno;
     }

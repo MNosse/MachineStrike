@@ -3,15 +3,12 @@ package controller.command;
 //CONTROLLER
 import controller.observer.ObserverCommand;
 
-//JAVA
-import java.util.List;
-
 public abstract class Command {
 
-    protected List<ObserverCommand> observers;
+    protected ObserverCommand observer;
 
-    public Command(List<ObserverCommand> observers) {
-        this.observers = observers;
+    public Command(ObserverCommand observer) {
+        this.observer = observer;
     }
 
     public abstract void execute();

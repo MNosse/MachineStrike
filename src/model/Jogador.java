@@ -43,6 +43,10 @@ public class Jogador {
         return maquinas;
     }
 
+    public void addPontosVitoria(int pontosVitoria) {
+        this.pontosVitoria += pontosVitoria;
+    }
+
     public int contagemPVMaquinas() {
         int totalPV = 0;
         for (Maquina maquina : maquinas) {

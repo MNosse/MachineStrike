@@ -1,18 +1,18 @@
 package view;
 
 //CONTROLLER
-import controller.observer.ObserverTelaJogo;
 import controller.ControladorTelaJogo;
+import controller.observer.ObserverTelaJogo;
 
 //GLOBAL
 import global.EnumTipoTerreno;
 
 //JAVA
 import java.awt.*;
-import java.awt.event.*;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.awt.event.*;
+import java.util.HashMap;
 
 //JAVAX
 import javax.swing.*;
@@ -151,11 +151,35 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
             }
         });
 
+        //btnAtacar
+        btnAtacar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controlador.clicarBotaoAtacar();
+            }
+        });
+
+        //btnSobrecarregar
+        btnSobrecarregar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controlador.clicarBotaoSobrecarregar();
+            }
+        });
+
         //btnGirar
         btnGirar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controlador.clicarBotaoGirar();
+            }
+        });
+
+        //btnEncerrarTurno
+        btnEncerrarTurno.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controlador.clicarBotaoEncerrar();
             }
         });
 
@@ -287,14 +311,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
     }
 
     @Override
-    public void desenharQuadrados(Set<String> posicoes) {
-        for (String posicao : posicoes) {
-            desenharQuadrado(posicao);
-        }
+    public void atualizarCardMaquinaAtacante(HashMap<String, String> informacoes){
+        cardMaquinaAtacante.atualizarConteudo(informacoes);
     }
 
     @Override
-    public void atualizarCardMaquinaAtacante(HashMap<String, String> informacoes){
-        cardMaquinaAtacante.atualizarConteudo(informacoes);
+    public void atualizarLblJogadorAtivo(String nome) {
+        lblJogadorAtivo.setText(nome);
     }
 }

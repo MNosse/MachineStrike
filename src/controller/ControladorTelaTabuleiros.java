@@ -1,12 +1,7 @@
 package controller;
 
 //CONTROLLER
-import model.builderTerreno.DirectorTerreno;
 import controller.observer.ObserverTelaTabuleiros;
-import model.builderTerreno.ConstruirTerreno;
-import model.builderTabuleiro.DirectorTabuleiro;
-import view.abstractFactoryTela.AbstractFactoryTela;
-import model.builderTabuleiro.ConstruirTabuleiroSemMaquinas;
 
 //GLOBAL
 import global.EnumTipoTerreno;
@@ -17,8 +12,15 @@ import java.io.*;
 import java.util.*;
 
 //MODEL
-import model.Tabuleiro;
 import model.Terreno;
+import model.Tabuleiro;
+import model.builderTerreno.DirectorTerreno;
+import model.builderTerreno.ConstruirTerreno;
+import model.builderTabuleiro.DirectorTabuleiro;
+import model.builderTabuleiro.ConstruirTabuleiroSemMaquinas;
+
+//VIEW ABSTRACT FACTORY
+import view.abstractFactoryTela.AbstractFactoryTela;
 
 public class ControladorTelaTabuleiros {
 

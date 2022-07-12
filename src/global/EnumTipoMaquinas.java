@@ -17,4 +17,5 @@ public enum EnumTipoMaquinas {
     public String getTipo() {
         return tipo;
     }
+
 }

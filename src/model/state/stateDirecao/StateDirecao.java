@@ -18,5 +18,13 @@ public abstract class StateDirecao {
 
     public abstract EnumDirecao getDirecaoAtual();
 
+    public abstract int getResistenciaBaixo();
+
+    public abstract int getResistenciaDireita();
+
+    public abstract int getResistenciaEsquerda();
+
+    public abstract int getResistenciaCima();
+
     public abstract String getCaminhoImagem();
 }

@@ -4,8 +4,8 @@ package model;
 import global.EnumTipoTabuleiro;
 
 //JAVA
-import java.util.HashMap;
 import java.util.List;
+import java.util.HashMap;
 
 public class Tabuleiro {
     //Chaves sao as posicoes linha+coluna
@@ -24,6 +24,10 @@ public class Tabuleiro {
             }
         }
         return null;
+    }
+
+    public void removerMaquina(Maquina maquina) {
+        maquinas.remove(maquina);
     }
 
     public HashMap<String, Terreno> getTerrenos() {

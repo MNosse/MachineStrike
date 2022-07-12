@@ -1,5 +1,6 @@
 package model.state.stateCorrer;
 
+//MODEL
 import model.Maquina;
 
 public class StateCorrerInativo extends StateCorrer{

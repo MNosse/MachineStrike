@@ -1,11 +1,13 @@
 package model.builderMaquina;
 
 //MODEL
-import model.Jogador;
 import model.Maquina;
+import model.Jogador;
 import model.state.stateMover.StateMoverAtivo;
+import model.state.stateAtacar.StateAtacarAtivo;
 import model.state.stateCorrer.StateCorrerAtivo;
 import model.state.stateDirecao.StateDirecaoNorte;
+import model.state.StateSobrecarregar.StateSobrecarregarInativo;
 
 public abstract class ConstruirMaquina {
 
@@ -55,6 +57,18 @@ public abstract class ConstruirMaquina {
 
     public void construirCorrerAtual() {
         maquina.setCorrerAtual(new StateCorrerAtivo(maquina));
+    }
+
+    public void construirAtacarAtual() {
+        maquina.setAtacarAtual(new StateAtacarAtivo(maquina));
+    }
+
+    public void construirSobrecarregarAtual() {
+        maquina.setSobrecarregarAtual(new StateSobrecarregarInativo(maquina));
+    }
+
+    public void construirJaSobrecarregou() {
+        maquina.setJaSobrecarregou(false);
     }
 
     public Maquina getMaquina() {

@@ -1,17 +1,17 @@
 package view;
 
 //CONTROLLER
-import controller.observer.ObserverTelaTabuleiros;
 import controller.ControladorTelaTabuleiros;
+import controller.observer.ObserverTelaTabuleiros;
 
 //GLOBAL
 import global.EnumTipoTerreno;
 
 //JAVA
 import java.awt.*;
+import java.util.Set;
 import java.awt.event.*;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.Vector;
 import java.util.HashMap;
 
@@ -88,8 +88,6 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         //cmbTiposTerreno
         cmbTiposTerreno = criarComboBox(new Vector<>(Arrays.asList(EnumTipoTerreno.values())), ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
         //lblTerrenoSelecionado
-        System.out.println(cmbTiposTerreno.getSelectedItem());
-        System.out.println(cmbTiposTerreno.getSelectedItem().toString());
         lblTerrenoSelecionado = new JLabel(imagens.get(EnumTipoTerreno.valueOf(cmbTiposTerreno.getSelectedItem().toString()).getTipo()));
         //btnCancelar
         btnCancelar = criarBotao("Cancelar", ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));

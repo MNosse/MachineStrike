@@ -12,6 +12,5 @@ public class DirectorTerreno {
         construirTerreno.reset();
         construirTerreno.construirTipo();
         construirTerreno.construirPontosDeCombate();
-        construirTerreno.construirCaminhoDaImage();
     }
 }

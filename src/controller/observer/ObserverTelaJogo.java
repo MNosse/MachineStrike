@@ -15,7 +15,6 @@ public interface ObserverTelaJogo {
     void desenharQuadrado(String posicao);
     void desenharQuadrado(String posicao, String caminhoImagem);
     void desenharQuadrados(HashMap<String, String> maquinas);
-    void desenharQuadrados(Set<String> posicoes);
 
     void apagarCampoDeMovimento(Set<String> posicoes);
     void desenharCampoDeMovimento(Set<String> posicoes);
@@ -28,5 +27,6 @@ public interface ObserverTelaJogo {
     void desativarBotoes();
 
     void atualizarCardMaquinaAtacante(HashMap<String, String> informacoes);
+    void atualizarLblJogadorAtivo(String nome);
     void navegarParaOutraTela(Tela outraTela);
 }

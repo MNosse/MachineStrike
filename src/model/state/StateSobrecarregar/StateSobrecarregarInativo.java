@@ -1,4 +1,21 @@
 package model.state.StateSobrecarregar;
 
-public class StateSobrecarregarInativo {
+//MODEL
+import model.Maquina;
+
+public class StateSobrecarregarInativo extends StateSobrecarregar{
+
+    public StateSobrecarregarInativo(Maquina maquina) {
+        super(maquina);
+    }
+
+    @Override
+    public void sobrecarregar() {
+
+    }
+
+    @Override
+    public boolean isAtivo() {
+        return false;
+    }
 }

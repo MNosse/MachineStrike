@@ -1,7 +1,6 @@
 package model.builderMaquina;
 
 //GLOBAL
-import global.EnumResistencia;
 import global.EnumTipoMaquinas;
 
 public class ConstruirPuxao extends ConstruirMaquina {
@@ -35,19 +34,19 @@ public class ConstruirPuxao extends ConstruirMaquina {
     }
 
     public void construirTras() {
-        maquina.setTras(EnumResistencia.FRACO);
+        maquina.setResistenciaTras(-1);
     }
 
     public void construirFrente() {
-        maquina.setFrente(EnumResistencia.NEUTRO);
+        maquina.setResistenciaFrente(0);
     }
 
     public void construirDireita() {
-        maquina.setDireita(EnumResistencia.FORTE);
+        maquina.setResistenciaDireita(1);
     }
 
     public void construirEsquerda() {
-        maquina.setEsquerda(EnumResistencia.FORTE);
+        maquina.setResistenciaEsquerda(1);
     }
 
 }

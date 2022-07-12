@@ -1,14 +1,23 @@
 package model;
 
-//CONTROLLER
-import global.EnumDirecao;
-import model.state.stateCorrer.StateCorrer;
-import model.state.stateDirecao.StateDirecao;
-
 //GLOBAL
-import global.EnumResistencia;
+import global.EnumDirecao;
 import global.EnumTipoMaquinas;
+
+//MODEL
+import model.visitor.VisitorAtaque;
 import model.state.stateMover.StateMover;
+import model.state.stateCorrer.StateCorrer;
+import model.state.stateAtacar.StateAtacar;
+import model.state.stateDirecao.StateDirecao;
+import model.state.stateMover.StateMoverAtivo;
+import model.state.stateMover.StateMoverInativo;
+import model.state.stateCorrer.StateCorrerAtivo;
+import model.state.stateAtacar.StateAtacarAtivo;
+import model.state.stateAtacar.StateAtacarInativo;
+import model.state.stateCorrer.StateCorrerInativo;
+import model.state.StateSobrecarregar.StateSobrecarregar;
+import model.state.StateSobrecarregar.StateSobrecarregarInativo;
 
 public class Maquina {
     private int vida;
@@ -20,14 +29,17 @@ public class Maquina {
     private int movimento;
     private Jogador jogador;
     private int pontosVitoria;
-    private EnumResistencia tras;
-    private EnumTipoMaquinas tipo;
-    private EnumResistencia frente;
-    private EnumResistencia direita;
-    private EnumResistencia esquerda;
-    private StateDirecao direcaoAtual;
+    private int resistenciaTras;
     private StateMover moverAtual;
+    private EnumTipoMaquinas tipo;
+    private int resistenciaFrente;
+    private int resistenciaDireita;
+    private int resistenciaEsquerda;
     private StateCorrer correrAtual;
+    private StateAtacar atacarAtual;
+    private boolean jaSobrecarregou;
+    private StateDirecao direcaoAtual;
+    private StateSobrecarregar sobrecarregarAtual;
 
     public void girar() {
         direcaoAtual.girar();
@@ -39,6 +51,14 @@ public class Maquina {
 
     public void correr(int novaLinha, int novaColuna) {
         correrAtual.correr(novaLinha, novaColuna);
+    }
+
+    public void atacar(Maquina outraMaquina, Terreno outraTerreno, VisitorAtaque visitor) {
+        atacarAtual.atacar(outraMaquina, outraTerreno, visitor);
+    }
+
+    public void sobrecarregar() {
+        sobrecarregarAtual.sobrecarregar();
     }
 
     public boolean podeMover(int novaLinha, int novaColuna) {
@@ -59,6 +79,17 @@ public class Maquina {
         return false;
     }
 
+    public boolean podeAtacar(Maquina outraMaquina) {
+        int outraLinha = outraMaquina.getLinha();
+        int outraColuna = outraMaquina.getColuna();
+        if (linha == outraLinha && Math.abs(coluna - outraColuna) <= alcance) {
+            return true;
+        } else if (coluna == outraColuna && Math.abs(linha - outraLinha) <= alcance) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean isMoverAtivo() {
         return moverAtual.isAtivo();
     }
@@ -67,12 +98,54 @@ public class Maquina {
         return correrAtual.isAtivo();
     }
 
+    public boolean isAtacarAtivo() {
+        return atacarAtual.isAtivo();
+    }
+
+    public boolean isSobrecarregarAtivo() {
+        return sobrecarregarAtual.isAtivo();
+    }
+
     public EnumDirecao direcaoAtualDaMaquina() {
         return direcaoAtual.getDirecaoAtual();
     }
 
     public String caminhoImagemDirecaoAtual() {
         return direcaoAtual.getCaminhoImagem();
+    }
+
+    public int pontosCombateCimaAtual() {
+        return direcaoAtual.getResistenciaCima();
+    }
+
+    public int pontosCombateBaixoAtual() {
+        return direcaoAtual.getResistenciaBaixo();
+    }
+
+    public int pontosCombateDireitaAtual() {
+        return direcaoAtual.getResistenciaDireita();
+    }
+
+    public int pontosCombateEsquerdaAtual() {
+        return direcaoAtual.getResistenciaEsquerda();
+    }
+
+    public void reativarAcoes() {
+        moverAtual = new StateMoverAtivo(this);
+        correrAtual = new StateCorrerAtivo(this);
+        atacarAtual = new StateAtacarAtivo(this);
+    }
+
+    public void resetarMaquina() {
+        reativarAcoes();
+        sobrecarregarAtual = new StateSobrecarregarInativo(this);
+        jaSobrecarregou = false;
+    }
+
+    public void desativarAcoes() {
+        moverAtual = new StateMoverInativo(this);
+        correrAtual = new StateCorrerInativo(this);
+        atacarAtual = new StateAtacarInativo(this);
     }
 
     public Jogador getJogador() {
@@ -155,36 +228,36 @@ public class Maquina {
         this.tipo = tipo;
     }
 
-    public EnumResistencia getTras() {
-        return tras;
+    public int getResistenciaTras() {
+        return resistenciaTras;
     }
 
-    public void setTras(EnumResistencia tras) {
-        this.tras = tras;
+    public void setResistenciaTras(int resistenciaTras) {
+        this.resistenciaTras = resistenciaTras;
     }
 
-    public EnumResistencia getFrente() {
-        return frente;
+    public int getResistenciaFrente() {
+        return resistenciaFrente;
     }
 
-    public void setFrente(EnumResistencia frente) {
-        this.frente = frente;
+    public void setResistenciaFrente(int resistenciaFrente) {
+        this.resistenciaFrente = resistenciaFrente;
     }
 
-    public EnumResistencia getDireita() {
-        return direita;
+    public int getResistenciaDireita() {
+        return resistenciaDireita;
     }
 
-    public void setDireita(EnumResistencia direita) {
-        this.direita = direita;
+    public void setResistenciaDireita(int resistenciaDireita) {
+        this.resistenciaDireita = resistenciaDireita;
     }
 
-    public EnumResistencia getEsquerda() {
-        return esquerda;
+    public int getResistenciaEsquerda() {
+        return resistenciaEsquerda;
     }
 
-    public void setEsquerda(EnumResistencia esquerda) {
-        this.esquerda = esquerda;
+    public void setResistenciaEsquerda(int resistenciaEsquerda) {
+        this.resistenciaEsquerda = resistenciaEsquerda;
     }
 
     public StateDirecao getDirecaoAtual() {
@@ -209,5 +282,29 @@ public class Maquina {
 
     public void setCorrerAtual(StateCorrer correrAtual) {
         this.correrAtual = correrAtual;
+    }
+
+    public StateAtacar getAtacarAtual() {
+        return atacarAtual;
+    }
+
+    public void setAtacarAtual(StateAtacar atacarAtual) {
+        this.atacarAtual = atacarAtual;
+    }
+
+    public StateSobrecarregar getSobrecarregarAtual() {
+        return sobrecarregarAtual;
+    }
+
+    public void setSobrecarregarAtual(StateSobrecarregar sobrecarregarAtual) {
+        this.sobrecarregarAtual = sobrecarregarAtual;
+    }
+
+    public boolean getJaSobrecarregou() {
+        return jaSobrecarregou;
+    }
+
+    public void setJaSobrecarregou(boolean jaSobrecarregou) {
+        this.jaSobrecarregou = jaSobrecarregou;
     }
 }

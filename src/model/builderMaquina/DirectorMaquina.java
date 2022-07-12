@@ -29,5 +29,8 @@ public class DirectorMaquina {
         construirMaquina.construirDirecaoAtual();
         construirMaquina.construirMoverAtual();
         construirMaquina.construirCorrerAtual();
+        construirMaquina.construirAtacarAtual();
+        construirMaquina.construirSobrecarregarAtual();
+        construirMaquina.construirJaSobrecarregou();
     }
 }

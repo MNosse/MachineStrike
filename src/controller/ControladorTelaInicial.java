@@ -2,11 +2,13 @@ package controller;
 
 //CONTROLLER
 import controller.observer.ObserverTelaInicial;
-import view.abstractFactoryTela.AbstractFactoryTela;
 
 //JAVA
 import java.util.List;
 import java.util.ArrayList;
+
+//VIEW ABSTRACT FACTORY
+import view.abstractFactoryTela.AbstractFactoryTela;
 
 public class ControladorTelaInicial {
 

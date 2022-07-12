@@ -13,8 +13,4 @@ public class ConstruirPantano extends ConstruirTerreno {
     public void construirPontosDeCombate() {
         terreno.setPontosDeCombate(-1);
     }
-
-    public void construirCaminhoDaImage() {
-        terreno.setCaminhoDaImagem("src/images/Pantano.png");
-    }
 }

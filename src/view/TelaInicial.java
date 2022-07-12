@@ -1,14 +1,14 @@
 package view;
 
 //CONTROLLER
-import controller.observer.ObserverTelaInicial;
 import controller.ControladorTelaInicial;
+import controller.observer.ObserverTelaInicial;
 
 //JAVA
 import java.awt.*;
+import java.util.HashMap;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
 //JAVAX
 import javax.swing.*;
