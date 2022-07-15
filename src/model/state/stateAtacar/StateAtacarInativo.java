@@ -5,6 +5,8 @@ import model.Maquina;
 import model.Terreno;
 import model.visitor.VisitorAtaque;
 
+import java.util.List;
+
 public class StateAtacarInativo extends StateAtacar {
 
     public StateAtacarInativo(Maquina maquina) {
@@ -12,8 +14,8 @@ public class StateAtacarInativo extends StateAtacar {
     }
 
     @Override
-    public void atacar(Maquina outraMaquina, Terreno outraTerreno, VisitorAtaque visitor) {
-
+    public void atacar(Maquina outraMaquina, Terreno outraTerreno, List<Maquina> maquinasMesmoJogador, VisitorAtaque visitor) {
+        throw new RuntimeException();
     }
 
     @Override

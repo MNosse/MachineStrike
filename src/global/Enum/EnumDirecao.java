@@ -1,4 +1,4 @@
-package global;
+package global.Enum;
 
 public enum EnumDirecao {
     NORTE,

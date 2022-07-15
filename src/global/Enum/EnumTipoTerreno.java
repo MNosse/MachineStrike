@@ -1,4 +1,4 @@
-package global;
+package global.Enum;
 
 public enum EnumTipoTerreno {
     ABISMO("Abismo"),

@@ -5,7 +5,7 @@ import controller.ControladorTelaJogo;
 import controller.observer.ObserverTelaJogo;
 
 //GLOBAL
-import global.EnumTipoTerreno;
+import global.Enum.EnumTipoTerreno;
 
 //JAVA
 import java.awt.*;
@@ -139,7 +139,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         btnMover.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.clicarBotaoMover();
+                try {
+                    controlador.clicarBotaoMover();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido",
+                            "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -147,7 +152,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         btnCorrer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.clicarBotaoCorrer();
+                try {
+                    controlador.clicarBotaoCorrer();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido",
+                            "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -155,7 +165,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         btnAtacar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.clicarBotaoAtacar();
+                try {
+                    controlador.clicarBotaoAtacar();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido",
+                            "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -163,7 +178,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         btnSobrecarregar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.clicarBotaoSobrecarregar();
+                try {
+                    controlador.clicarBotaoSobrecarregar();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido",
+                            "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -171,7 +191,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         btnGirar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.clicarBotaoGirar();
+                try {
+                    controlador.clicarBotaoGirar();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido",
+                            "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -187,7 +212,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         btnSair.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
+                try {
+                    controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel localizar essa tela",
+                            "Tela nao localizada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -204,7 +234,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
                 quadrado.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        controlador.selecionarQuadrado(finalLinha+""+finalColuna);
+                        try {
+                            controlador.selecionarQuadrado(finalLinha+""+finalColuna);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "Nao foi possivel realizar essa acao",
+                                    "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 });
                 listaMaquinasNoTabuleiro.put((linha+""+coluna), quadrado);

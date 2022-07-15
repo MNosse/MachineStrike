@@ -15,13 +15,9 @@ public class SobrecarregarCommand extends Command{
     }
 
     @Override
-    public void execute() {
-        try {
-            maquina.sobrecarregar();
-            observer.redesenharMaquinas();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void execute() throws Exception {
+        maquina.sobrecarregar();
+        observer.redesenharMaquinas();
     }
 
     @Override

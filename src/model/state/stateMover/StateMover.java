@@ -3,6 +3,8 @@ package model.state.stateMover;
 //MODEL
 import model.Maquina;
 
+import java.util.List;
+
 public abstract class StateMover {
 
     protected Maquina maquina;
@@ -11,7 +13,7 @@ public abstract class StateMover {
         this.maquina = maquina;
     }
 
-    public abstract void mover(int novaLinha, int novaColuna);
+    public abstract void mover(int novaLinha, int novaColuna, List<Maquina> maquinasEmJogo);
 
     public abstract boolean isAtivo();
 }

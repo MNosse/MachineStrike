@@ -1,5 +1,8 @@
 package model.state.stateAtacar;
 
+//JAVA
+import java.util.List;
+
 //MODEL
 import model.Maquina;
 import model.Terreno;
@@ -13,13 +16,15 @@ public class StateAtacarAtivo extends StateAtacar {
     }
 
     @Override
-    public void atacar(Maquina outraMaquina, Terreno outraTerreno, VisitorAtaque visitor) {
-        if(maquina.podeAtacar(outraMaquina)) {
+    public void atacar(Maquina outraMaquina, Terreno outraTerreno, List<Maquina> maquinasMesmoJogador, VisitorAtaque visitor) {
+        if(maquina.podeAtacar(outraMaquina, maquinasMesmoJogador)) {
             visitor.atacar(outraMaquina, outraTerreno);
             maquina.setAtacarAtual(new StateAtacarInativo(maquina));
             if (!maquina.isMoverAtivo() && !maquina.getJaSobrecarregou()) {
                 maquina.setSobrecarregarAtual(new StateSobrecarregarAtivo(maquina));
             }
+        } else {
+            throw new RuntimeException();
         }
     }
 

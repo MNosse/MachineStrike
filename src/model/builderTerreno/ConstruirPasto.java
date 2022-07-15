@@ -1,7 +1,7 @@
 package model.builderTerreno;
 
 //GLOBAL
-import global.EnumTipoTerreno;
+import global.Enum.EnumTipoTerreno;
 
 public class ConstruirPasto extends ConstruirTerreno {
 

@@ -1,4 +1,4 @@
-package global;
+package global.Enum;
 
 public enum EnumTipoMaquinas {
     CORPO_A_CORPO("Corpo a corpo"),

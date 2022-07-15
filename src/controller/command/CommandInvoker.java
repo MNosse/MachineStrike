@@ -14,7 +14,7 @@ public class CommandInvoker {
 
     private List<Command> undo = new ArrayList<>();
 
-    public void execute(Command command) {
+    public void execute(Command command) throws Exception {
         command.execute();
         listaDeComandos.add(command);
     }

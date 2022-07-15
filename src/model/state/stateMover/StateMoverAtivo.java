@@ -1,9 +1,12 @@
 package model.state.stateMover;
 
 //MODEL
+import model.Jogo;
 import model.Maquina;
 import model.state.stateCorrer.StateCorrerInativo;
 import model.state.StateSobrecarregar.StateSobrecarregarAtivo;
+
+import java.util.List;
 
 public class StateMoverAtivo extends StateMover{
 
@@ -12,8 +15,8 @@ public class StateMoverAtivo extends StateMover{
     }
 
     @Override
-    public void mover(int novaLinha, int novaColuna) {
-        if(maquina.podeMover(novaLinha, novaColuna)) {
+    public void mover(int novaLinha, int novaColuna, List<Maquina> maquinasEmJogo) {
+        if(maquina.podeMover(novaLinha, novaColuna, maquinasEmJogo)) {
             maquina.setLinha(novaLinha);
             maquina.setColuna(novaColuna);
             maquina.setMoverAtual(new StateMoverInativo(maquina));
@@ -21,6 +24,8 @@ public class StateMoverAtivo extends StateMover{
             if (!maquina.isAtacarAtivo() && !maquina.getJaSobrecarregou()) {
                 maquina.setSobrecarregarAtual(new StateSobrecarregarAtivo(maquina));
             }
+        } else {
+            throw new RuntimeException();
         }
     }
 

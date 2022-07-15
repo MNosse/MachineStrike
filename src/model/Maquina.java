@@ -1,8 +1,8 @@
 package model;
 
 //GLOBAL
-import global.EnumDirecao;
-import global.EnumTipoMaquinas;
+import global.Enum.EnumDirecao;
+import global.Enum.EnumTipoMaquinas;
 
 //MODEL
 import model.visitor.VisitorAtaque;
@@ -18,6 +18,8 @@ import model.state.stateAtacar.StateAtacarInativo;
 import model.state.stateCorrer.StateCorrerInativo;
 import model.state.StateSobrecarregar.StateSobrecarregar;
 import model.state.StateSobrecarregar.StateSobrecarregarInativo;
+
+import java.util.List;
 
 public class Maquina {
     private int vida;
@@ -45,27 +47,36 @@ public class Maquina {
         direcaoAtual.girar();
     }
 
-    public void mover(int novaLinha, int novaColuna) {
-        moverAtual.mover(novaLinha, novaColuna);
+    public void mover(int novaLinha, int novaColuna, List<Maquina> maquinasEmJogo) throws Exception {
+        moverAtual.mover(novaLinha, novaColuna, maquinasEmJogo);
     }
 
-    public void correr(int novaLinha, int novaColuna) {
+    public void correr(int novaLinha, int novaColuna) throws Exception {
         correrAtual.correr(novaLinha, novaColuna);
     }
 
-    public void atacar(Maquina outraMaquina, Terreno outraTerreno, VisitorAtaque visitor) {
-        atacarAtual.atacar(outraMaquina, outraTerreno, visitor);
+    public void atacar(Maquina outraMaquina, Terreno outraTerreno, List<Maquina> maquinasMesmoJogador, VisitorAtaque visitor) throws Exception {
+        atacarAtual.atacar(outraMaquina, outraTerreno, maquinasMesmoJogador, visitor);
     }
 
-    public void sobrecarregar() {
+    public void sobrecarregar() throws Exception {
         sobrecarregarAtual.sobrecarregar();
     }
 
-    public boolean podeMover(int novaLinha, int novaColuna) {
-        int diferencaLinha = Math.abs(linha - novaLinha);
-        int diferencaColuna = Math.abs(coluna - novaColuna);
-        if ((diferencaLinha+diferencaColuna) != 0 && (diferencaLinha+diferencaColuna) <= movimento) {
-            return true;
+    public boolean podeMover(int novaLinha, int novaColuna, List<Maquina> maquinasEmJogo) {
+        boolean continua = true;
+        for (Maquina maquina : maquinasEmJogo) {
+            if (maquina.getLinha() == novaLinha && maquina.getColuna() == novaColuna) {
+                continua = false;
+            }
+        }
+        if (continua) {
+            int diferencaLinha = Math.abs(linha - novaLinha);
+            int diferencaColuna = Math.abs(coluna - novaColuna);
+            if ((diferencaLinha + diferencaColuna) != 0 && (diferencaLinha + diferencaColuna) <= movimento) {
+
+                return true;
+            }
         }
         return false;
     }
@@ -79,13 +90,15 @@ public class Maquina {
         return false;
     }
 
-    public boolean podeAtacar(Maquina outraMaquina) {
-        int outraLinha = outraMaquina.getLinha();
-        int outraColuna = outraMaquina.getColuna();
-        if (linha == outraLinha && Math.abs(coluna - outraColuna) <= alcance) {
-            return true;
-        } else if (coluna == outraColuna && Math.abs(linha - outraLinha) <= alcance) {
-            return true;
+    public boolean podeAtacar(Maquina outraMaquina, List<Maquina> maquinasMesmoJogador) {
+        if (!maquinasMesmoJogador.contains(outraMaquina)) {
+            int outraLinha = outraMaquina.getLinha();
+            int outraColuna = outraMaquina.getColuna();
+            if (linha == outraLinha && Math.abs(coluna - outraColuna) <= alcance) {
+                return true;
+            } else if (coluna == outraColuna && Math.abs(linha - outraLinha) <= alcance) {
+                return true;
+            }
         }
         return false;
     }

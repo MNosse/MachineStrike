@@ -1,7 +1,7 @@
 package controller.observer;
 
 //GLOBAL
-import global.EnumTipoTerreno;
+import global.Enum.EnumTipoTerreno;
 
 //JAVA
 import java.util.HashMap;

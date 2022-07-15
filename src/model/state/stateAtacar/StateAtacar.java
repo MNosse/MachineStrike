@@ -5,6 +5,8 @@ import model.Maquina;
 import model.Terreno;
 import model.visitor.VisitorAtaque;
 
+import java.util.List;
+
 public abstract class StateAtacar {
 
     protected Maquina maquina;
@@ -13,7 +15,7 @@ public abstract class StateAtacar {
         this.maquina = maquina;
     }
 
-    public abstract void atacar(Maquina outraMaquina, Terreno outraTerreno, VisitorAtaque visitor);
+    public abstract void atacar(Maquina outraMaquina, Terreno outraTerreno, List<Maquina> maquinasMesmoJogador, VisitorAtaque visitor);
 
     public abstract boolean isAtivo();
 }

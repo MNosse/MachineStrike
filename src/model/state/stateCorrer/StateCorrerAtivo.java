@@ -23,6 +23,8 @@ public class StateCorrerAtivo extends StateCorrer{
             if (!maquina.getJaSobrecarregou()) {
                 maquina.setSobrecarregarAtual(new StateSobrecarregarAtivo(maquina));
             }
+        } else {
+            throw new RuntimeException();
         }
     }
 

@@ -1,4 +1,4 @@
-package global;
+package global.Enum;
 
 public enum EnumJogador {
     JOGADOR1("Jogador 1"),

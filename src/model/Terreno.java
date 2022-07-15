@@ -1,7 +1,7 @@
 package model;
 
 //GLOBAL
-import global.EnumTipoTerreno;
+import global.Enum.EnumTipoTerreno;
 
 public class Terreno {
 

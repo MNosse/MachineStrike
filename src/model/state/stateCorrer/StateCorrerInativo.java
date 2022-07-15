@@ -11,7 +11,7 @@ public class StateCorrerInativo extends StateCorrer{
 
     @Override
     public void correr(int novaLinha, int novaColuna) {
-
+        throw new RuntimeException();
     }
 
     @Override

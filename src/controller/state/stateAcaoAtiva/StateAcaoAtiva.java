@@ -15,7 +15,7 @@ public abstract class StateAcaoAtiva {
         cf.setObserver(controladorTelaJogo);
     }
 
-    public abstract void fazerAcao(String posicao);
+    public abstract void fazerAcao(String posicao) throws Exception;
 
     public void ativarNeutro() {
         controladorTelaJogo.setStateAcaoAtiva(new StateAcaoAtivaNeutro(controladorTelaJogo));

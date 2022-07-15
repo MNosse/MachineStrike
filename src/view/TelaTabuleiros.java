@@ -5,7 +5,7 @@ import controller.ControladorTelaTabuleiros;
 import controller.observer.ObserverTelaTabuleiros;
 
 //GLOBAL
-import global.EnumTipoTerreno;
+import global.Enum.EnumTipoTerreno;
 
 //JAVA
 import java.awt.*;
@@ -46,7 +46,12 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
 
     public TelaTabuleiros() {
         edicaoAtiva = false;
-        controlador = new ControladorTelaTabuleiros();
+        try {
+            controlador = new ControladorTelaTabuleiros();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao manusear arquivos",
+                    "Erro de arquvios", JOptionPane.ERROR_MESSAGE);
+        }
         controlador.attach(this);
         layout = new GridBagLayout();
         constraints = new GridBagConstraints();
@@ -171,14 +176,24 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
         btnDeletarTabuleiro.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.deletarArquivoDeTabuleiro(cmbListaTabuleiros.getSelectedItem().toString());
+                try {
+                    controlador.deletarArquivoDeTabuleiro(cmbListaTabuleiros.getSelectedItem().toString());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao manusear arquivos",
+                            "Erro de arquvios", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         //btnVoltar
         btnVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
+                try {
+                    controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel localizar essa tela",
+                            "Tela nao localizada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         //cmbTiposTerreno
@@ -201,9 +216,19 @@ public class TelaTabuleiros extends Tela implements ObserverTelaTabuleiros {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(txtNome.getText().equals("")){
-                    controlador.atualizarArquivoDeTabuleiro(cmbListaTabuleiros.getSelectedItem().toString(),  terrenosQuadradosTabuleiros);
+                    try {
+                        controlador.atualizarArquivoDeTabuleiro(cmbListaTabuleiros.getSelectedItem().toString(),  terrenosQuadradosTabuleiros);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao manusear arquivos",
+                                "Erro de arquvios", JOptionPane.ERROR_MESSAGE);
+                    }
                 }else{
-                    controlador.criarArquivoDeTabuleiro(txtNome.getText(), terrenosQuadradosTabuleiros);
+                    try {
+                        controlador.criarArquivoDeTabuleiro(txtNome.getText(), terrenosQuadradosTabuleiros);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Erro ao manusear arquivos",
+                                "Erro de arquvios", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
                 mudarEstadoPainelDireito(false);
             }

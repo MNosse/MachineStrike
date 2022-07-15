@@ -1,7 +1,7 @@
 package model.state.stateJogadorAtivo;
 
 //GLOBAL
-import global.EnumJogador;
+import global.Enum.EnumJogador;
 
 //MODEL
 import model.Jogo;

@@ -22,14 +22,10 @@ public class ControladorTelaInicial {
         observers.add(observer);
     }
 
-    public void navegarParaOutraTela(String caminho) {
-        try {
-            AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
-            for (ObserverTelaInicial observer : observers) {
-                observer.navegarParaOutraTela(factoryTela.construirTela());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void navegarParaOutraTela(String caminho) throws Exception {
+        AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
+        for (ObserverTelaInicial observer : observers) {
+            observer.navegarParaOutraTela(factoryTela.construirTela());
         }
     }
 }

@@ -1,7 +1,7 @@
 package model.builderTabuleiro;
 
 //GLOBAL
-import global.EnumTipoTabuleiro;
+import global.Enum.EnumTipoTabuleiro;
 
 //JAVA
 import java.util.List;

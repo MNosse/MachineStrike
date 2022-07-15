@@ -1,7 +1,7 @@
 package model;
 
 //GLOBAL
-import global.EnumJogador;
+import global.Enum.EnumJogador;
 
 //JAVA
 import java.util.Set;

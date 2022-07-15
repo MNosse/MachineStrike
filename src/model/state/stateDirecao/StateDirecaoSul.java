@@ -1,7 +1,7 @@
 package model.state.stateDirecao;
 
 //GLOBAL
-import global.EnumDirecao;
+import global.Enum.EnumDirecao;
 
 //MODEL
 import model.Maquina;

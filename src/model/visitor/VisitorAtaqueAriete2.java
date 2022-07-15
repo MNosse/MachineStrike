@@ -1,7 +1,7 @@
 package model.visitor;
 
 //GLOBAl
-import global.EnumDirecao;
+import global.Enum.EnumDirecao;
 
 //MODEL
 import model.Maquina;

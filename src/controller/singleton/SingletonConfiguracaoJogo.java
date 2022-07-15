@@ -1,7 +1,7 @@
 package controller.singleton;
 
 //GLOBAL
-import global.EnumJogador;
+import global.Enum.EnumJogador;
 
 //JAVA
 import java.util.LinkedHashMap;

@@ -20,7 +20,7 @@ public class CorrerCommand extends Command{
     }
 
     @Override
-    public void execute() {
+    public void execute() throws Exception {
         maquina.correr(novaLinha, novaColuna);
         observer.redesenharMaquinas();
     }

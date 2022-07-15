@@ -1,4 +1,4 @@
-package global;
+package global.Enum;
 
 public enum EnumMaquinas {
     ARIETE1("Ariete 1", "model.builderMaquina.ConstruirAriete1"),

@@ -4,7 +4,7 @@ package model;
 import java.util.*;
 
 //GLOBAL
-import global.EnumJogador;
+import global.Enum.EnumJogador;
 
 public class Jogador {
     private EnumJogador nome;

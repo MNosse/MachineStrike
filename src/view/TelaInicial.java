@@ -78,14 +78,24 @@ public class TelaInicial extends Tela implements ObserverTelaInicial {
         btnJogar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaConfigurarJogo");
+                try {
+                    controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaConfigurarJogo");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel localizar essa tela",
+                            "Tela nao localizada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         //btnTabuleiros
         btnTabuleiros.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaTabuleiros");
+                try {
+                    controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaTabuleiros");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel localizar essa tela",
+                            "Tela nao localizada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }

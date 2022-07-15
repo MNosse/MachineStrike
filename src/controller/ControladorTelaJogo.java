@@ -11,7 +11,7 @@ import controller.state.stateAcaoAtiva.StateAcaoAtiva;
 import controller.state.stateAcaoAtiva.StateAcaoAtivaNeutro;
 
 //GLOBAL
-import global.EnumTipoTerreno;
+import global.Enum.EnumTipoTerreno;
 
 //JAVA
 import java.util.*;
@@ -109,34 +109,42 @@ public class ControladorTelaJogo implements ObserverCommand {
         limparSetCampoDeCorrida();
     }
 
-    public void clicarBotaoMover() {
+    public void clicarBotaoMover() throws Exception {
         if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
             stateAcaoAtiva.ativarMover();
             apagarCampos();
             desenharCampoDeMovimento(maquinaSelecionada);
+        } else {
+            throw new RuntimeException();
         }
     }
 
-    public void clicarBotaoCorrer() {
+    public void clicarBotaoCorrer() throws Exception {
         if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
             stateAcaoAtiva.ativarCorrer();
             apagarCampos();
             desenharCampoDeCorrida(maquinaSelecionada);
+        } else {
+            throw new RuntimeException();
         }
     }
 
-    public void clicarBotaoAtacar() {
+    public void clicarBotaoAtacar() throws Exception {
         if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
             stateAcaoAtiva.ativarAtacar();
             apagarCampos();
+        } else {
+            throw new RuntimeException();
         }
     }
 
-    public void clicarBotaoSobrecarregar() {
+    public void clicarBotaoSobrecarregar() throws Exception {
         if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
             stateAcaoAtiva.ativarSobrecarregar();
             stateAcaoAtiva.fazerAcao(null);
             apagarCampos();
+        } else {
+            throw new RuntimeException();
         }
     }
 
@@ -151,7 +159,7 @@ public class ControladorTelaJogo implements ObserverCommand {
         }
     }
 
-    public void clicarBotaoGirar() {
+    public void clicarBotaoGirar() throws Exception {
         if (jogo.getMaquinasQueAtacaram().contains(maquinaSelecionada) || jogo.getMaquinasQueAtacaram().size() < 2) {
             apagarCampos();
             CommandFactory cf = CommandFactory.getInstancia();
@@ -159,6 +167,8 @@ public class ControladorTelaJogo implements ObserverCommand {
             cf.setObserver(this);
             Command comm = cf.getComando("girar", new Object[]{maquinaSelecionada});
             ci.execute(comm);
+        } else {
+            throw new RuntimeException();
         }
     }
 
@@ -187,7 +197,7 @@ public class ControladorTelaJogo implements ObserverCommand {
         apagarCampoDeCorrida();
     }
 
-    public void selecionarQuadrado(String posicao) {
+    public void selecionarQuadrado(String posicao) throws Exception {
         stateAcaoAtiva.fazerAcao(posicao);
     }
 
@@ -196,7 +206,7 @@ public class ControladorTelaJogo implements ObserverCommand {
         for (String chave : todasChaves) {
             int linha = Integer.parseInt(String.valueOf(chave.charAt(0)));
             int coluna = Integer.parseInt(String.valueOf(chave.charAt(1)));
-            if (maquina.podeMover(linha, coluna)) {
+            if (maquina.podeMover(linha, coluna, jogo.getTabuleiro().getMaquinas())) {
                 campoDeMovimento.add(chave);
             }
         }
@@ -284,14 +294,10 @@ public class ControladorTelaJogo implements ObserverCommand {
         this.maquinaSelecionada = maquinaSelecionada;
     }
 
-    public void navegarParaOutraTela(String caminho) {
-        try {
-            AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
-            for (ObserverTelaJogo observer : observers) {
-                observer.navegarParaOutraTela(factoryTela.construirTela());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void navegarParaOutraTela(String caminho) throws Exception {
+        AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
+        for (ObserverTelaJogo observer : observers) {
+            observer.navegarParaOutraTela(factoryTela.construirTela());
         }
     }
 }

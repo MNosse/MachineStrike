@@ -5,10 +5,10 @@ import controller.ControladorTelaConfigurarJogo;
 import controller.observer.ObserverTelaConfigurarJogo;
 
 //GLOBAL
-import global.EnumJogador;
-import global.EnumMaquinas;
-import global.EnumTipoTerreno;
-import global.EnumAdicionarRemover;
+import global.Enum.EnumJogador;
+import global.Enum.EnumMaquinas;
+import global.Enum.EnumTipoTerreno;
+import global.Enum.EnumAdicionarRemover;
 
 //JAVA
 import java.awt.*;
@@ -43,7 +43,12 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
     private HashMap<String, ImageIcon> imagens = SingletonImagens.getInstancia().getImagens();
 
     public TelaConfigurarJogo() {
-        controlador = new ControladorTelaConfigurarJogo();
+        try {
+            controlador = new ControladorTelaConfigurarJogo();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao manusear arquivos",
+                    "Erro de arquvios", JOptionPane.ERROR_MESSAGE);
+        }
         controlador.attach(this);
         layout = new GridBagLayout();
         constraints = new GridBagConstraints();
@@ -78,7 +83,12 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         //cmbMaquinas
         cmbMaquinas = criarComboBox(new Vector<>(Arrays.asList(EnumMaquinas.values())), ((int)(getLargura()*0.2125)), ((int)(getAltura()*0.056)));
         //cardMaquina
-        cardMaquina = new CardMaquina(controlador.getInformacoesMaquina((EnumMaquinas)cmbMaquinas.getSelectedItem()));
+        try {
+            cardMaquina = new CardMaquina(controlador.getInformacoesMaquina((EnumMaquinas)cmbMaquinas.getSelectedItem()));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Nao foi possivel localizar essa maquina",
+                    "Maquina inexistente", JOptionPane.ERROR_MESSAGE);
+        }
         //lblPainelDireito
         lblPainelDireito = new JLabel(criarImagem("src/images/Filtro.png", ((int)(getAltura()*0.9)), ((int)(getLargura()*0.225))));
         lblPainelDireito.setLayout(layout);
@@ -132,7 +142,12 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         btnJogar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaTelaJogo(cmbListaTabuleiros.getSelectedItem().toString());
+                try {
+                    controlador.navegarParaTelaJogo(cmbListaTabuleiros.getSelectedItem().toString());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel localizar essa tela",
+                            "Tela nao localizada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         //cmbListaTabuleiros
@@ -149,7 +164,12 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         btnVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
+                try {
+                    controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel localizar essa tela",
+                            "Tela nao localizada", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         //cmbJogador
@@ -163,7 +183,12 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
         cmbMaquinas.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                cardMaquina.atualizarConteudo(controlador.getInformacoesMaquina((EnumMaquinas)cmbMaquinas.getSelectedItem()));
+                try {
+                    cardMaquina.atualizarConteudo(controlador.getInformacoesMaquina((EnumMaquinas)cmbMaquinas.getSelectedItem()));
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Nao foi possivel localizar essa maquina",
+                            "Maquina inexistente", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }
@@ -182,7 +207,12 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
                         if ((cmbJogador.getSelectedItem().equals(EnumJogador.JOGADOR1) && finalLinha > 5)
                                 || cmbJogador.getSelectedItem().equals(EnumJogador.JOGADOR2) && finalLinha < 2) {
                             if (cmbAdicionarRemover.getSelectedItem().equals(EnumAdicionarRemover.ADICIONAR)) {
-                                controlador.adicionarMaquinaAoJogador((EnumJogador) cmbJogador.getSelectedItem(), finalLinha, finalColuna, EnumMaquinas.valueOf(cmbMaquinas.getSelectedItem().toString()), cmbListaTabuleiros.getSelectedItem().toString());
+                                try {
+                                    controlador.adicionarMaquinaAoJogador((EnumJogador) cmbJogador.getSelectedItem(), finalLinha, finalColuna, EnumMaquinas.valueOf(cmbMaquinas.getSelectedItem().toString()), cmbListaTabuleiros.getSelectedItem().toString());
+                                } catch (Exception ex) {
+                                    JOptionPane.showMessageDialog(null, "Nao foi possivel localizar essa maquina",
+                                            "Maquina inexistente", JOptionPane.ERROR_MESSAGE);
+                                }
                             } else {
                                 controlador.removerMaquinaDoJogador((EnumJogador) cmbJogador.getSelectedItem(), finalLinha, finalColuna);
                             }

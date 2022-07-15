@@ -1,7 +1,7 @@
 package model.builderMaquina;
 
 //GLOBAL
-import global.EnumTipoMaquinas;
+import global.Enum.EnumTipoMaquinas;
 
 public class ConstruirCorpoACorpo2 extends ConstruirMaquina {
 

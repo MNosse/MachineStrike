@@ -5,7 +5,6 @@ import controller.singleton.SingletonConfiguracaoJogo;
 import controller.observer.ObserverTelaConfigurarJogo;
 
 //GLOBAL
-import global.*;
 
 //JAVA
 import java.util.*;
@@ -14,6 +13,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 
 //MODEL
+import global.Enum.*;
 import model.Terreno;
 import model.Maquina;
 import model.Jogador;
@@ -41,46 +41,42 @@ public class ControladorTelaConfigurarJogo {
     private LinkedHashMap<String, Tabuleiro> tabuleiros;
     private ConstruirTabuleiroSemMaquinas construirTabuleiro;
 
-    public ControladorTelaConfigurarJogo() {
+    public ControladorTelaConfigurarJogo() throws Exception {
         observers = new ArrayList<>();
         arquivosTabuleiros = new File("src/arquivosTabuleiros").listFiles();
         construirTabuleiros();
         iniciarJogadores();
     }
 
-    private void construirTabuleiros() {
+    private void construirTabuleiros() throws Exception {
         tabuleiros = new LinkedHashMap<>();
         BufferedReader bufferedReader;
         for (File arquivo:arquivosTabuleiros) {
-            try {
-                bufferedReader = new BufferedReader(new FileReader(arquivo));
-                List<String> linhas = new ArrayList<>(bufferedReader.lines().toList());
-                bufferedReader.close();
-                String nome = linhas.get(0);
-                EnumTipoTabuleiro tipoTabuleiro = EnumTipoTabuleiro.PADRAO;
-                if (!linhas.get(1).equals("padrao")) {
-                    tipoTabuleiro = EnumTipoTabuleiro.CRIADO;
-                }
-                ArrayList<ArrayList<String>> tiposTerrenos = new ArrayList<>();
-                for (int linha = 2; linha < linhas.size(); linha++) {
-                    tiposTerrenos.add(new ArrayList<>(Arrays.asList(linhas.get(linha).split(" "))));
-                }
-                HashMap<String, Terreno> terrenos = new HashMap<>();
-                construirTabuleiro = new ConstruirTabuleiroSemMaquinas();
-                directorTabuleiro = new DirectorTabuleiro(construirTabuleiro);
-                for (int linha = 0; linha < 8; linha++) {
-                    for (int coluna = 0; coluna < 8; coluna++) {
-                        ConstruirTerreno builder = (ConstruirTerreno) Class.forName("model.builderTerreno.Construir"+tiposTerrenos.get(linha).get(coluna)).getDeclaredConstructor().newInstance();
-                        directorTerreno = new DirectorTerreno(builder);
-                        directorTerreno.construir();
-                        terrenos.put(linha+""+coluna, builder.getTerreno());
-                    }
-                }
-                directorTabuleiro.construir(tipoTabuleiro, terrenos, null);
-                tabuleiros.put(nome, construirTabuleiro.getTabuleiro());
-            } catch (Exception exception) {
-                throw new RuntimeException(exception);
+            bufferedReader = new BufferedReader(new FileReader(arquivo));
+            List<String> linhas = new ArrayList<>(bufferedReader.lines().toList());
+            bufferedReader.close();
+            String nome = linhas.get(0);
+            EnumTipoTabuleiro tipoTabuleiro = EnumTipoTabuleiro.PADRAO;
+            if (!linhas.get(1).equals("padrao")) {
+                tipoTabuleiro = EnumTipoTabuleiro.CRIADO;
             }
+            ArrayList<ArrayList<String>> tiposTerrenos = new ArrayList<>();
+            for (int linha = 2; linha < linhas.size(); linha++) {
+                tiposTerrenos.add(new ArrayList<>(Arrays.asList(linhas.get(linha).split(" "))));
+            }
+            HashMap<String, Terreno> terrenos = new HashMap<>();
+            construirTabuleiro = new ConstruirTabuleiroSemMaquinas();
+            directorTabuleiro = new DirectorTabuleiro(construirTabuleiro);
+            for (int linha = 0; linha < 8; linha++) {
+                for (int coluna = 0; coluna < 8; coluna++) {
+                    ConstruirTerreno builder = (ConstruirTerreno) Class.forName("model.builderTerreno.Construir"+tiposTerrenos.get(linha).get(coluna)).getDeclaredConstructor().newInstance();
+                    directorTerreno = new DirectorTerreno(builder);
+                    directorTerreno.construir();
+                    terrenos.put(linha+""+coluna, builder.getTerreno());
+                }
+            }
+            directorTabuleiro.construir(tipoTabuleiro, terrenos, null);
+            tabuleiros.put(nome, construirTabuleiro.getTabuleiro());
         }
     }
 
@@ -116,53 +112,45 @@ public class ControladorTelaConfigurarJogo {
         return jogadores;
     }
 
-    public HashMap<String, String> getInformacoesMaquina(EnumMaquinas nomeMaquina) {
+    public HashMap<String, String> getInformacoesMaquina(EnumMaquinas nomeMaquina) throws Exception {
         HashMap<String, String> resposta = new HashMap<>();
-        try {
-            construirMaquina = (ConstruirMaquina) Class.forName(nomeMaquina.getNomeBuilder()).getDeclaredConstructor().newInstance();
-            DirectorMaquina directorMaquina = new DirectorMaquina(construirMaquina);
-            directorMaquina.construir(null, 0, 0);
-            Maquina maquina = construirMaquina.getMaquina();
-            resposta.put("CaminhoImagem", maquina.caminhoImagemDirecaoAtual());
-            resposta.put("Nome", maquina.getNome());
-            resposta.put("PV", String.valueOf(maquina.getPontosVitoria()));
-            resposta.put("Vida", String.valueOf(maquina.getVida()));
-            resposta.put("Ataque", String.valueOf(maquina.getAtaque()));
-            resposta.put("Alcance", String.valueOf(maquina.getAlcance()));
-            resposta.put("Movimento", String.valueOf(maquina.getMovimento()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        construirMaquina = (ConstruirMaquina) Class.forName(nomeMaquina.getNomeBuilder()).getDeclaredConstructor().newInstance();
+        DirectorMaquina directorMaquina = new DirectorMaquina(construirMaquina);
+        directorMaquina.construir(null, 0, 0);
+        Maquina maquina = construirMaquina.getMaquina();
+        resposta.put("CaminhoImagem", maquina.caminhoImagemDirecaoAtual());
+        resposta.put("Nome", maquina.getNome());
+        resposta.put("PV", String.valueOf(maquina.getPontosVitoria()));
+        resposta.put("Vida", String.valueOf(maquina.getVida()));
+        resposta.put("Ataque", String.valueOf(maquina.getAtaque()));
+        resposta.put("Alcance", String.valueOf(maquina.getAlcance()));
+        resposta.put("Movimento", String.valueOf(maquina.getMovimento()));
         return resposta;
     }
 
-    public void adicionarMaquinaAoJogador(EnumJogador nomeJogador, int linha, int coluna, EnumMaquinas nomeMaquina, String nomeTabuleiro) {
-        try {
-            Jogador jogador = jogadores.get(nomeJogador);
-            construirMaquina = (ConstruirMaquina) Class.forName(nomeMaquina.getNomeBuilder()).getDeclaredConstructor().newInstance();
-            DirectorMaquina directorMaquina = new DirectorMaquina(construirMaquina);
-            directorMaquina.construir(jogador, linha, coluna);
-            Maquina maquina = construirMaquina.getMaquina();
-            if (nomeJogador == EnumJogador.JOGADOR2) {
-                maquina.setDirecaoAtual(new StateDirecaoSul(maquina));
+    public void adicionarMaquinaAoJogador(EnumJogador nomeJogador, int linha, int coluna, EnumMaquinas nomeMaquina, String nomeTabuleiro) throws Exception {
+        Jogador jogador = jogadores.get(nomeJogador);
+        construirMaquina = (ConstruirMaquina) Class.forName(nomeMaquina.getNomeBuilder()).getDeclaredConstructor().newInstance();
+        DirectorMaquina directorMaquina = new DirectorMaquina(construirMaquina);
+        directorMaquina.construir(jogador, linha, coluna);
+        Maquina maquina = construirMaquina.getMaquina();
+        if (nomeJogador == EnumJogador.JOGADOR2) {
+            maquina.setDirecaoAtual(new StateDirecaoSul(maquina));
+        }
+        if (!jogador.podeAdicionarMaquinaNaPosicao(linha, coluna)) {
+            if (jogador.podeSubstituirMaquinas(jogador.getMaquinaPorPosicao(linha, coluna), maquina)) {
+                jogador.removeMaquina(linha, coluna);
             }
-            if (!jogador.podeAdicionarMaquinaNaPosicao(linha, coluna)) {
-                if (jogador.podeSubstituirMaquinas(jogador.getMaquinaPorPosicao(linha, coluna), maquina)) {
-                    jogador.removeMaquina(linha, coluna);
+        }
+        if (jogador.podeAdicionarMaquinas(maquina)) {
+            if ((tabuleiros.get(nomeTabuleiro).getTerrenoPorPosicao(linha+""+coluna).getTipo().equals(EnumTipoTerreno.ABISMO)
+                    && maquina.getTipo().equals(EnumTipoMaquinas.MERGULHO))
+                    || (!tabuleiros.get(nomeTabuleiro).getTerrenoPorPosicao(linha+""+coluna).getTipo().equals(EnumTipoTerreno.ABISMO))) {
+                jogador.addMaquinas(maquina);
+                for (ObserverTelaConfigurarJogo observer : observers) {
+                    observer.desenharMaquina(maquina.caminhoImagemDirecaoAtual(), linha+""+coluna);
                 }
             }
-            if (jogador.podeAdicionarMaquinas(maquina)) {
-                if ((tabuleiros.get(nomeTabuleiro).getTerrenoPorPosicao(linha+""+coluna).getTipo().equals(EnumTipoTerreno.ABISMO)
-                        && maquina.getTipo().equals(EnumTipoMaquinas.MERGULHO))
-                        || (!tabuleiros.get(nomeTabuleiro).getTerrenoPorPosicao(linha+""+coluna).getTipo().equals(EnumTipoTerreno.ABISMO))) {
-                    jogador.addMaquinas(maquina);
-                    for (ObserverTelaConfigurarJogo observer : observers) {
-                        observer.desenharMaquina(maquina.caminhoImagemDirecaoAtual(), linha+""+coluna);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -203,7 +191,7 @@ public class ControladorTelaConfigurarJogo {
         }
     }
 
-    public void navegarParaTelaJogo(String nomeTabuleiro) {
+    public void navegarParaTelaJogo(String nomeTabuleiro) throws Exception {
         if (jogadores.get(EnumJogador.JOGADOR1).contagemPVMaquinas() > 0
                 && jogadores.get(EnumJogador.JOGADOR2).contagemPVMaquinas() > 0) {
             construirTabuleiro = new ConstruirTabuleiroComMaquinas();
@@ -222,14 +210,10 @@ public class ControladorTelaConfigurarJogo {
         }
     }
 
-    public void navegarParaOutraTela(String caminho) {
-        try {
-            AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
-            for (ObserverTelaConfigurarJogo observer : observers) {
-                observer.navegarParaOutraTela(factoryTela.construirTela());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void navegarParaOutraTela(String caminho) throws Exception {
+        AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
+        for (ObserverTelaConfigurarJogo observer : observers) {
+            observer.navegarParaOutraTela(factoryTela.construirTela());
         }
     }
 }

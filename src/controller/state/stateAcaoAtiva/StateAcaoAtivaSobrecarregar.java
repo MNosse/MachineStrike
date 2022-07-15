@@ -14,7 +14,7 @@ public class StateAcaoAtivaSobrecarregar extends StateAcaoAtiva{
     }
 
     @Override
-    public void fazerAcao(String posicao) {
+    public void fazerAcao(String posicao) throws Exception {
         controladorTelaJogo.apagarCampos();
         Maquina maquina = controladorTelaJogo.getMaquinaSelecionada();
         if (maquina != null) {

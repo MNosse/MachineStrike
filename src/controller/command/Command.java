@@ -11,7 +11,7 @@ public abstract class Command {
         this.observer = observer;
     }
 
-    public abstract void execute();
+    public abstract void execute() throws Exception;
 
     public abstract void undo();
 

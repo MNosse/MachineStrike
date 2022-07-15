@@ -11,7 +11,7 @@ public class StateSobrecarregarInativo extends StateSobrecarregar{
 
     @Override
     public void sobrecarregar() {
-
+        throw new RuntimeException();
     }
 
     @Override
