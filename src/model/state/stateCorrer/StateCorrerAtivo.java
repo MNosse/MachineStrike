@@ -1,33 +1,25 @@
 package model.state.stateCorrer;
 
-//MODEL
-import model.Maquina;
-import model.state.stateMover.StateMoverInativo;
-import model.state.stateAtacar.StateAtacarInativo;
-import model.state.StateSobrecarregar.StateSobrecarregarAtivo;
+import model.Terreno;
+import model.maquinas.Maquina;
 
-public class StateCorrerAtivo extends StateCorrer{
+import java.util.List;
 
+public class StateCorrerAtivo extends StateCorrer {
+    
     public StateCorrerAtivo(Maquina maquina) {
         super(maquina);
     }
-
+    
     @Override
-    public void correr(int novaLinha, int novaColuna) {
-        if(maquina.podeCorrer(novaLinha, novaColuna)) {
-            maquina.setLinha(novaLinha);
-            maquina.setColuna(novaColuna);
-            maquina.setMoverAtual(new StateMoverInativo(maquina));
-            maquina.setCorrerAtual(new StateCorrerInativo(maquina));
-            maquina.setAtacarAtual(new StateAtacarInativo(maquina));
-            if (!maquina.getJaSobrecarregou()) {
-                maquina.setSobrecarregarAtual(new StateSobrecarregarAtivo(maquina));
-            }
+    public void correr(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) {
+        if(maquina.podeCorrer(novaLinha, novaColuna, terrenoNaPosicao, maquinasEmJogo)) {
+            maquina.acaoCorrer(novaLinha, novaColuna, terrenoNaPosicao, maquinasEmJogo);
         } else {
             throw new RuntimeException();
         }
     }
-
+    
     @Override
     public boolean isAtivo() {
         return true;

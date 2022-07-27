@@ -1,39 +1,49 @@
 package controller.state.stateAcaoAtiva;
 
-//CONTROLLER
-import controller.command.Command;
 import controller.ControladorTelaJogo;
+import controller.command.Command;
+import model.maquinas.Maquina;
+import model.visitor.VisitorJogadorAtivoGanhador;
+import model.visitor.VisitorJogadorDefensorGanhador;
+import model.visitor.VisitorMaquinasMortas;
 
-//MODEL
-import model.Maquina;
-import model.Terreno;
-
-public class StateAcaoAtivaAtacar extends StateAcaoAtiva{
-
+public class StateAcaoAtivaAtacar extends StateAcaoAtiva {
+    
     public StateAcaoAtivaAtacar(ControladorTelaJogo controladorTelaJogo) {
         super(controladorTelaJogo);
     }
-
+    
     @Override
     public void fazerAcao(String posicao) throws Exception {
         controladorTelaJogo.apagarCampos();
         try {
             Maquina maquinaDefensora = controladorTelaJogo.getJogo().getTabuleiro().getMaquinaPorPosicao(Integer.parseInt(String.valueOf(posicao.charAt(0))), Integer.parseInt(String.valueOf(posicao.charAt(1))));
-            if (maquinaDefensora != null && controladorTelaJogo.getMaquinaSelecionada().podeAtacar(maquinaDefensora, controladorTelaJogo.getJogo().jogadorAtivo().getMaquinas())) {
-                Terreno terrenoAtacante = controladorTelaJogo.getJogo().getTabuleiro().getTerrenoPorPosicao(controladorTelaJogo.getMaquinaSelecionada().getLinha() + "" + controladorTelaJogo.getMaquinaSelecionada().getColuna());
-                Terreno terrenoDefensor = controladorTelaJogo.getJogo().getTabuleiro().getTerrenoPorPosicao(posicao);
-                Command comm = cf.getComando("atacar", new Object[]{controladorTelaJogo.getMaquinaSelecionada(), terrenoAtacante, maquinaDefensora, controladorTelaJogo.getJogo().jogadorAtivo().getMaquinas(), terrenoDefensor});
+            if(maquinaDefensora != null && controladorTelaJogo.getMaquinaSelecionada().podeAtacar(maquinaDefensora, controladorTelaJogo.getJogo().getTabuleiro())) {
+                Command comm = cf.getComando("atacar", new Object[]{controladorTelaJogo.getMaquinaSelecionada(), maquinaDefensora, controladorTelaJogo.getJogo().getTabuleiro()});
                 ci.execute(comm);
-                controladorTelaJogo.getJogo().verificarMaquinasJogadorDefensor();
+                if (controladorTelaJogo.getJogo().accept(new VisitorMaquinasMortas())) {
+                    controladorTelaJogo.atualizarLblJogadorAtivo();
+                }
                 controladorTelaJogo.redesenharMaquinas();
-                controladorTelaJogo.getJogo().addMaquinaQueAtacou(controladorTelaJogo.getMaquinaSelecionada());
+                controladorTelaJogo.getJogo().addMaquinaQueRealizouAcao(controladorTelaJogo.getMaquinaSelecionada());
+                if (controladorTelaJogo.getJogo().accept(new VisitorJogadorAtivoGanhador())) {
+                    controladorTelaJogo.anunciarGanhador(controladorTelaJogo.getJogo().jogadorAtivo());
+                }
+                if (controladorTelaJogo.getJogo().accept(new VisitorJogadorDefensorGanhador())) {
+                    controladorTelaJogo.anunciarGanhador(controladorTelaJogo.getJogo().jogadorDefensor());
+                }
             }
-        } catch (Exception e) {
+        } catch(Exception e) {
             throw new RuntimeException();
         } finally {
             controladorTelaJogo.setMaquinaSelecionada(null);
             controladorTelaJogo.desativarPainel();
             ativarNeutro();
         }
+    }
+    
+    @Override
+    public boolean estaAtacando() {
+        return true;
     }
 }

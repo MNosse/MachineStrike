@@ -1,6 +1,5 @@
 package view.abstractFactoryTela;
 
-//VIEW
 import view.Tela;
 import view.TelaJogo;
 

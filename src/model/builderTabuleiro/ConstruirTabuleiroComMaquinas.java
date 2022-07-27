@@ -1,10 +1,8 @@
 package model.builderTabuleiro;
 
-//JAVA
-import java.util.List;
+import model.maquinas.Maquina;
 
-//MODEL
-import model.Maquina;
+import java.util.List;
 
 public class ConstruirTabuleiroComMaquinas extends ConstruirTabuleiroSemMaquinas {
 

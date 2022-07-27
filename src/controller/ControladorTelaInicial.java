@@ -25,7 +25,8 @@ public class ControladorTelaInicial {
     public void navegarParaOutraTela(String caminho) throws Exception {
         AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
         for (ObserverTelaInicial observer : observers) {
-            observer.navegarParaOutraTela(factoryTela.construirTela());
+            factoryTela.construirTela();
+            observer.navegarParaOutraTela();
         }
     }
 }

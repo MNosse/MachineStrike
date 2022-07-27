@@ -1,19 +1,21 @@
 package model.state.stateCorrer;
 
-//MODEL
-import model.Maquina;
+import model.Terreno;
+import model.maquinas.Maquina;
 
-public class StateCorrerInativo extends StateCorrer{
+import java.util.List;
 
+public class StateCorrerInativo extends StateCorrer {
+    
     public StateCorrerInativo(Maquina maquina) {
         super(maquina);
     }
-
+    
     @Override
-    public void correr(int novaLinha, int novaColuna) {
+    public void correr(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) {
         throw new RuntimeException();
     }
-
+    
     @Override
     public boolean isAtivo() {
         return false;

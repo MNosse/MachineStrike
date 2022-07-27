@@ -1,14 +1,17 @@
 package controller;
 
 //CONTROLLER
+import controller.adapter.ObjetoArquivoAdapter;
 import controller.observer.ObserverTelaTabuleiros;
 
 //GLOBAL
+import controller.singleton.SingletonTipoDeArquivo;
 import global.Enum.EnumTipoTerreno;
 import global.Enum.EnumTipoTabuleiro;
 
 //JAVA
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 //MODEL
@@ -39,21 +42,25 @@ public class ControladorTelaTabuleiros {
 
     private void construirTabuleiros() throws Exception {
         tabuleiros = new LinkedHashMap<>();
-        BufferedReader bufferedReader;
-        File todosArquivos = new File("src/arquivosTabuleiros");
+        File todosArquivos = new File(SingletonTipoDeArquivo.getInstancia().getCaminhoArquivos());
         File[] arquivos = todosArquivos.listFiles();
         for (File arquivo:arquivos) {
-            bufferedReader = new BufferedReader(new FileReader(arquivo));
-            List<String> linhas = new ArrayList<>(bufferedReader.lines().toList());
-            bufferedReader.close();
-            String nome = linhas.get(0);
+            Class<?>[] parametroObjeto = new Class<?>[]{File.class};
+            Class<?>[] parametroAdapter = new Class<?>[]{SingletonTipoDeArquivo.getInstancia().getClasseObjeto()};
+            Constructor<?> construtorObjeto = SingletonTipoDeArquivo.getInstancia().getClasseObjeto().getConstructor(parametroObjeto);
+            Constructor<? extends ObjetoArquivoAdapter> construtorAdapter = SingletonTipoDeArquivo.getInstancia().getClasseAdapter().getConstructor(parametroAdapter);
+            Object objetoArquivo = construtorObjeto.newInstance(arquivo);
+            ObjetoArquivoAdapter objetoArquivoAdapter = construtorAdapter.newInstance(objetoArquivo);
+            ArrayList<ArrayList<String>> conteudo = objetoArquivoAdapter.getConteudo();
+            String nome = conteudo.get(0).get(0);
+            String tipo = conteudo.get(1).get(0);
             EnumTipoTabuleiro tipoTabuleiro = EnumTipoTabuleiro.PADRAO;
-            if (!linhas.get(1).equals("padrao")) {
+            if (!tipo.equals("padrao")) {
                 tipoTabuleiro = EnumTipoTabuleiro.CRIADO;
             }
             ArrayList<ArrayList<String>> tiposTerrenos = new ArrayList<>();
-            for (int linha = 2; linha < linhas.size(); linha++) {
-                tiposTerrenos.add(new ArrayList<>(Arrays.asList(linhas.get(linha).split(" "))));
+            for (int l = 2; l < conteudo.size(); l++) {
+                tiposTerrenos.add(conteudo.get(l));
             }
             HashMap<String, Terreno> terrenos = new HashMap<>();
             for (int linha = 0; linha < 8; linha++) {
@@ -70,63 +77,57 @@ public class ControladorTelaTabuleiros {
     }
 
     public EnumTipoTabuleiro getTipoTabuleiro(String nomeTabuleiro) {
-        return tabuleiros.get(nomeTabuleiro).getTipoTabuleiro();
+        if (tabuleiros.get(nomeTabuleiro) != null) {
+            return tabuleiros.get(nomeTabuleiro).getTipoTabuleiro();
+        } else {
+            return null;
+        }
     }
 
     public void criarArquivoDeTabuleiro(String nome, HashMap<String, EnumTipoTerreno> terrenos) throws Exception {
-        String nomeDoArquivo = nome.replace(" ", "_");
-        String caminho = "src/arquivosTabuleiros/Mapa"+nomeDoArquivo+".txt";
-        File arquivoDeTabuleiro = new File(caminho);
-        arquivoDeTabuleiro.createNewFile();
-        FileWriter fileWriter = new FileWriter(caminho);
-        fileWriter.write(nome+"\n");
-        fileWriter.write("criado\n");
-        for (int linha = 0; linha < 8; linha++) {
-            for (int coluna = 0; coluna < 8; coluna++) {
-                fileWriter.write(terrenos.get(linha+""+coluna).getTipo());
-                if (coluna < 7) {
-                    fileWriter.write(" ");
+        EnumTipoTabuleiro tipo = getTipoTabuleiro(nome);
+        if ((tipo == null) || (!getTipoTabuleiro(nome).getTipo().equals("padrao"))) {
+            String nomeDoArquivo = nome.replace(" ", "_");
+            String caminho = SingletonTipoDeArquivo.getInstancia().getCaminhoArquivos() + "/Mapa" + nomeDoArquivo + SingletonTipoDeArquivo.getInstancia().getExtensaoArquivo();
+            ArrayList<ArrayList<String>> textoTerrenos = new ArrayList<>();
+            for (int linha = 0; linha < 8; linha++) {
+                textoTerrenos.add(new ArrayList<>());
+                for (int coluna = 0; coluna < 8; coluna++) {
+                    textoTerrenos.get(linha).add(terrenos.get(linha + "" + coluna).getTipo());
                 }
             }
-            fileWriter.write("\n");
-        }
-        fileWriter.close();
-        construirTabuleiros();
-        for (ObserverTelaTabuleiros observer:observers) {
-            observer.atualizarListaDeTabuleiros(new Vector<String>(tabuleiros.keySet()));
+            SingletonTipoDeArquivo.getInstancia().escreverArquivo(caminho, nome, textoTerrenos);
+            construirTabuleiros();
+            for (ObserverTelaTabuleiros observer : observers) {
+                observer.atualizarListaDeTabuleiros(new Vector<String>(tabuleiros.keySet()));
+            }
         }
     }
 
     public void atualizarArquivoDeTabuleiro(String nome, HashMap<String, EnumTipoTerreno> terrenos) throws Exception {
-        String caminho = "src/arquivosTabuleiros/Mapa"+nome+".txt";
-        File arquivoDeTabuleiro = new File(caminho);
-        arquivoDeTabuleiro.createNewFile();
-        FileWriter fileWriter = new FileWriter(caminho);
-        fileWriter.write(nome+"\n");
-        fileWriter.write(getTipoTabuleiro(nome).getTipo()+"\n");
+        String nomeDoArquivo = nome.replace(" ", "_");
+        String caminho = SingletonTipoDeArquivo.getInstancia().getCaminhoArquivos() + "/Mapa" + nomeDoArquivo + SingletonTipoDeArquivo.getInstancia().getExtensaoArquivo();
+        ArrayList<ArrayList<String>> textoTerrenos = new ArrayList<>();
         for (int linha = 0; linha < 8; linha++) {
-            for (int coluna = 0; coluna < 8; coluna++){
-                fileWriter.write(terrenos.get(linha+""+coluna).getTipo());
-                if (coluna < 7) {
-                    fileWriter.write(" ");
-                }
+            textoTerrenos.add(new ArrayList<>());
+            for (int coluna = 0; coluna < 8; coluna++) {
+                textoTerrenos.get(linha).add(terrenos.get(linha + "" + coluna).getTipo());
             }
-            fileWriter.write("\n");
         }
-        fileWriter.close();
+        SingletonTipoDeArquivo.getInstancia().editarArquivo(caminho, nome, textoTerrenos);
         construirTabuleiros();
-        for (ObserverTelaTabuleiros observer:observers) {
+        for (ObserverTelaTabuleiros observer : observers) {
             observer.atualizarListaDeTabuleiros(new Vector<String>(tabuleiros.keySet()));
         }
     }
 
     public void deletarArquivoDeTabuleiro(String nome) throws Exception {
         String nomeDoArquivo = nome.replace(" ", "_");
-        String caminho = "src/arquivosTabuleiros/Mapa"+nomeDoArquivo+".txt";
+        String caminho = SingletonTipoDeArquivo.getInstancia().getCaminhoArquivos()+"/Mapa"+nomeDoArquivo+SingletonTipoDeArquivo.getInstancia().getExtensaoArquivo();
         File arquivoDeTabuleiro = new File(caminho);
         arquivoDeTabuleiro.delete();
         construirTabuleiros();
-        for (ObserverTelaTabuleiros observer:observers) {
+        for (ObserverTelaTabuleiros observer : observers) {
             observer.atualizarListaDeTabuleiros(new Vector<String>(tabuleiros.keySet()));
         }
     }
@@ -172,7 +173,8 @@ public class ControladorTelaTabuleiros {
     public void navegarParaOutraTela(String caminho) throws Exception {
         AbstractFactoryTela factoryTela = (AbstractFactoryTela) Class.forName(caminho).getDeclaredConstructor().newInstance();
         for (ObserverTelaTabuleiros observer : observers) {
-            observer.navegarParaOutraTela(factoryTela.construirTela());
+            factoryTela.construirTela();
+            observer.navegarParaOutraTela();
         }
     }
 

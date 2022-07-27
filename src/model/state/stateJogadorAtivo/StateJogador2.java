@@ -1,9 +1,6 @@
 package model.state.stateJogadorAtivo;
 
-//GLOBAL
 import global.Enum.EnumJogador;
-
-//MODEL
 import model.Jogo;
 
 public class StateJogador2 extends StateJogadorAtivo{

@@ -1,11 +1,8 @@
 package view.utils;
 
-//JAVA
+import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
-
-//JAVAX
-import javax.swing.*;
 
 public class SingletonImagens {
     private static SingletonImagens instancia;
@@ -13,8 +10,8 @@ public class SingletonImagens {
 
     static {
         imagens = new HashMap<>();
-        int altura = (int)(Toolkit.getDefaultToolkit().getScreenSize().getHeight()*0.9);
-        int largura = (int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth()*0.9);
+        int largura = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() * 0.9);
+        int altura = (int) (largura * 0.562);
         imagens.put("Background", new ImageIcon(new ImageIcon(("src/images/Background.png")).getImage().getScaledInstance(largura, altura, Image.SCALE_SMOOTH)));
         imagens.put("Logo", new ImageIcon(new ImageIcon(("src/images/Logo.png")).getImage().getScaledInstance((int)(largura*0.375), ((int)(altura*0.36402)), Image.SCALE_SMOOTH)));
         imagens.put("Abismo", new ImageIcon(new ImageIcon(("src/images/Abismo.png")).getImage().getScaledInstance((int)(altura*0.11), (int)(altura*0.11), Image.SCALE_SMOOTH)));

@@ -1,15 +1,14 @@
 package global.Enum;
 
 public enum EnumTipoTabuleiro {
-    PADRAO("padrao"),
-    CRIADO("criado");
-
+    PADRAO("padrao"), CRIADO("criado");
+    
     private String tipo;
-
+    
     EnumTipoTabuleiro(String tipo) {
         this.tipo = tipo;
     }
-
+    
     public String getTipo() {
         return tipo;
     }

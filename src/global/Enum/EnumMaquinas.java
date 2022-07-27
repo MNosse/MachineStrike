@@ -1,30 +1,25 @@
 package global.Enum;
 
 public enum EnumMaquinas {
-    ARIETE1("Ariete 1", "model.builderMaquina.ConstruirAriete1"),
-    ARIETE2("Ariete 2", "model.builderMaquina.ConstruirAriete2"),
-    ARRANCADA("Arrancada", "model.builderMaquina.ConstruirArrancada"),
-    ATIRADOR1("Atirador 1", "model.builderMaquina.ConstruirAtirador1"),
-    ATIRADOR2("Atirador 2", "model.builderMaquina.ConstruirAtirador2"),
-    CORPO_A_CORPO1("Corpo A Corpo 1", "model.builderMaquina.ConstruirCorpoACorpo1"),
-    CORPO_A_CORPO2("Corpo A Corpo 2", "model.builderMaquina.ConstruirCorpoACorpo2"),
-    MERGULHO1("Mergulho 1", "model.builderMaquina.ConstruirMergulho1"),
-    MERGULHO2("Mergulho 2", "model.builderMaquina.ConstruirMergulho2"),
-    PUXAO("Puxao", "model.builderMaquina.ConstruirPuxao");
+    ARIETE1("Ariete 1"),
+    ARIETE2("Ariete 2"),
+    ARRANCADA("Arrancada"),
+    ATIRADOR1("Atirador 1"),
+    ATIRADOR2("Atirador 2"),
+    CORPO_A_CORPO1("Corpo A Corpo 1"),
+    CORPO_A_CORPO2("Corpo A Corpo 2"),
+    MERGULHO1("Mergulho 1"),
+    MERGULHO2("Mergulho 2"),
+    PUXAO("Puxao");
 
     private String nome;
-    private String nomeBuilder;
 
-    EnumMaquinas(String nome, String nomeBuilder) {
+    EnumMaquinas(String nome) {
         this.nome = nome;
-        this.nomeBuilder = nomeBuilder;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public String getNomeBuilder() {
-        return nomeBuilder;
-    }
 }

@@ -1,26 +1,23 @@
 package controller.state.stateAcaoAtiva;
 
-//CONTROLLER
 import controller.ControladorTelaJogo;
 import controller.command.Command;
+import model.maquinas.Maquina;
 
-//MODEL
-import model.Maquina;
-
-public class StateAcaoAtivaSobrecarregar extends StateAcaoAtiva{
-
+public class StateAcaoAtivaSobrecarregar extends StateAcaoAtiva {
+    
     public StateAcaoAtivaSobrecarregar(ControladorTelaJogo controladorTelaJogo) {
         super(controladorTelaJogo);
     }
-
+    
     @Override
     public void fazerAcao(String posicao) throws Exception {
         controladorTelaJogo.apagarCampos();
         Maquina maquina = controladorTelaJogo.getMaquinaSelecionada();
-        if (maquina != null) {
+        if(maquina != null) {
             Command comm = cf.getComando("sobrecarregar", new Object[]{maquina});
             ci.execute(comm);
-            controladorTelaJogo.getJogo().addMaquinaQueAtacou(controladorTelaJogo.getMaquinaSelecionada());
+            controladorTelaJogo.getJogo().addMaquinaQueRealizouAcao(controladorTelaJogo.getMaquinaSelecionada());
             controladorTelaJogo.setMaquinaSelecionada(null);
             controladorTelaJogo.desativarPainel();
             ativarNeutro();
