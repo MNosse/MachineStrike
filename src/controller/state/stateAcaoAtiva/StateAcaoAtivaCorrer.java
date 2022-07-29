@@ -27,8 +27,7 @@ public class StateAcaoAtivaCorrer extends StateAcaoAtiva {
             controladorTelaJogo.getJogo().addMaquinaQueRealizouAcao(controladorTelaJogo.getMaquinaSelecionada());
             if(controladorTelaJogo.getJogo().accept(new VisitorJogadorAtivoGanhador())) {
                 controladorTelaJogo.anunciarGanhador(controladorTelaJogo.getJogo().jogadorAtivo());
-            }
-            else if(controladorTelaJogo.getJogo().accept(new VisitorJogadorDefensorGanhador())) {
+            } else if(controladorTelaJogo.getJogo().accept(new VisitorJogadorDefensorGanhador())) {
                 controladorTelaJogo.anunciarGanhador(controladorTelaJogo.getJogo().jogadorDefensor());
             }
             controladorTelaJogo.getJogo().addMaquinaQueRealizouAcao(controladorTelaJogo.getMaquinaSelecionada());

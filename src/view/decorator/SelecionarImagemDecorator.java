@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class SelecionarImagemDecorator extends ImagemDecorator{
+public class SelecionarImagemDecorator extends ImagemDecorator {
     
     public SelecionarImagemDecorator(ImagemBase imagem) {
         super(imagem);

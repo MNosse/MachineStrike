@@ -11,7 +11,7 @@ import global.Exception.MaquinaEmTerrenoInvalidoException;
 import global.Exception.MinimoMaquinasException;
 import global.Exception.SubstituicaoInvalidaException;
 import view.components.CardMaquina;
-import view.decorator.*;
+import view.decorator.Imagem;
 import view.utils.SingletonImagens;
 
 import javax.swing.*;
@@ -247,7 +247,7 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
     }
     
     public void desenharMaquina(String caminhoImagem, String posicao) {
-        listaMaquinasNoTabuleiro.get(posicao).setIcon(new Imagem(caminhoImagem, (int)(getAltura()*0.11), (int)(getAltura()*0.11)).getImagem());
+        listaMaquinasNoTabuleiro.get(posicao).setIcon(new Imagem(caminhoImagem, (int) (getAltura() * 0.11), (int) (getAltura() * 0.11)).getImagem());
     }
     
     public void desenharBloqueadosOuVazios(HashMap<String, String> valores) {

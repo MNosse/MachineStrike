@@ -2,8 +2,6 @@ package model.maquinas;
 
 import global.Enum.EnumTipoMaquinas;
 import model.Jogador;
-import model.Tabuleiro;
-import model.Terreno;
 
 public class Arrancada extends Maquina {
     

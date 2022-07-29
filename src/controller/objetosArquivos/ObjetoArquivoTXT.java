@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class ObjetoArquivoTXT {
     private String nome;
@@ -22,25 +21,27 @@ public class ObjetoArquivoTXT {
     
     private String lerNome(File file) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-        String n = new ArrayList<>(bufferedReader.lines().toList()).get(0);
+        String n = bufferedReader.readLine();
         bufferedReader.close();
         return n;
     }
     
     private String lerTipo(File file) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-        String n = new ArrayList<>(bufferedReader.lines().toList()).get(1);
+        bufferedReader.readLine();
+        String t = bufferedReader.readLine();
         bufferedReader.close();
-        return n;
+        return t;
     }
     
     private HashMap<String, String> lerTerrenos(File file) throws IOException {
         HashMap<String, String> t = new HashMap<>();
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-        List<String> linhas = new ArrayList<>(bufferedReader.lines().toList());
+        bufferedReader.readLine();
+        bufferedReader.readLine();
         ArrayList<ArrayList<String>> matrizTerrenos = new ArrayList<>();
-        for(int linha = 2; linha < linhas.size(); linha++) {
-            matrizTerrenos.add(new ArrayList<>(Arrays.asList(linhas.get(linha).split(" "))));
+        for(int linha = 2; linha < 10; linha++) {
+            matrizTerrenos.add(new ArrayList<>(Arrays.asList(bufferedReader.readLine().split(" "))));
         }
         for(int linha = 0; linha < 8; linha++) {
             for(int coluna = 0; coluna < 8; coluna++) {

@@ -15,7 +15,7 @@ public class StateAcaoAtivaMover extends StateAcaoAtiva {
     
     @Override
     public void fazerAcao(String posicao) throws Exception {
-        if (controladorTelaJogo.getCampoDeMovimento().contains(posicao)) {
+        if(controladorTelaJogo.getCampoDeMovimento().contains(posicao)) {
             int linha = Integer.parseInt(String.valueOf(posicao.charAt(0)));
             int coluna = Integer.parseInt(String.valueOf(posicao.charAt(1)));
             Command comm = cf.getComando("mover", new Object[]{controladorTelaJogo.getMaquinaSelecionada(), linha, coluna, controladorTelaJogo.getJogo().getTabuleiro().getTerrenoPorPosicao(linha + "" + coluna), controladorTelaJogo.getJogo().getTabuleiro().getMaquinas()});
@@ -27,8 +27,7 @@ public class StateAcaoAtivaMover extends StateAcaoAtiva {
             controladorTelaJogo.getJogo().addMaquinaQueRealizouAcao(controladorTelaJogo.getMaquinaSelecionada());
             if(controladorTelaJogo.getJogo().accept(new VisitorJogadorAtivoGanhador())) {
                 controladorTelaJogo.anunciarGanhador(controladorTelaJogo.getJogo().jogadorAtivo());
-            }
-            else if(controladorTelaJogo.getJogo().accept(new VisitorJogadorDefensorGanhador())) {
+            } else if(controladorTelaJogo.getJogo().accept(new VisitorJogadorDefensorGanhador())) {
                 controladorTelaJogo.anunciarGanhador(controladorTelaJogo.getJogo().jogadorDefensor());
             }
             controladorTelaJogo.getJogo().addMaquinaQueRealizouAcao(controladorTelaJogo.getMaquinaSelecionada());

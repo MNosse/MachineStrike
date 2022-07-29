@@ -3,12 +3,14 @@ package model.maquinas;
 import global.Enum.EnumDirecao;
 import global.Enum.EnumTipoMaquinas;
 import global.Enum.EnumTipoTerreno;
-import global.Exception.*;
+import global.Exception.JaAtacouException;
+import global.Exception.JaCorreuException;
+import global.Exception.JaMovimentouException;
+import global.Exception.JaSobrecarregouException;
 import model.Jogador;
 import model.Tabuleiro;
 import model.Terreno;
 import model.state.StateSobrecarregar.StateSobrecarregar;
-import model.state.StateSobrecarregar.StateSobrecarregarAtivo;
 import model.state.StateSobrecarregar.StateSobrecarregarInativo;
 import model.state.stateAtacar.StateAtacar;
 import model.state.stateAtacar.StateAtacarAtivo;
@@ -175,36 +177,36 @@ public abstract class Maquina {
         int linhaOutraMaquina = outraMaquina.getLinha();
         int colunaOutraMaquina = outraMaquina.getColuna();
         outraMaquina.setVida(outraMaquina.getVida() - 1);
-        if (linha == linhaOutraMaquina) {
-            if (coluna < colunaOutraMaquina) {
-                if(tabuleiro.getMaquinaPorPosicao( linhaOutraMaquina, colunaOutraMaquina + 1) != null) {
-                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina , colunaOutraMaquina + 1), tabuleiro);
+        if(linha == linhaOutraMaquina) {
+            if(coluna < colunaOutraMaquina) {
+                if(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina, colunaOutraMaquina + 1) != null) {
+                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina, colunaOutraMaquina + 1), tabuleiro);
                 } else if(colunaOutraMaquina < 7) {
                     outraMaquina.setColuna(colunaOutraMaquina + 1);
                 } else {
                     outraMaquina.setVida(outraMaquina.getVida() - 1);
                 }
-            } else if (coluna > colunaOutraMaquina) {
-                if(tabuleiro.getMaquinaPorPosicao( linhaOutraMaquina, colunaOutraMaquina - 1) != null) {
-                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina , colunaOutraMaquina - 1), tabuleiro);
+            } else if(coluna > colunaOutraMaquina) {
+                if(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina, colunaOutraMaquina - 1) != null) {
+                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina, colunaOutraMaquina - 1), tabuleiro);
                 } else if(colunaOutraMaquina > 0) {
                     outraMaquina.setColuna(colunaOutraMaquina - 1);
                 } else {
                     outraMaquina.setVida(outraMaquina.getVida() - 1);
                 }
             }
-        } else if (coluna == colunaOutraMaquina) {
-            if (linha < linhaOutraMaquina) {
-                if(tabuleiro.getMaquinaPorPosicao( linhaOutraMaquina + 1, colunaOutraMaquina) != null) {
-                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina + 1 , colunaOutraMaquina), tabuleiro);
+        } else if(coluna == colunaOutraMaquina) {
+            if(linha < linhaOutraMaquina) {
+                if(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina + 1, colunaOutraMaquina) != null) {
+                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina + 1, colunaOutraMaquina), tabuleiro);
                 } else if(linhaOutraMaquina < 7) {
                     outraMaquina.setLinha(linhaOutraMaquina + 1);
                 } else {
                     outraMaquina.setVida(outraMaquina.getVida() - 1);
                 }
-            } else if (linha > linhaOutraMaquina) {
-                if(tabuleiro.getMaquinaPorPosicao( linhaOutraMaquina - 1, colunaOutraMaquina) != null) {
-                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina - 1 , colunaOutraMaquina), tabuleiro);
+            } else if(linha > linhaOutraMaquina) {
+                if(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina - 1, colunaOutraMaquina) != null) {
+                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina - 1, colunaOutraMaquina), tabuleiro);
                 } else if(linhaOutraMaquina > 0) {
                     outraMaquina.setLinha(linhaOutraMaquina - 1);
                 } else {
