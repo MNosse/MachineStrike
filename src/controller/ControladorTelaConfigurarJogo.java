@@ -127,8 +127,8 @@ public class ControladorTelaConfigurarJogo {
         String nome = nomeMaquina.getNome();
         factoryMaquina = (AbstractFactoryMaquina) Class.forName("model.abstractFactoryMaquina.ConcretFactory" + nomeMaquina.getNome().replace(" ", "")).getDeclaredConstructor().newInstance();
         Maquina maquina = factoryMaquina.construirMaquinaJogador1(0, 0, null);
-        resposta.put("CaminhoImagem", maquina.caminhoImagemDirecaoAtual());
-        resposta.put("Nome", maquina.getNome());
+        resposta.put("CaminhoImagem", maquina.caminhoImagemDirecaoFixa());
+        resposta.put("Nome", nome);
         resposta.put("PV", String.valueOf(maquina.getPontosVitoria()));
         resposta.put("Vida", String.valueOf(maquina.getVida()));
         resposta.put("Ataque", String.valueOf(maquina.getAtaque()));
@@ -188,12 +188,12 @@ public class ControladorTelaConfigurarJogo {
         for(int linha = 0; linha < 2; linha++) {
             for(int coluna = 0; coluna < 8; coluna++) {
                 if(jogador2.getMaquinaPorPosicao(linha, coluna) == null) {
-                    String nome = (nomeNovoJogador.equals(EnumJogador.JOGADOR1) ? "BloqueadoPequeno" : "Vazio");
+                    String nome = (nomeNovoJogador.equals(EnumJogador.JOGADOR1) ? "Bloqueado" : "Vazio");
                     chavesLinhasSuperiores.put(linha + "" + coluna, nome);
                 }
                 int linhaInferior = linha + 6;
                 if(jogador1.getMaquinaPorPosicao(linhaInferior, coluna) == null) {
-                    String nome = (nomeNovoJogador.equals(EnumJogador.JOGADOR1) ? "Vazio" : "BloqueadoPequeno");
+                    String nome = (nomeNovoJogador.equals(EnumJogador.JOGADOR1) ? "Vazio" : "Bloqueado");
                     chavesLinhasInferiores.put(linhaInferior + "" + coluna, nome);
                 }
             }
@@ -205,7 +205,7 @@ public class ControladorTelaConfigurarJogo {
     }
     
     public void navegarParaTelaJogo(String nomeTabuleiro) throws Exception {
-        if(jogadores.get(EnumJogador.JOGADOR1).contagemPVMaquinas() >= 2 && jogadores.get(EnumJogador.JOGADOR2).contagemPVMaquinas() >= 2) {
+        if(jogadores.get(EnumJogador.JOGADOR1).contagemPVMaquinas() >= 1 && jogadores.get(EnumJogador.JOGADOR2).contagemPVMaquinas() >= 1) {
             construirTabuleiro = new ConstruirTabuleiroComMaquinas();
             directorTabuleiro = new DirectorTabuleiro(construirTabuleiro);
             List<Maquina> maquinas = new ArrayList<>();

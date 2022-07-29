@@ -55,7 +55,17 @@ public class Jogador {
     }
     
     public boolean podeAdicionarMaquinas(Maquina maquina) {
+        
         if(maquinas.size() < 10) {
+            int contagem = 0;
+            for (Maquina m: maquinas) {
+                if (maquina.getNome().equals(m.getNome())) {
+                    contagem++;
+                }
+            }
+            if (contagem >= 4) {
+                return false;
+            }
             if(contagemPVMaquinas() + maquina.getPontosVitoria() <= 10) {
                 return true;
             }

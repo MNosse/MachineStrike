@@ -5,7 +5,7 @@ import controller.objetosArquivos.ObjetoArquivoPROPERTIES;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ObjetoArquivoPROPERTIESAdapter extends ObjetoArquivoAdapter {
+public class ObjetoArquivoPROPERTIESAdapter implements ObjetoArquivoAdapter {
     
     private ObjetoArquivoPROPERTIES adaptada;
     

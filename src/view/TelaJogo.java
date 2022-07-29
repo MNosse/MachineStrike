@@ -3,8 +3,12 @@ package view;
 import controller.ControladorTelaJogo;
 import controller.observer.ObserverTelaJogo;
 import global.Enum.EnumTipoTerreno;
-import global.Exception.MinimoDeMovimentoException;
+import global.Exception.*;
 import view.components.CardMaquina;
+import view.decorator.Imagem;
+import view.decorator.JogadorAtivoImagemDecorator;
+import view.decorator.JogadorInativoImagemDecorator;
+import view.decorator.SelecionarImagemDecorator;
 import view.utils.SingletonImagens;
 
 import javax.swing.*;
@@ -35,6 +39,7 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
     private GridBagConstraints constraints;
     private ControladorTelaJogo controlador;
     private CardMaquina cardMaquinaAtacante;
+    private CardMaquina cardMaquinaDefensora;
     private Map<String, JLabel> listaQuadradosTabuleiros;
     private Map<String, JLabel> listaMaquinasNoTabuleiro;
     private HashMap<String, ImageIcon> imagens = SingletonImagens.getInstancia().getImagens();
@@ -93,9 +98,12 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
         lblPainelEsquerdo.add(linha3, constraints);
         constraints.insets = new Insets((int) (getAltura() * 0.125), 0, 0, 0);
         lblPainelEsquerdo.add(btnSair, constraints);
+        //cardMaquinaDefensora
+        cardMaquinaDefensora = new CardMaquina(null);
         //lblPainelDireito
         lblPainelDireito = new JLabel(criarImagem("src/images/Filtro.png", ((int) (getAltura() * 0.9)), ((int) (getLargura() * 0.225))));
         lblPainelDireito.setLayout(layout);
+        lblPainelDireito.add(cardMaquinaDefensora);
         //lblPainelCentral
         lblPainelCentral = new JLabel(criarImagem("src/images/Filtro.png", ((int) (getAltura() * 0.9)), ((int) (getAltura() * 0.9))));
         lblPainelCentral.setLayout(layout);
@@ -137,8 +145,8 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
             public void actionPerformed(ActionEvent e) {
                 try {
                     controlador.clicarBotaoMover();
-                } catch(Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido", "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                } catch(LimiteDeAcoesException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite atingido", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -149,8 +157,8 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
             public void actionPerformed(ActionEvent e) {
                 try {
                     controlador.clicarBotaoCorrer();
-                } catch(Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido", "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                } catch(LimiteDeAcoesException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite atingido", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -161,8 +169,10 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
             public void actionPerformed(ActionEvent e) {
                 try {
                     controlador.clicarBotaoAtacar();
-                } catch(Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido", "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                } catch (SemMaquinaNoCampoAtaqueException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Sem alvos", JOptionPane.INFORMATION_MESSAGE);
+                } catch(LimiteDeAcoesException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite atingido", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -173,8 +183,10 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
             public void actionPerformed(ActionEvent e) {
                 try {
                     controlador.clicarBotaoSobrecarregar();
+                } catch(LimiteDeAcoesException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite atingido", JOptionPane.ERROR_MESSAGE);
                 } catch(Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido", "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Acao bloqueada", "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -185,8 +197,10 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
             public void actionPerformed(ActionEvent e) {
                 try {
                     controlador.clicarBotaoGirar();
+                } catch(LimiteDeAcoesException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite atingido", JOptionPane.ERROR_MESSAGE);
                 } catch(Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Limite de acoes com maquinas distintas atingido", "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Acao bloqueada", "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -230,6 +244,18 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
                     public void mouseClicked(MouseEvent e) {
                         try {
                             controlador.selecionarQuadrado(finalLinha + "" + finalColuna);
+                        } catch (ForaDoCampoMovimentoException ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage(), "Mover invalido", JOptionPane.ERROR_MESSAGE);
+                        } catch (ForaDoCampoCorridaException ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage(), "Correr invalido", JOptionPane.ERROR_MESSAGE);
+                        } catch (ForaDoCampoAtaqueException ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage(), "Ataque invalido", JOptionPane.ERROR_MESSAGE);
+                        } catch (JaMovimentouException ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite Mover atingido", JOptionPane.ERROR_MESSAGE);
+                        } catch (JaCorreuException ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite Correr atingido", JOptionPane.ERROR_MESSAGE);
+                        } catch (JaAtacouException ex) {
+                            JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite Atacar atingido", JOptionPane.ERROR_MESSAGE);
                         } catch(Exception ex) {
                             JOptionPane.showMessageDialog(null, "Nao foi possivel realizar essa acao", "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
                         }
@@ -307,35 +333,45 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
     }
     
     @Override
-    public void apagarCamposSelecionados(Set<String> posicoes) {
-        for(String posicao : posicoes) {
-            listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get("Vazio"));
+    public void redesenharMaquinas(HashMap<String, String> maquinasAtivas, HashMap<String, String> maquinasInativas) {
+        for (int i = 0; i <= 7; i++) {
+            for (int j = 0; j <= 7; j++) {
+                listaMaquinasNoTabuleiro.get(i+""+j).setIcon(imagens.get("Vazio"));
+            }
+        }
+        Set<String> posicoesAtivas = maquinasAtivas.keySet();
+        for(String posicao : posicoesAtivas) {
+            listaMaquinasNoTabuleiro.get(posicao).setIcon(new JogadorAtivoImagemDecorator(new Imagem(maquinasAtivas.get(posicao), (int) (getAltura() * 0.11), (int) (getAltura() * 0.11))).getImagem());
+        }
+        Set<String> posicoesInativas = maquinasInativas.keySet();
+        for(String posicao : posicoesInativas) {
+            listaMaquinasNoTabuleiro.get(posicao).setIcon(new JogadorInativoImagemDecorator(new Imagem(maquinasInativas.get(posicao), (int) (getAltura() * 0.11), (int) (getAltura() * 0.11))).getImagem());
         }
     }
     
     @Override
-    public void desenharCamposSelecionados(Set<String> posicoes) {
+    public void desenharCamposDeMovimento(Set<String> posicoes) {
         for(String posicao : posicoes) {
             listaMaquinasNoTabuleiro.get(posicao).setIcon(imagens.get("Selecionado"));
         }
     }
     
     @Override
-    public void desenharQuadrado(String posicao, String caminhoImagem) {
-        listaMaquinasNoTabuleiro.get(posicao).setIcon(criarImagem(caminhoImagem, ((int) (getAltura() * 0.11)), ((int) (getAltura() * 0.11))));
-    }
-    
-    @Override
-    public void desenharQuadrados(HashMap<String, String> maquinas) {
+    public void desenharCampoDeAtaque(HashMap<String, String> maquinas) {
         Set<String> posicoes = maquinas.keySet();
         for(String posicao : posicoes) {
-            desenharQuadrado(posicao, maquinas.get(posicao));
+            listaMaquinasNoTabuleiro.get(posicao).setIcon(new SelecionarImagemDecorator(new Imagem(maquinas.get(posicao), (int) (getAltura() * 0.11), (int) (getAltura() * 0.11))).getImagem());
         }
     }
     
     @Override
     public void atualizarCardMaquinaAtacante(HashMap<String, String> informacoes) {
         cardMaquinaAtacante.atualizarConteudo(informacoes);
+    }
+    
+    @Override
+    public void atualizarCardMaquinaDefensora(HashMap<String, String> informacoes) {
+        cardMaquinaDefensora.atualizarConteudo(informacoes);
     }
     
     @Override

@@ -16,14 +16,4 @@ public class GirarCommand extends Command {
         maquina.girar();
         observer.redesenharMaquinas();
     }
-    
-    @Override
-    public void undo() {
-    
-    }
-    
-    @Override
-    public void redo() {
-    
-    }
 }

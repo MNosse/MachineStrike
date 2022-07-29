@@ -12,14 +12,10 @@ public class StateAtacarAtivo extends StateAtacar {
     
     @Override
     public void atacar(Maquina outraMaquina, Tabuleiro tabuleiro) {
-        if(maquina.podeAtacar(outraMaquina, tabuleiro)) {
-            maquina.acaoAtacar(outraMaquina, tabuleiro);
-            maquina.setAtacarAtual(new StateAtacarInativo(maquina));
-            if(!maquina.isMoverAtivo() && !maquina.getJaSobrecarregou()) {
-                maquina.setSobrecarregarAtual(new StateSobrecarregarAtivo(maquina));
-            }
-        } else {
-            throw new RuntimeException();
+        maquina.acaoAtacar(outraMaquina, tabuleiro);
+        maquina.setAtacarAtual(new StateAtacarInativo(maquina));
+        if(!maquina.isMoverAtivo() && !maquina.getJaSobrecarregou()) {
+            maquina.setSobrecarregarAtual(new StateSobrecarregarAtivo(maquina));
         }
     }
     

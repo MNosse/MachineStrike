@@ -12,6 +12,8 @@ import global.Enum.EnumTipoTabuleiro;
 //JAVA
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.util.*;
 
 //MODEL
@@ -126,6 +128,7 @@ public class ControladorTelaTabuleiros {
         String caminho = SingletonTipoDeArquivo.getInstancia().getCaminhoArquivos()+"/Mapa"+nomeDoArquivo+SingletonTipoDeArquivo.getInstancia().getExtensaoArquivo();
         File arquivoDeTabuleiro = new File(caminho);
         arquivoDeTabuleiro.delete();
+        Files.delete(arquivoDeTabuleiro.toPath());
         construirTabuleiros();
         for (ObserverTelaTabuleiros observer : observers) {
             observer.atualizarListaDeTabuleiros(new Vector<String>(tabuleiros.keySet()));

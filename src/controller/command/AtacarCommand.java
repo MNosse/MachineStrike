@@ -1,6 +1,8 @@
 package controller.command;
 
 import controller.observer.ObserverCommand;
+import global.Exception.ForaDoCampoAtaqueException;
+import global.Exception.JaAtacouException;
 import model.Tabuleiro;
 import model.maquinas.Maquina;
 
@@ -17,18 +19,12 @@ public class AtacarCommand extends Command {
     }
     
     @Override
-    public void execute() throws Exception {
-        maquinaAtacante.atacar(maquinaDefensora, tabuleiro);
-        observer.redesenharMaquinas();
-    }
-    
-    @Override
-    public void undo() {
-    
-    }
-    
-    @Override
-    public void redo() {
-    
+    public void execute() throws ForaDoCampoAtaqueException, JaAtacouException {
+        if(maquinaDefensora != null && maquinaAtacante.podeAtacar(maquinaDefensora, tabuleiro)) {
+            maquinaAtacante.atacar(maquinaDefensora, tabuleiro);
+            observer.redesenharMaquinas();
+        } else {
+            throw new ForaDoCampoAtaqueException();
+        }
     }
 }

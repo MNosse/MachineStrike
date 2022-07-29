@@ -2,7 +2,7 @@ package controller.adapter;
 
 import java.util.ArrayList;
 
-public abstract class ObjetoArquivoAdapter {
+public interface ObjetoArquivoAdapter {
     
-    public abstract ArrayList<ArrayList<String>> getConteudo();
+    ArrayList<ArrayList<String>> getConteudo();
 }

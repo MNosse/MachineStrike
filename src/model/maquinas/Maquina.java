@@ -3,6 +3,7 @@ package model.maquinas;
 import global.Enum.EnumDirecao;
 import global.Enum.EnumTipoMaquinas;
 import global.Enum.EnumTipoTerreno;
+import global.Exception.*;
 import model.Jogador;
 import model.Tabuleiro;
 import model.Terreno;
@@ -70,11 +71,11 @@ public abstract class Maquina {
         direcaoAtual.girar();
     }
     
-    public void mover(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) throws Exception {
+    public void mover(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) throws JaMovimentouException {
         moverAtual.mover(novaLinha, novaColuna, terrenoNaPosicao, maquinasEmJogo);
     }
     
-    public void acaoMover(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) {
+    public void acaoMover(int novaLinha, int novaColuna, Terreno terrenoNaPosicao) {
         linha = novaLinha;
         coluna = novaColuna;
         moverAtual = new StateMoverInativo(this);
@@ -82,33 +83,140 @@ public abstract class Maquina {
         if(terrenoNaPosicao.getTipo().equals(EnumTipoTerreno.PANTANO)) {
             atacarAtual = new StateAtacarInativo(this);
         }
-        if(!isAtacarAtivo() && !jaSobrecarregou) {
-            sobrecarregarAtual = new StateSobrecarregarAtivo(this);
-        }
     }
     
-    public void correr(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) throws Exception {
+    public void correr(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) throws JaCorreuException {
         correrAtual.correr(novaLinha, novaColuna, terrenoNaPosicao, maquinasEmJogo);
     }
     
-    public void acaoCorrer(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) {
+    public void acaoCorrer(int novaLinha, int novaColuna) {
         linha = novaLinha;
         coluna = novaColuna;
         moverAtual = new StateMoverInativo(this);
         correrAtual = new StateCorrerInativo(this);
         atacarAtual = new StateAtacarInativo(this);
-        if(!jaSobrecarregou) {
-            sobrecarregarAtual = new StateSobrecarregarAtivo(this);
-        }
     }
     
-    public void atacar(Maquina outraMaquina, Tabuleiro tabuleiro) throws Exception {
+    public void atacar(Maquina outraMaquina, Tabuleiro tabuleiro) throws JaAtacouException {
         atacarAtual.atacar(outraMaquina, tabuleiro);
     }
     
-    public abstract void acaoAtacar(Maquina outraMaquina, Tabuleiro tabuleiro);
+    public void acaoAtacar(Maquina outraMaquina, Tabuleiro tabuleiro) {
+        int linhaOutraMaquina = outraMaquina.getLinha();
+        int colunaOutraMaquina = outraMaquina.getColuna();
+        Terreno terrenoOutraMaquina = tabuleiro.getTerrenoPorPosicao(linhaOutraMaquina + "" + colunaOutraMaquina);
+        Terreno terrenoDessaMaquina = tabuleiro.getTerrenoPorPosicao(linha + "" + coluna);
+        int pontoDeAtaque = ataque + terrenoDessaMaquina.getPontosDeCombate();
+        int pontoDeDefesa = terrenoOutraMaquina.getPontosDeCombate() + outraMaquina.getPontosEscudo(linha, coluna);
+        if(linha == linhaOutraMaquina) {
+            if(coluna < colunaOutraMaquina && direcaoAtual.getDirecaoAtual().equals(EnumDirecao.LESTE)) {
+                if(pontoDeAtaque > pontoDeDefesa) {
+                    outraMaquina.setVida(outraMaquina.getVida() - (pontoDeAtaque - pontoDeDefesa));
+                } else {
+                    vida--;
+                    outraMaquina.setVida(outraMaquina.getVida() - 1);
+                    if(tabuleiro.getMaquinaPorPosicao(linha, colunaOutraMaquina + 1) != null) {
+                        encadearAtaque(tabuleiro.getMaquinaPorPosicao(linha, colunaOutraMaquina + 1), tabuleiro);
+                    } else if((colunaOutraMaquina + 1) <= 7) {
+                        outraMaquina.setColuna(colunaOutraMaquina + 1);
+                    } else {
+                        outraMaquina.setVida(outraMaquina.getVida() - 1);
+                    }
+                }
+            } else if(coluna > colunaOutraMaquina && direcaoAtual.getDirecaoAtual().equals(EnumDirecao.OESTE)) {
+                if(pontoDeAtaque > pontoDeDefesa) {
+                    outraMaquina.setVida(outraMaquina.getVida() - (pontoDeAtaque - pontoDeDefesa));
+                } else {
+                    vida--;
+                    outraMaquina.setVida(outraMaquina.getVida() - 1);
+                    if(tabuleiro.getMaquinaPorPosicao(linha, colunaOutraMaquina - 1) != null) {
+                        encadearAtaque(tabuleiro.getMaquinaPorPosicao(linha, colunaOutraMaquina - 1), tabuleiro);
+                    } else if((colunaOutraMaquina - 1) >= 0) {
+                        outraMaquina.setColuna(colunaOutraMaquina - 1);
+                    } else {
+                        outraMaquina.setVida(outraMaquina.getVida() - 1);
+                    }
+                }
+            }
+        } else if(coluna == colunaOutraMaquina) {
+            if(linha < linhaOutraMaquina && direcaoAtual.getDirecaoAtual().equals((EnumDirecao.SUL))) {
+                if(pontoDeAtaque > pontoDeDefesa) {
+                    outraMaquina.setVida(outraMaquina.getVida() - (pontoDeAtaque - pontoDeDefesa));
+                } else {
+                    vida--;
+                    outraMaquina.setVida(outraMaquina.getVida() - 1);
+                    if(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina + 1, coluna) != null) {
+                        encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina + 1, coluna), tabuleiro);
+                    } else if((linhaOutraMaquina + 1) <= 7) {
+                        outraMaquina.setLinha(linhaOutraMaquina + 1);
+                    } else {
+                        outraMaquina.setVida(outraMaquina.getVida() - 1);
+                    }
+                }
+            } else if(linha > linhaOutraMaquina && direcaoAtual.getDirecaoAtual().equals(EnumDirecao.NORTE)) {
+                if(pontoDeAtaque > pontoDeDefesa) {
+                    outraMaquina.setVida(outraMaquina.getVida() - (pontoDeAtaque - pontoDeDefesa));
+                } else {
+                    vida--;
+                    outraMaquina.setVida(outraMaquina.getVida() - 1);
+                    if(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina - 1, coluna) != null) {
+                        encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina - 1, coluna), tabuleiro);
+                    } else if((linhaOutraMaquina - 1) >= 0) {
+                        outraMaquina.setLinha(linhaOutraMaquina - 1);
+                    } else {
+                        outraMaquina.setVida(outraMaquina.getVida() - 1);
+                    }
+                }
+            }
+        }
+    }
     
-    public void sobrecarregar() throws Exception {
+    public void encadearAtaque(Maquina outraMaquina, Tabuleiro tabuleiro) {
+        int linhaOutraMaquina = outraMaquina.getLinha();
+        int colunaOutraMaquina = outraMaquina.getColuna();
+        outraMaquina.setVida(outraMaquina.getVida() - 1);
+        if (linha == linhaOutraMaquina) {
+            if (coluna < colunaOutraMaquina) {
+                if(tabuleiro.getMaquinaPorPosicao( linhaOutraMaquina, colunaOutraMaquina + 1) != null) {
+                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina , colunaOutraMaquina + 1), tabuleiro);
+                } else if(colunaOutraMaquina < 7) {
+                    outraMaquina.setColuna(colunaOutraMaquina + 1);
+                } else {
+                    outraMaquina.setVida(outraMaquina.getVida() - 1);
+                }
+            } else if (coluna > colunaOutraMaquina) {
+                if(tabuleiro.getMaquinaPorPosicao( linhaOutraMaquina, colunaOutraMaquina - 1) != null) {
+                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina , colunaOutraMaquina - 1), tabuleiro);
+                } else if(colunaOutraMaquina > 0) {
+                    outraMaquina.setColuna(colunaOutraMaquina - 1);
+                } else {
+                    outraMaquina.setVida(outraMaquina.getVida() - 1);
+                }
+            }
+        } else if (coluna == colunaOutraMaquina) {
+            if (linha < linhaOutraMaquina) {
+                if(tabuleiro.getMaquinaPorPosicao( linhaOutraMaquina + 1, colunaOutraMaquina) != null) {
+                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina + 1 , colunaOutraMaquina), tabuleiro);
+                } else if(linhaOutraMaquina < 7) {
+                    outraMaquina.setLinha(linhaOutraMaquina + 1);
+                } else {
+                    outraMaquina.setVida(outraMaquina.getVida() - 1);
+                }
+            } else if (linha > linhaOutraMaquina) {
+                if(tabuleiro.getMaquinaPorPosicao( linhaOutraMaquina - 1, colunaOutraMaquina) != null) {
+                    encadearAtaque(tabuleiro.getMaquinaPorPosicao(linhaOutraMaquina - 1 , colunaOutraMaquina), tabuleiro);
+                } else if(linhaOutraMaquina > 0) {
+                    outraMaquina.setLinha(linhaOutraMaquina - 1);
+                } else {
+                    outraMaquina.setVida(outraMaquina.getVida() - 1);
+                }
+            }
+        }
+        
+        
+    }
+    
+    public void sobrecarregar() throws JaSobrecarregouException {
         sobrecarregarAtual.sobrecarregar();
     }
     
@@ -193,13 +301,11 @@ public abstract class Maquina {
         return sobrecarregarAtual.isAtivo();
     }
     
-    public EnumDirecao direcaoAtualDaMaquina() {
-        return direcaoAtual.getDirecaoAtual();
-    }
-    
     public String caminhoImagemDirecaoAtual() {
         return direcaoAtual.getCaminhoImagem();
     }
+    
+    public abstract String caminhoImagemDirecaoFixa();
     
     public int getPontosEscudo(int linhaOutra, int colunaOutra) {
         if(linha == linhaOutra) {
@@ -244,12 +350,6 @@ public abstract class Maquina {
         reativarAcoes();
         sobrecarregarAtual = new StateSobrecarregarInativo(this);
         jaSobrecarregou = false;
-    }
-    
-    public void desativarAcoes() {
-        moverAtual = new StateMoverInativo(this);
-        correrAtual = new StateCorrerInativo(this);
-        atacarAtual = new StateAtacarInativo(this);
     }
     
     public Jogador getJogador() {

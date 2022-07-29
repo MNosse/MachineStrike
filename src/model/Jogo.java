@@ -14,7 +14,7 @@ public class Jogo {
     private Tabuleiro tabuleiro;
     private LinkedHashMap<EnumJogador, Jogador> jogadores;
     private Set<Maquina> maquinasQueRealizaramAcoes;
-    private int contagemMovimentos = 0;
+    private Set<Maquina> maquinasQueMoveram;
     private StateJogadorAtivo jogadorAtivo;
     
     public Jogo(Tabuleiro tabuleiro, LinkedHashMap<EnumJogador, Jogador> jogadores) {
@@ -22,10 +22,7 @@ public class Jogo {
         this.jogadores = jogadores;
         jogadorAtivo = new StateJogador1(this);
         maquinasQueRealizaramAcoes = new HashSet<>();
-    }
-    
-    public EnumJogador nomeJogadorAtivo() {
-        return jogadorAtivo.getJogadorAtivo();
+        maquinasQueMoveram = new HashSet<>();
     }
     
     public Jogador jogadorAtivo() {
@@ -45,7 +42,7 @@ public class Jogo {
             maquina.resetarMaquina();
         }
         maquinasQueRealizaramAcoes.clear();
-        contagemMovimentos = 0;
+        maquinasQueMoveram.clear();
         jogadorAtivo.passarTurno();
     }
     
@@ -57,8 +54,8 @@ public class Jogo {
         maquinasQueRealizaramAcoes.add(maquina);
     }
     
-    public void addContagemMovimentos() {
-        contagemMovimentos++;
+    public void addMaquinaQueMoveu(Maquina maquina) {
+        maquinasQueMoveram.add(maquina);
     }
     
     public Tabuleiro getTabuleiro() {
@@ -69,16 +66,8 @@ public class Jogo {
         this.tabuleiro = tabuleiro;
     }
     
-    public LinkedHashMap<EnumJogador, Jogador> getJogadores() {
-        return jogadores;
-    }
-    
     public Jogador getJogador(EnumJogador enumJogador) {
         return jogadores.get(enumJogador);
-    }
-    
-    private StateJogadorAtivo getJogadorAtivo() {
-        return jogadorAtivo;
     }
     
     public void setJogadorAtivo(StateJogadorAtivo jogadorAtivo) {
@@ -93,15 +82,11 @@ public class Jogo {
         this.maquinasQueRealizaramAcoes = maquinasQueRealizaramAcoes;
     }
     
-    public void setJogadores(LinkedHashMap<EnumJogador, Jogador> jogadores) {
-        this.jogadores = jogadores;
+    public Set<Maquina> getMaquinasQueMoveram() {
+        return maquinasQueMoveram;
     }
     
-    public int getContagemMovimentos() {
-        return contagemMovimentos;
-    }
-    
-    public void setContagemMovimentos(int contagemMovimentos) {
-        this.contagemMovimentos = contagemMovimentos;
+    public void setMaquinasQueMoveram(Set<Maquina> maquinasQueMoveram) {
+        this.maquinasQueMoveram = maquinasQueMoveram;
     }
 }

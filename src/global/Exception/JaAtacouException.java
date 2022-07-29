@@ -1,9 +1,9 @@
 package global.Exception;
 
-public class JaCorreuException extends RuntimeException {
+public class JaAtacouException extends RuntimeException {
     
-    public JaCorreuException() {
-        super("Essa maquina ja realizou a acao de corrida");
+    public JaAtacouException() {
+        super("Essa maquina ja atacou");
     }
     
 }

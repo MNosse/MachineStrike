@@ -1,9 +1,9 @@
 package global.Exception;
 
-public class ForaDoCampoAtaqueException extends RuntimeException {
+public class SemMaquinaNoCampoAtaqueException extends RuntimeException {
     
-    public ForaDoCampoAtaqueException() {
-        super("Selecione uma maquina do campo de ataque");
+    public SemMaquinaNoCampoAtaqueException() {
+        super("Nao tem maquinas no seu campo de ataque");
     }
     
 }

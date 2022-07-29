@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class ObjetoArquivoTXTAdapter extends ObjetoArquivoAdapter {
+public class ObjetoArquivoTXTAdapter implements ObjetoArquivoAdapter {
     
     private ObjetoArquivoTXT adaptada;
     

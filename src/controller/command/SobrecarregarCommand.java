@@ -16,14 +16,4 @@ public class SobrecarregarCommand extends Command {
         maquina.sobrecarregar();
         observer.redesenharMaquinas();
     }
-    
-    @Override
-    public void undo() {
-    
-    }
-    
-    @Override
-    public void redo() {
-    
-    }
 }

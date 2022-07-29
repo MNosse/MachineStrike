@@ -1,9 +1,9 @@
 package global.Exception;
 
-public class ForaDoCampoMovimentoException extends RuntimeException {
+public class ForaDoCampoAtaqueException extends RuntimeException {
     
-    public ForaDoCampoMovimentoException() {
-        super("Selecione um terreno do campo de movimento");
+    public ForaDoCampoAtaqueException() {
+        super("Selecione uma maquina do campo de ataque");
     }
     
 }

@@ -1,9 +1,9 @@
 package global.Exception;
 
-public class JaMovimentouException extends RuntimeException {
+public class JaCorreuException extends RuntimeException {
     
-    public JaMovimentouException() {
-        super("Essa maquina ja realizou um movimento");
+    public JaCorreuException() {
+        super("Essa maquina ja realizou a acao de corrida");
     }
     
 }

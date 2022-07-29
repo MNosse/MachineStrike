@@ -1,5 +1,6 @@
 package model.state.stateAtacar;
 
+import global.Exception.JaAtacouException;
 import model.Tabuleiro;
 import model.maquinas.Maquina;
 
@@ -10,8 +11,8 @@ public class StateAtacarInativo extends StateAtacar {
     }
     
     @Override
-    public void atacar(Maquina outraMaquina, Tabuleiro tabuleiro) {
-        throw new RuntimeException();
+    public void atacar(Maquina outraMaquina, Tabuleiro tabuleiro) throws JaAtacouException {
+        throw new JaAtacouException();
     }
     
     @Override

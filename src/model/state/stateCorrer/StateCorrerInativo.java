@@ -1,5 +1,6 @@
 package model.state.stateCorrer;
 
+import global.Exception.JaCorreuException;
 import model.Terreno;
 import model.maquinas.Maquina;
 
@@ -12,8 +13,8 @@ public class StateCorrerInativo extends StateCorrer {
     }
     
     @Override
-    public void correr(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) {
-        throw new RuntimeException();
+    public void correr(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) throws JaCorreuException {
+        throw new JaCorreuException();
     }
     
     @Override

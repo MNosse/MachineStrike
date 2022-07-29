@@ -12,14 +12,15 @@ public class StateAcaoAtivaSobrecarregar extends StateAcaoAtiva {
     
     @Override
     public void fazerAcao(String posicao) throws Exception {
-        controladorTelaJogo.apagarCampos();
+        controladorTelaJogo.limparCampos();
+        controladorTelaJogo.redesenharMaquinas();
         Maquina maquina = controladorTelaJogo.getMaquinaSelecionada();
         if(maquina != null) {
             Command comm = cf.getComando("sobrecarregar", new Object[]{maquina});
             ci.execute(comm);
             controladorTelaJogo.getJogo().addMaquinaQueRealizouAcao(controladorTelaJogo.getMaquinaSelecionada());
-            controladorTelaJogo.setMaquinaSelecionada(null);
-            controladorTelaJogo.desativarPainel();
+            controladorTelaJogo.desativarPainelDefensor();
+            controladorTelaJogo.ativarPainelAtacante();
             ativarNeutro();
         }
     }

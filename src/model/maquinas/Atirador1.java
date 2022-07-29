@@ -11,11 +11,21 @@ public class Atirador1 extends Maquina {
         super(5, linha, coluna, 2, 2, "Atirador 1", 2, jogador, 3, 0, EnumTipoMaquinas.ATIRADOR, -1, 1, 1);
     }
     
-    public void acaoAtacar(Maquina outraMaquina, Tabuleiro tabuleiro) {
-    
+    public boolean podeAtacar(Maquina outraMaquina, Tabuleiro tabuleiro) {
+        if(!outraMaquina.getJogador().equals(jogador)) {
+            int outraLinha = outraMaquina.getLinha();
+            int outraColuna = outraMaquina.getColuna();
+            if(linha == outraLinha && Math.abs(coluna - outraColuna) == alcance) {
+                return true;
+            } else if(coluna == outraColuna && Math.abs(linha - outraLinha) == alcance) {
+                return true;
+            }
+        }
+        return false;
     }
     
-    public boolean podeAtacar(Maquina outraMaquina, Tabuleiro tabuleiro) {
-        return false;
+    @Override
+    public String caminhoImagemDirecaoFixa() {
+        return "src/images/Atirador1-Norte.png";
     }
 }

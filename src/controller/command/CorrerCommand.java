@@ -1,6 +1,8 @@
 package controller.command;
 
 import controller.observer.ObserverCommand;
+import global.Exception.ForaDoCampoCorridaException;
+import global.Exception.JaCorreuException;
 import model.Terreno;
 import model.maquinas.Maquina;
 
@@ -23,18 +25,12 @@ public class CorrerCommand extends Command {
     }
     
     @Override
-    public void execute() throws Exception {
-        maquina.correr(novaLinha, novaColuna, terreno, maquinasEmJogo);
-        observer.redesenharMaquinas();
-    }
-    
-    @Override
-    public void undo() {
-    
-    }
-    
-    @Override
-    public void redo() {
-    
+    public void execute() throws ForaDoCampoCorridaException, JaCorreuException {
+        if(maquina.podeCorrer(novaLinha, novaColuna, terreno, maquinasEmJogo)) {
+            maquina.correr(novaLinha, novaColuna, terreno, maquinasEmJogo);
+            observer.redesenharMaquinas();
+        } else {
+            throw new ForaDoCampoCorridaException();
+        }
     }
 }

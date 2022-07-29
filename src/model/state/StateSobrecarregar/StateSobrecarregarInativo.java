@@ -1,5 +1,6 @@
 package model.state.StateSobrecarregar;
 
+import global.Exception.JaSobrecarregouException;
 import model.maquinas.Maquina;
 
 public class StateSobrecarregarInativo extends StateSobrecarregar {
@@ -10,7 +11,7 @@ public class StateSobrecarregarInativo extends StateSobrecarregar {
     
     @Override
     public void sobrecarregar() {
-        throw new RuntimeException();
+        throw new JaSobrecarregouException();
     }
     
     @Override

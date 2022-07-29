@@ -1,6 +1,8 @@
 package controller.command;
 
 import controller.observer.ObserverCommand;
+import global.Exception.ForaDoCampoMovimentoException;
+import global.Exception.JaMovimentouException;
 import model.Terreno;
 import model.maquinas.Maquina;
 
@@ -23,18 +25,12 @@ public class MoverCommand extends Command {
     }
     
     @Override
-    public void execute() throws Exception {
-        maquina.mover(novaLinha, novaColuna, terreno, maquinasEmJogo);
-        observer.redesenharMaquinas();
-    }
-    
-    @Override
-    public void undo() {
-    
-    }
-    
-    @Override
-    public void redo() {
-    
+    public void execute() throws ForaDoCampoMovimentoException, JaMovimentouException {
+        if (maquina.podeMover(novaLinha, novaColuna, terreno, maquinasEmJogo)) {
+            maquina.mover(novaLinha, novaColuna, terreno, maquinasEmJogo);
+            observer.redesenharMaquinas();
+        } else {
+            throw new ForaDoCampoMovimentoException();
+        }
     }
 }

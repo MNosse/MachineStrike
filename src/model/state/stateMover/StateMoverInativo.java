@@ -1,5 +1,6 @@
 package model.state.stateMover;
 
+import global.Exception.JaMovimentouException;
 import model.Terreno;
 import model.maquinas.Maquina;
 
@@ -12,8 +13,8 @@ public class StateMoverInativo extends StateMover {
     }
     
     @Override
-    public void mover(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) {
-        throw new RuntimeException();
+    public void mover(int novaLinha, int novaColuna, Terreno terrenoNaPosicao, List<Maquina> maquinasEmJogo) throws JaMovimentouException {
+        throw new JaMovimentouException();
     }
     
     @Override

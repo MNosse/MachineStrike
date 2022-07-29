@@ -1,7 +1,5 @@
 package view;
 
-//CONTROLLER
-
 import controller.ControladorTelaConfigurarJogo;
 import controller.observer.ObserverTelaConfigurarJogo;
 import global.Enum.EnumAdicionarRemover;
@@ -13,6 +11,7 @@ import global.Exception.MaquinaEmTerrenoInvalidoException;
 import global.Exception.MinimoMaquinasException;
 import global.Exception.SubstituicaoInvalidaException;
 import view.components.CardMaquina;
+import view.decorator.*;
 import view.utils.SingletonImagens;
 
 import javax.swing.*;
@@ -106,7 +105,7 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
             constraints.gridx = Integer.parseInt(String.valueOf(posicao.charAt(1)));
             JLabel maquinaLabel = listaMaquinasNoTabuleiro.get(posicao);
             if(constraints.gridy > 1 && constraints.gridy < 6) {
-                maquinaLabel.setIcon(imagens.get("BloqueadoPequeno"));
+                maquinaLabel.setIcon(imagens.get("Bloqueado"));
             }
             lblPainelCentral.add(maquinaLabel, constraints);
             lblPainelCentral.add(listaQuadradosTabuleiros.get(posicao), constraints);
@@ -248,7 +247,7 @@ public class TelaConfigurarJogo extends Tela implements ObserverTelaConfigurarJo
     }
     
     public void desenharMaquina(String caminhoImagem, String posicao) {
-        listaMaquinasNoTabuleiro.get(posicao).setIcon(criarImagem(caminhoImagem, ((int) (getAltura() * 0.11)), ((int) (getAltura() * 0.11))));
+        listaMaquinasNoTabuleiro.get(posicao).setIcon(new Imagem(caminhoImagem, (int)(getAltura()*0.11), (int)(getAltura()*0.11)).getImagem());
     }
     
     public void desenharBloqueadosOuVazios(HashMap<String, String> valores) {

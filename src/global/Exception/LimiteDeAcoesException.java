@@ -1,9 +1,9 @@
 package global.Exception;
 
-public class JaSobrecarregouException extends RuntimeException {
+public class LimiteDeAcoesException extends RuntimeException {
     
-    public JaSobrecarregouException() {
-        super("Essa maquina ja sobrecarregou");
+    public LimiteDeAcoesException() {
+        super("Voce atingiu o limite de acoes com maquinas distintas");
     }
     
 }

@@ -1,0 +1,10 @@
+Mapa Criado TXT
+criado
+Montanha Montanha Montanha Pasto Pasto Montanha Montanha Montanha
+Montanha Elevacao Pasto Pasto Pasto Pasto Elevacao Montanha
+Montanha Abismo Abismo Floresta Floresta Floresta Floresta Montanha
+Pantano Pantano Pantano Pantano Pantano Pantano Pantano Pantano
+Pantano Pantano Pantano Pantano Pantano Pantano Pantano Pantano
+Montanha Floresta Floresta Floresta Floresta Abismo Abismo Montanha
+Montanha Elevacao Pasto Pasto Pasto Pasto Elevacao Montanha
+Montanha Montanha Montanha Pasto Pasto Montanha Montanha Montanha

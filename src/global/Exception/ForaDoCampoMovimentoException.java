@@ -1,9 +1,9 @@
 package global.Exception;
 
-public class SubstituicaoInvalidaException extends RuntimeException {
+public class ForaDoCampoMovimentoException extends RuntimeException {
     
-    public SubstituicaoInvalidaException() {
-        super("A troca dessas maquinas ira ultrapassar o limite de PV");
+    public ForaDoCampoMovimentoException() {
+        super("Selecione um terreno do campo de movimento");
     }
     
 }

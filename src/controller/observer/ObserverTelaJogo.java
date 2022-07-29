@@ -8,13 +8,11 @@ import java.util.Set;
 public interface ObserverTelaJogo {
     void desenharTabuleiro(HashMap<String, EnumTipoTerreno> terrenos);
     
-    void desenharQuadrado(String posicao, String caminhoImagem);
+    void redesenharMaquinas(HashMap<String, String> maquinasAtivas, HashMap<String, String> maquinasInativas);
     
-    void desenharQuadrados(HashMap<String, String> maquinas);
+    void desenharCampoDeAtaque(HashMap<String, String> maquinas);
     
-    void apagarCamposSelecionados(Set<String> posicoes);
-    
-    void desenharCamposSelecionados(Set<String> posicoes);
+    void desenharCamposDeMovimento(Set<String> posicoes);
     
     void mudarEstadoBtnAtacar(boolean estado);
     
@@ -29,6 +27,8 @@ public interface ObserverTelaJogo {
     void desativarBotoes();
     
     void atualizarCardMaquinaAtacante(HashMap<String, String> informacoes);
+    
+    void atualizarCardMaquinaDefensora(HashMap<String, String> informacoes);
     
     void atualizarLblJogadorAtivo(String nome);
     
