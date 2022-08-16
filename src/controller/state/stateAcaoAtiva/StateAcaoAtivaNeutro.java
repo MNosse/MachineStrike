@@ -15,7 +15,7 @@ public class StateAcaoAtivaNeutro extends StateAcaoAtiva {
         if(controladorTelaJogo.getJogo().jogadorAtivo().getMaquinaPorPosicao(linha, coluna) != null) {
             controladorTelaJogo.setMaquinaSelecionada(controladorTelaJogo.getJogo().getTabuleiro().getMaquinaPorPosicao(linha, coluna));
             controladorTelaJogo.ativarPainelAtacante();
-        } else if (controladorTelaJogo.getJogo().jogadorDefensor().getMaquinaPorPosicao(linha, coluna) != null) {
+        } else if(controladorTelaJogo.getJogo().jogadorDefensor().getMaquinaPorPosicao(linha, coluna) != null) {
             controladorTelaJogo.ativarPainelDefensor(controladorTelaJogo.getJogo().jogadorDefensor().getMaquinaPorPosicao(linha, coluna));
         } else {
             controladorTelaJogo.setMaquinaSelecionada(null);

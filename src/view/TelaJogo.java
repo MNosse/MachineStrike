@@ -169,7 +169,7 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
             public void actionPerformed(ActionEvent e) {
                 try {
                     controlador.clicarBotaoAtacar();
-                } catch (SemMaquinaNoCampoAtaqueException ex) {
+                } catch(SemMaquinaNoCampoAtaqueException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Sem alvos", JOptionPane.INFORMATION_MESSAGE);
                 } catch(LimiteDeAcoesException ex) {
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite atingido", JOptionPane.ERROR_MESSAGE);
@@ -244,17 +244,17 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
                     public void mouseClicked(MouseEvent e) {
                         try {
                             controlador.selecionarQuadrado(finalLinha + "" + finalColuna);
-                        } catch (ForaDoCampoMovimentoException ex) {
+                        } catch(ForaDoCampoMovimentoException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage(), "Mover invalido", JOptionPane.ERROR_MESSAGE);
-                        } catch (ForaDoCampoCorridaException ex) {
+                        } catch(ForaDoCampoCorridaException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage(), "Correr invalido", JOptionPane.ERROR_MESSAGE);
-                        } catch (ForaDoCampoAtaqueException ex) {
+                        } catch(ForaDoCampoAtaqueException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage(), "Ataque invalido", JOptionPane.ERROR_MESSAGE);
-                        } catch (JaMovimentouException ex) {
+                        } catch(JaMovimentouException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite Mover atingido", JOptionPane.ERROR_MESSAGE);
-                        } catch (JaCorreuException ex) {
+                        } catch(JaCorreuException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite Correr atingido", JOptionPane.ERROR_MESSAGE);
-                        } catch (JaAtacouException ex) {
+                        } catch(JaAtacouException ex) {
                             JOptionPane.showMessageDialog(null, ex.getMessage(), "Limite Atacar atingido", JOptionPane.ERROR_MESSAGE);
                         } catch(Exception ex) {
                             JOptionPane.showMessageDialog(null, "Nao foi possivel realizar essa acao", "Acao bloqueada", JOptionPane.ERROR_MESSAGE);
@@ -334,9 +334,9 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
     
     @Override
     public void redesenharMaquinas(HashMap<String, String> maquinasAtivas, HashMap<String, String> maquinasInativas) {
-        for (int i = 0; i <= 7; i++) {
-            for (int j = 0; j <= 7; j++) {
-                listaMaquinasNoTabuleiro.get(i+""+j).setIcon(imagens.get("Vazio"));
+        for(int i = 0; i <= 7; i++) {
+            for(int j = 0; j <= 7; j++) {
+                listaMaquinasNoTabuleiro.get(i + "" + j).setIcon(imagens.get("Vazio"));
             }
         }
         Set<String> posicoesAtivas = maquinasAtivas.keySet();
@@ -381,7 +381,7 @@ public class TelaJogo extends Tela implements ObserverTelaJogo {
     
     @Override
     public void anunciarGanhador(String nome) {
-        JOptionPane.showMessageDialog(null, "O "+nome+" ganhou a partida!!!", "Jogo encerrado", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "O " + nome + " ganhou a partida!!!", "Jogo encerrado", JOptionPane.INFORMATION_MESSAGE);
         try {
             controlador.navegarParaOutraTela("view.abstractFactoryTela.ConcretFactoryTelaInicial");
         } catch(Exception ex) {

@@ -2,7 +2,7 @@ package view.decorator;
 
 import javax.swing.*;
 
-public abstract class ImagemDecorator extends ImagemBase{
+public abstract class ImagemDecorator extends ImagemBase {
     
     protected ImagemBase imagem;
     

@@ -26,7 +26,7 @@ public class MoverCommand extends Command {
     
     @Override
     public void execute() throws ForaDoCampoMovimentoException, JaMovimentouException {
-        if (maquina.podeMover(novaLinha, novaColuna, terreno, maquinasEmJogo)) {
+        if(maquina.podeMover(novaLinha, novaColuna, terreno, maquinasEmJogo)) {
             maquina.mover(novaLinha, novaColuna, terreno, maquinasEmJogo);
             observer.redesenharMaquinas();
         } else {

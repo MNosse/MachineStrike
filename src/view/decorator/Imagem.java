@@ -3,7 +3,7 @@ package view.decorator;
 import javax.swing.*;
 import java.awt.*;
 
-public class Imagem extends ImagemBase{
+public class Imagem extends ImagemBase {
     
     private String caminhoImagem;
     private int altura;

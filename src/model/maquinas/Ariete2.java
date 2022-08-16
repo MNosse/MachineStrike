@@ -1,6 +1,5 @@
 package model.maquinas;
 
-
 import global.Enum.EnumDirecao;
 import global.Enum.EnumTipoMaquinas;
 import model.Jogador;

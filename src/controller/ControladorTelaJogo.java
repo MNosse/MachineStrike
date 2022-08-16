@@ -311,7 +311,7 @@ public class ControladorTelaJogo implements ObserverCommand {
         for(String posicao : campoDeMovimento) {
             int linha = Integer.parseInt(String.valueOf(posicao.charAt(0)));
             int coluna = Integer.parseInt(String.valueOf(posicao.charAt(1)));
-            if (maquinaSelecionada.getLinha() != linha && maquinaSelecionada.getColuna() != coluna) {
+            if(maquinaSelecionada.getLinha() != linha && maquinaSelecionada.getColuna() != coluna) {
                 Maquina baixo = jogo.getTabuleiro().getMaquinaPorPosicao(linha + 1, coluna);
                 Maquina cima = jogo.getTabuleiro().getMaquinaPorPosicao(linha - 1, coluna);
                 Maquina direita = jogo.getTabuleiro().getMaquinaPorPosicao(linha, coluna + 1);
@@ -319,13 +319,13 @@ public class ControladorTelaJogo implements ObserverCommand {
                 if(maquinaSelecionada.getLinha() < linha) {
                     if(maquinaSelecionada.getColuna() < coluna) {
                         if((cima != null) && (esquerda != null)) {
-                            if (!cima.equals(maquinaSelecionada) && !esquerda.equals(maquinaSelecionada)) {
+                            if(!cima.equals(maquinaSelecionada) && !esquerda.equals(maquinaSelecionada)) {
                                 remover.add(posicao);
                             }
                         }
                     } else {
                         if((cima != null) && (direita != null)) {
-                            if (!cima.equals(maquinaSelecionada) && !direita.equals(maquinaSelecionada)) {
+                            if(!cima.equals(maquinaSelecionada) && !direita.equals(maquinaSelecionada)) {
                                 remover.add(posicao);
                             }
                         }
@@ -333,13 +333,13 @@ public class ControladorTelaJogo implements ObserverCommand {
                 } else {
                     if(maquinaSelecionada.getColuna() < coluna) {
                         if((baixo != null) && (esquerda != null)) {
-                            if (!baixo.equals(maquinaSelecionada) && !esquerda.equals(maquinaSelecionada)) {
+                            if(!baixo.equals(maquinaSelecionada) && !esquerda.equals(maquinaSelecionada)) {
                                 remover.add(posicao);
                             }
                         }
                     } else {
                         if((baixo != null) && (direita != null)) {
-                            if (!cima.equals(maquinaSelecionada) && !direita.equals(maquinaSelecionada)) {
+                            if(!cima.equals(maquinaSelecionada) && !direita.equals(maquinaSelecionada)) {
                                 remover.add(posicao);
                             }
                         }
@@ -381,8 +381,7 @@ public class ControladorTelaJogo implements ObserverCommand {
                                 campoDeCorrida.remove(linDef + "" + i);
                             }
                         }
-                    }
-                    else if(linAtq < linDef) {
+                    } else if(linAtq < linDef) {
                         for(int i = (linDef + 1); i <= 7; i++) {
                             if(Math.abs(linAtq - i) >= (correrAtq - 1)) {
                                 campoDeCorrida.remove(i + "" + colDef);
@@ -398,18 +397,18 @@ public class ControladorTelaJogo implements ObserverCommand {
                 }
             }
         }
-        for (String posicao : jogo.getTabuleiro().getTerrenos().keySet()) {
+        for(String posicao : jogo.getTabuleiro().getTerrenos().keySet()) {
             int linha = Integer.parseInt(String.valueOf(posicao.charAt(0)));
             int coluna = Integer.parseInt(String.valueOf(posicao.charAt(1)));
             if(maquina.podeMover(linha, coluna, jogo.getTabuleiro().getTerrenoPorPosicao(linha + "" + coluna), jogo.getTabuleiro().getMaquinas())) {
                 campoDeCorrida.remove(posicao);
             }
         }
-//        gerarSetCampoDeMovimento(maquina);
-//        for(String posicao : campoDeMovimento) {
-//            campoDeCorrida.remove(posicao);
-//        }
-//        campoDeMovimento = new HashSet<>();
+        //        gerarSetCampoDeMovimento(maquina);
+        //        for(String posicao : campoDeMovimento) {
+        //            campoDeCorrida.remove(posicao);
+        //        }
+        //        campoDeMovimento = new HashSet<>();
     }
     
     private void gerarSetCampoDeAtaque(Maquina maquina) {

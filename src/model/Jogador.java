@@ -58,12 +58,12 @@ public class Jogador {
         
         if(maquinas.size() < 10) {
             int contagem = 0;
-            for (Maquina m: maquinas) {
-                if (maquina.getNome().equals(m.getNome())) {
+            for(Maquina m : maquinas) {
+                if(maquina.getNome().equals(m.getNome())) {
                     contagem++;
                 }
             }
-            if (contagem >= 4) {
+            if(contagem >= 4) {
                 return false;
             }
             if(contagemPVMaquinas() + maquina.getPontosVitoria() <= 10) {

@@ -1,40 +1,29 @@
 package controller;
 
-//CONTROLLER
-
 import controller.adapter.ObjetoArquivoAdapter;
-import controller.singleton.SingletonConfiguracaoJogo;
 import controller.observer.ObserverTelaConfigurarJogo;
-
-//GLOBAL
-
-//JAVA
-import java.lang.reflect.Constructor;
-import java.util.*;
-import java.io.File;
-import java.io.FileReader;
-import java.io.BufferedReader;
-
-//MODEL
+import controller.singleton.SingletonConfiguracaoJogo;
 import controller.singleton.SingletonTipoDeArquivo;
 import global.Enum.*;
 import global.Exception.LimiteDeMaquinasException;
 import global.Exception.MaquinaEmTerrenoInvalidoException;
 import global.Exception.MinimoMaquinasException;
 import global.Exception.SubstituicaoInvalidaException;
-import model.Terreno;
 import model.Jogador;
 import model.Tabuleiro;
-import model.maquinas.Maquina;
-import model.builderTerreno.DirectorTerreno;
-import model.builderTerreno.ConstruirTerreno;
-import model.builderTabuleiro.DirectorTabuleiro;
+import model.Terreno;
 import model.abstractFactoryMaquina.AbstractFactoryMaquina;
 import model.builderTabuleiro.ConstruirTabuleiroComMaquinas;
 import model.builderTabuleiro.ConstruirTabuleiroSemMaquinas;
-
-//VIEW ABSTRACT FACTORY
+import model.builderTabuleiro.DirectorTabuleiro;
+import model.builderTerreno.ConstruirTerreno;
+import model.builderTerreno.DirectorTerreno;
+import model.maquinas.Maquina;
 import view.abstractFactoryTela.AbstractFactoryTela;
+
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.util.*;
 
 public class ControladorTelaConfigurarJogo {
     
